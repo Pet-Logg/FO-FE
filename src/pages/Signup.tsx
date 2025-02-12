@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { signupUser } from "../api/auth";
-const SignupPage = () => {
-
+const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,10 +33,8 @@ const SignupPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4">
-          회원가입
-        </h2>
-        {errer && <p className="text-red-500 mb-4" >{errer}</p>}
+        <h2 className="text-2xl font-bold mb-4">회원가입</h2>
+        {errer && <p className="text-red-500 mb-4">{errer}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700">이름</label>
@@ -57,7 +54,7 @@ const SignupPage = () => {
               className="mt-1 block w-full border rounded p-2"
               required
               onChange={(e) => {
-               setEmail(e.target.value);
+                setEmail(e.target.value);
               }}
             />
           </div>
@@ -68,7 +65,7 @@ const SignupPage = () => {
               className="mt-1 block w-full border rounded p-2"
               required
               onChange={(e) => {
-               setPassword(e.target.value);
+                setPassword(e.target.value);
               }}
             />
           </div>
@@ -79,7 +76,7 @@ const SignupPage = () => {
               className="mt-1 block w-full border rounded p-2"
               required
               onChange={(e) => {
-               setConfirmPassword(e.target.value);
+                setConfirmPassword(e.target.value);
               }}
             />
           </div>
@@ -95,4 +92,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default Signup;
