@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // 1. 폼 제출 시 기본 동작(페이지 새로고침) 방지
@@ -18,7 +20,7 @@ const Login = () => {
       const data = await loginUser(email, password);
       console.log("로그인 성공", data);
 
-      // 이후 토큰 저장, 페이지 리다이렌션 추가하기
+      navigate("/dashboard");
     } catch (err) {
       setError("로그인에 실패했습니다.");
       console.log(err);
