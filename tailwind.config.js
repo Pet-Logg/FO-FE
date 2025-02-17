@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        gongbuFont: ["gongbuFont", "sans-serif"] // 폰트 추가
+      }
+    },
   },
   plugins: [],
 }
