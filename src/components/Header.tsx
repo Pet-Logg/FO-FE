@@ -3,7 +3,7 @@ import logo from "../assets/logo.png";
 
 const Header = () => {
   return (
-    <nav className="p-4 text-black">
+    <nav className="p-4 sticky top-0 bg-white shadow-md z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <img src={logo} alt="로고" className="h-14" />

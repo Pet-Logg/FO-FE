@@ -1,4 +1,5 @@
 import apiClient from "./apiClient";
+import petApiClient from "./petApiClient";
 
 // 백엔드 기본 URL
 const API_BASE_URL = 'http://localhost:8080/api/v1/user';
@@ -18,6 +19,11 @@ export interface LoginResponse {
   };
 };
 
+export interface CreatePetInfoResponse {
+  id: number;
+}
+
+
 // 회원가입
 export async function signupUser(
   email: string,
@@ -25,7 +31,7 @@ export async function signupUser(
 ): Promise<signupResponse> {
   
   try {
-    const response = await apiClient.post("signup", { email, password } );
+    const response = await apiClient.post("/signup", { email, password } );
     return response.data;
   } catch(error) {
     // throw new Error(errer.response?.data?.message || "회원가입 실패");
@@ -46,6 +52,21 @@ export async function loginUser(
     // throw new Error(error.response?.data?.message || "로그인 실패");
     throw new Error("로그인 실패");
 
+  }
+};
+
+// 펫 정보 등록
+export async function createPetInfo (formData: FormData): Promise<CreatePetInfoResponse> {
+  try {
+    const response = await petApiClient.post("/createPetInfo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error)
+    throw new Error("펫 정보 등록 실패");
   }
 };
 
