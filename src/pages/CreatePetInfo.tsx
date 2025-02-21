@@ -7,7 +7,8 @@ import Header from "../components/Header";
 const CreatePetInfo = () => {
   const navigate = useNavigate();
 
-  const [petImage, setPetImage] = useState<null | string>(null);
+  const [petImage, setPetImage] = useState<null | string>(null); // 미리보기 URL 저장
+  const [petFile, setPetFile] = useState<null | File>(null); // 원본 파일 젖아
   const [petName, setPetName] = useState("");
   const [petAnimal, setPetAnimal] = useState("");
   const [petBirth, setPetBirth] = useState("");
@@ -33,6 +34,7 @@ const CreatePetInfo = () => {
     console.log("Uploaded Image URL:", imageUrl);
 
     setPetImage(imageUrl);
+    setPetFile(file);
   };
 
   // 폼 제출하기
@@ -46,11 +48,18 @@ const CreatePetInfo = () => {
       return;
     }
 
+    if (!petFile || !petImage) {
+      alert("귀여운 반려동물의 사진을 넣어주세요");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const formData = new FormData();
       if (petImage) {
-        formData.append("petImage", petImage);
+        formData.append("petImage", petFile);
       }
+      console.log(petImage);
       formData.append("petName", petName);
       formData.append("petAnimal", petAnimal);
       formData.append("petBirth", petBirth);
@@ -59,6 +68,8 @@ const CreatePetInfo = () => {
       formData.append("petWeight", petWeight);
 
       const response = await createPetInfo(formData);
+      console.log("📝 FormData 내용:", [...formData.entries()]); // FormData 확인
+
       console.log("펫 정보 등록 완료!", response);
 
       alert("펫 정보가 성공적으로 등록되었습니다!");
