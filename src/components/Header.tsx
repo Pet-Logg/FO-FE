@@ -1,15 +1,23 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import logo from "../assets/logo.png";
+import Cookies from "js-cookie";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
-  const a = (e) => {
+  useEffect(() => {
+    const token = Cookies.get("Authorization");
+    setIsLoggedin(!!token);
+  }, []);
+
+  const a = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(searchQuery);
   };
+
   return (
     <nav className="p-4 sticky top-0 bg-white shadow-md z-50">
       <div className="container mx-auto flex justify-between items-center">
@@ -31,12 +39,25 @@ const Header = () => {
         </form>
 
         <div>
-          <Link to="/login" className="text-black px-5">
-            로그인
-          </Link>
-          <Link to="signup" className="text-black">
-            회원가입
-          </Link>
+          {isLoggedin ? (
+            <>
+              <Link to="/mypage" className="text-black px-5">
+                마이페이지
+              </Link>
+              <Link to="logout" className="text-black px-5">
+                로그아웃
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-black px-5">
+                로그인
+              </Link>
+              <Link to="signup" className="text-black">
+                회원가입
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
