@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import Header from "../components/Header";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,9 @@ const Login = () => {
       // loginUser API 호출
       const data = await loginUser(email, password);
       console.log("로그인 성공", data);
+
+      Cookies.set("Authorization", data.data);
+      console.log(data.data);
 
       navigate("/createPetInfo");
     } catch (err) {

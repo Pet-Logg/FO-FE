@@ -11,6 +11,7 @@ export interface signupResponse {
 };
 
 export interface LoginResponse {
+  [x: string]: string;
   token: string;
   user: {
     id: number;
@@ -31,7 +32,12 @@ export async function signupUser(
 ): Promise<signupResponse> {
   
   try {
-    const response = await apiClient.post("/signup", { email, password } );
+    const response = await apiClient.post("/signup", { email, password }, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch(error) {
     // throw new Error(errer.response?.data?.message || "회원가입 실패");
@@ -46,7 +52,12 @@ export async function loginUser(
   password: string,
 ): Promise<LoginResponse> {
   try {
-    const response = await apiClient.post("/login", { email, password });
+    const response = await apiClient.post("/login", { email, password }, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     // throw new Error(error.response?.data?.message || "로그인 실패");
@@ -59,6 +70,7 @@ export async function loginUser(
 export async function createPetInfo (formData: FormData): Promise<CreatePetInfoResponse> {
   try {
     const response = await petApiClient.post("/createPetInfo", formData, {
+      withCredentials: true,
       headers: {
         "Content-Type": "multipart/form-data",
       },
