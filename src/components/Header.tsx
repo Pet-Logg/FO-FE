@@ -1,21 +1,23 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-import Cookies from "js-cookie";
+import { useCookies } from "react-cookie";
 
 const Header = () => {
+  const nav = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoggedin, setIsLoggedin] = useState(false);
+  const isLoggedin = !!cookies.Authorization;
 
-  useEffect(() => {
-    const token = Cookies.get("Authorization");
-    setIsLoggedin(!!token);
-  }, []);
+  const clickLogout = () => {
+    removeCookie("Authorization", { path: "/" });
+    nav("/");
+  };
 
   const a = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(searchQuery);
   };
 
   return (
@@ -41,21 +43,19 @@ const Header = () => {
         <div>
           {isLoggedin ? (
             <>
-              <Link to="/mypage" className="text-black px-5">
+              <Link to="/mypage" className="px-5">
                 마이페이지
               </Link>
-              <Link to="logout" className="text-black px-5">
+              <button className="px-5" onClick={clickLogout}>
                 로그아웃
-              </Link>
+              </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="text-black px-5">
+              <Link to="/login" className="px-5">
                 로그인
               </Link>
-              <Link to="signup" className="text-black">
-                회원가입
-              </Link>
+              <Link to="signup">회원가입</Link>
             </>
           )}
         </div>

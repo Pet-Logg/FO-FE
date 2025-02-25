@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
-import Header from "../components/Header";
-import Cookies from "js-cookie";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [cookie, setCookie] = useCookies(["Authorization"]);
+  const nav = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // 1. 폼 제출 시 기본 동작(페이지 새로고침) 방지
@@ -22,10 +22,9 @@ const Login = () => {
       const data = await loginUser(email, password);
       console.log("로그인 성공", data);
 
-      Cookies.set("Authorization", data.data);
-      console.log(data.data);
+      setCookie("Authorization", data.data, { path: "/" });
 
-      navigate("/createPetInfo");
+      nav("/createPetInfo");
     } catch (err) {
       setError("로그인에 실패했습니다.");
       console.log(err);
@@ -34,8 +33,6 @@ const Login = () => {
 
   return (
     <>
-      <Header />
-
       <div className="w-full h-screen flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h2 className="text-2xl font-semibold mb-6 text-center">로그인</h2>
