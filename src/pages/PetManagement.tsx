@@ -37,7 +37,7 @@ const PetManagement = () => {
         to="/createPetInfo"
         className="absolute right-72 top-20 bg-blue-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center"
       >
-        추가하기
+        + 추가하기
       </Link>
 
       {loading && <p className="text-center text-3xl">로딩 중..</p>}
@@ -51,11 +51,11 @@ const PetManagement = () => {
       {!loading && !error && (
         <div className="grid grid-cols-3 gap-6">
           {pets.map((pet) => (
-            <div key={pet.petId} className="text-center">
+            <div key={pet.petId} className="text-center pb-4">
               <img
                 src={pet.petImg || basicPicture}
                 alt={pet.petName}
-                className="w-60 mx-auto mb-4"
+                className="w-60 h-60 rounded-full mx-auto mb-4"
               />
               <h2 className="text-xl font-semibold">{pet.petName}</h2>
             </div>
