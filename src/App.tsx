@@ -1,27 +1,23 @@
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Signup from "./pages/Signup";
-import Login from "./pages/login";
+import Login from "./pages/Login";
+import CreatePetInfo from "./pages/CreatePetInfo";
+import Header from "./components/Header";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <nav className="bg-gray-800 p-4">
-        <div className="container mx-auto flex justify-between">
-          <div>
-            <Link to="/" className="text-white">
-              로그인
-            </Link>
-            <Link to="signup" className="text-white">
-              회원가입
-            </Link>
-          </div>
-        </div>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/createPetInfo" element={<CreatePetInfo />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 
