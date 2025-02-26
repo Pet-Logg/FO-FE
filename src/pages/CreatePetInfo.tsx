@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FaPaw, FaCamera } from "react-icons/fa";
 import { createPetInfo } from "../api/auth";
 import Header from "../components/Header";
+import SuccessPopup from "../components/SuccessPopup";
 
 const CreatePetInfo = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const CreatePetInfo = () => {
   const [petBreed, setPetBreed] = useState("");
   const [petGender, setPetGender] = useState("");
   const [petWeight, setPetWeight] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // 팝업 상태
 
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
@@ -68,12 +70,8 @@ const CreatePetInfo = () => {
       formData.append("petWeight", petWeight);
 
       const response = await createPetInfo(formData);
-      console.log("📝 FormData 내용:", [...formData.entries()]); // FormData 확인
 
-      console.log("펫 정보 등록 완료!", response);
-
-      alert("펫 정보가 성공적으로 등록되었습니다!");
-      navigate("/dashboard"); // ✅ 등록 성공 후 이동
+      setShowPopup(true);
     } catch (error) {
       console.error("등록 실패", error);
       alert("펫 정보 등록에 실패했습니다.");
@@ -87,7 +85,7 @@ const CreatePetInfo = () => {
 
   return (
     <>
-      <Header />
+      {showPopup && <SuccessPopup /*onClose={() => setShowPopup(false)}*/ />}
 
       <div className="pt-7 w-full h-full flex items-center justify-center bg-gray-100 p-4">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
