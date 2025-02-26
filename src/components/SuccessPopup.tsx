@@ -4,11 +4,7 @@ import Confetti from "react-confetti";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-interface SuccessPopupProps {
-  onClose: () => void; // 팝업 닫기
-}
-
-const SuccessPopup: React.FC<SuccessPopupProps> = () => {
+const SuccessPopup: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
@@ -22,13 +18,6 @@ const SuccessPopup: React.FC<SuccessPopupProps> = () => {
 
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
         <div className="bg-white p-12 rounded-lg shadow-lg relative w-80 text-center">
-          {/* <button
-            onClick={onClose}
-            className="absolute top-3 right-4 text-gray-600"
-          >
-            <FaTimes size={20} />
-          </button> */}
-
           <div className="text-6xl">🥳</div>
           <h2 className="text-4xl mt-3">반려동물 등록 완료!</h2>
           <p className="mt-2">

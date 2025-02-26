@@ -85,7 +85,7 @@ const CreatePetInfo = () => {
 
   return (
     <>
-      {showPopup && <SuccessPopup /*onClose={() => setShowPopup(false)}*/ />}
+      {showPopup && <SuccessPopup />}
 
       <div className="pt-7 w-full h-full flex items-center justify-center bg-gray-100 p-4">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
