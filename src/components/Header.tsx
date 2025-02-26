@@ -1,20 +1,48 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
 import { useCookies } from "react-cookie";
+import logo from "../assets/logo.png";
+import icon_user from "../assets/icon_user.svg";
 
 const Header = () => {
   const nav = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const isLoggedin = !!cookies.Authorization;
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const clickLogout = () => {
     removeCookie("Authorization", { path: "/" });
     nav("/");
   };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const closeClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", closeClickOutside);
+    } else {
+      document.removeEventListener("mousedown", closeClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", closeClickOutside);
+    };
+  }, [isOpen]);
 
   const a = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,15 +68,58 @@ const Header = () => {
           </button>
         </form>
 
-        <div>
+        <div className="relative" ref={dropdownRef}>
           {isLoggedin ? (
+            // <>
+            //   <button>
+            //     <img src={icon_user} className="mt-2" />
+            //   </button>
+            //   {/* <button className="px-5" onClick={clickLogout}>
+            //     로그아웃
+            //   </button> */}
+            // </>
             <>
-              <Link to="/mypage" className="px-5">
-                마이페이지
-              </Link>
-              <button className="px-5" onClick={clickLogout}>
-                로그아웃
+              <button onClick={toggleDropdown}>
+                <img src={icon_user} className="mt-2" />
               </button>
+              {isOpen && (
+                <div className="absolute right-0 mt-2 w-48 border border-gray-300 rounded-md shadow-lg">
+                  <ul className="py-2">
+                    <li>
+                      <Link
+                        to="/"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        반려동물 관리
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        회원 정보 수정
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        비밀번호 변경
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={clickLogout}
+                        className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        로그아웃
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </>
           ) : (
             <>
