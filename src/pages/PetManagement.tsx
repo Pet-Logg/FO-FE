@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getPetsById } from "../api/auth";
 import basicPicture from "../assets/basicPicture.png";
 
@@ -13,6 +13,7 @@ const PetManagement = () => {
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const nav = useNavigate();
 
   useEffect(() => {
     const getPets = async () => {
@@ -35,7 +36,7 @@ const PetManagement = () => {
       <h1 className="text-3xl font-bold mb-14">반려동물 하우스 🏠</h1>
       <Link
         to="/createPetInfo"
-        className="absolute right-72 top-20 bg-blue-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center"
+        className="absolute right-72 top-20 bg-blue-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center hover:bg-blue-500 transition"
       >
         + 추가하기
       </Link>
@@ -51,13 +52,23 @@ const PetManagement = () => {
       {!loading && !error && (
         <div className="grid grid-cols-3 gap-6">
           {pets.map((pet) => (
-            <div key={pet.petId} className="text-center pb-4">
+            <div
+              key={pet.petId}
+              className="text-center pb-4"
+              onClick={() => nav(`/getPetDetail/${pet.petId}`)}
+            >
               <img
                 src={pet.petImg || basicPicture}
                 alt={pet.petName}
                 className="w-60 h-60 rounded-full mx-auto mb-4"
+                onClick={() => nav(`/getPetDetail/${pet.petId}`)}
               />
-              <h2 className="text-xl font-semibold">{pet.petName}</h2>
+              <h2
+                className="text-xl font-semibold"
+                onClick={() => nav(`/getPetDetail/${pet.petId}`)}
+              >
+                {pet.petName}
+              </h2>
             </div>
           ))}
         </div>

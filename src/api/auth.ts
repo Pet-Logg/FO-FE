@@ -30,8 +30,18 @@ export interface Pet {
   petImg: string;
   petName: string;
 }
-export type GetPetsResponse = Pet[];
+export type GetPetsByIdResponse = Pet[];
 
+export interface GetPetDetailByIdResponse {
+  petId: number;
+  petImg: string;
+  animal: string;
+  petName: string;
+  petBirth: string;
+  petBreed: string;
+  petGender: string;
+  petWeight: number;
+}
 
 // 회원가입
 export async function signupUser(
@@ -90,8 +100,8 @@ export async function createPetInfo (formData: FormData): Promise<CreatePetInfoR
   }
 };
 
-// 펫 정보 불러오기
-export async function getPetsById(): Promise<GetPetsResponse> {
+// 유저의 모든 펫 정보 불러오기
+export async function getPetsById(): Promise<GetPetsByIdResponse> {
   try {
     const response = await petApiClient.get("/getPetsById",{
       withCredentials: true,
@@ -100,7 +110,7 @@ export async function getPetsById(): Promise<GetPetsResponse> {
       },
     });
     
-  console.log("📌 응답 데이터:", JSON.stringify(response.data, null, 2));
+    console.log("📌 응답 데이터:", JSON.stringify(response.data, null, 2));
 
     return response.data.data;
   } catch (error) {
@@ -108,3 +118,20 @@ export async function getPetsById(): Promise<GetPetsResponse> {
     throw new Error("펫 정보 가져오기 실패");
   }
 };
+
+export async function getPetDetailById(petId: number): Promise<GetPetDetailByIdResponse>{
+  try {
+    const response = await petApiClient.get(`/getPetDetail/${petId}`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    
+    console.log("📌 응답 데이터:", JSON.stringify(response.data, null, 2));
+    return response.data.data;
+  } catch(error) {
+    console.log("error : " + error);
+    throw new Error("펫 상세정보 가져오기 실패");
+  }
+}
