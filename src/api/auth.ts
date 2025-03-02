@@ -135,3 +135,17 @@ export async function getPetDetailById(petId: number): Promise<GetPetDetailByIdR
     throw new Error("펫 상세정보 가져오기 실패");
   }
 }
+
+export async function deletePet(petId: number): Promise<void> {
+  try {
+    await petApiClient.delete(`/${petId}`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.log("error : " + error);
+    throw new Error("펫 삭제 실패");
+  }
+}

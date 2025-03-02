@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPetDetailById } from "../api/auth";
 import basicPicture from "../assets/basicPicture.png";
+import { deletePet } from "../api/auth";
+import DeleteConfirmPopup from "../components/DeleteConfirmPopup";
 
 interface Pet {
   petId: number;
@@ -15,16 +17,16 @@ interface Pet {
 }
 
 const PetDetail = () => {
+  const nav = useNavigate();
   const { petId } = useParams();
   const [pet, setPet] = useState<Pet | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [openPopup, setOpenPopup] = useState(false);
 
   useEffect(() => {
     const getPetDetail = async () => {
       try {
-        console.log("펫 아이디를 보자 : " + petId);
-
         if (!petId) {
           throw new Error("잘못된 요청입니다.");
         }
@@ -42,6 +44,17 @@ const PetDetail = () => {
 
     getPetDetail();
   }, [petId]);
+
+  const clickDeletePet = async () => {
+    if (!petId) return;
+
+    try {
+      await deletePet(Number(petId));
+      nav("/petManagement");
+    } catch (error) {
+      console.error("삭제 실패", error);
+    }
+  };
 
   if (loading) return <p className="text-center text-3xl">⏳ 로딩 중...</p>;
   if (error)
@@ -87,11 +100,23 @@ const PetDetail = () => {
           <button className=" bg-blue-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center mr-5 hover:bg-blue-500 transition">
             수정하기
           </button>
-          <button className=" bg-red-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center hover:bg-red-500 transition">
+          <button
+            onClick={() => setOpenPopup(true)}
+            className=" bg-red-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center hover:bg-red-500 transition"
+          >
             삭제하기
           </button>
         </div>
       </div>
+
+      {openPopup && (
+        <DeleteConfirmPopup
+          onClose={() => {
+            setOpenPopup(false);
+          }}
+          onConfirm={clickDeletePet}
+        />
+      )}
     </div>
   );
 };
