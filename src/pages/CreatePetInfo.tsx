@@ -4,6 +4,7 @@ import { FaPaw, FaCamera } from "react-icons/fa";
 import { createPetInfo } from "../api/auth";
 import Header from "../components/Header";
 import SuccessPopup from "../components/SuccessPopup";
+import Button from "../components/Button";
 
 const CreatePetInfo = () => {
   const navigate = useNavigate();
@@ -87,18 +88,15 @@ const CreatePetInfo = () => {
     <>
       {showPopup && <SuccessPopup />}
 
-      <div className="pt-7 w-full h-full flex items-center justify-center bg-gray-100 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
-          <h2 className="text-2xl mb-6 text-center flex items-center justify-center text-3xl">
-            <FaPaw className="text-emerald-500 mr-2" /> 반려동물 프로필 등록
+      <div className="pt-7 w-full h-full flex items-center justify-center p-24">
+        <div className="p-8 w-96">
+          <h2 className="text-4xl font-bold mb-10 flex items-center text-gray-700">
+            반려동물 등록
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
-              <label className="block font-bold mb-2 ">
-                반려동물 사진 업로드
-              </label>
               <div className="w-full flex flex-col items-center">
-                <label className="cursor-pointer border-2 border-dashed border-gray-300 w-32 h-32 flex items-center justify-center rounded-lg bg-gray-50">
+                <label className="cursor-pointer border border-gray-300 w-32 h-32 flex items-center justify-center rounded-full bg-gray-50">
                   {petImage ? (
                     <img
                       src={petImage}
@@ -114,46 +112,55 @@ const CreatePetInfo = () => {
                     onChange={handleImageUpload}
                   />
                 </label>
-                <p className="text-xs text-gray-500 mt-2">
-                  이미지 권장 크기: 140 x 140
-                </p>
               </div>
             </div>
 
-            <div className="mb-5 flex w-full justify-around">
-              <button
-                type="button"
-                className={`rounded-md border px-6 py-2 ${
-                  petAnimal === "DOG" ? "bg-yellow-200" : ""
-                }`}
-                onClick={() => setPetAnimal("DOG")}
-              >
-                강아지
-              </button>
-              <button
-                type="button"
-                className={`rounded-md border px-6 py-2 ${
-                  petAnimal === "CAT" ? "bg-yellow-200" : ""
-                }`}
-                onClick={() => setPetAnimal("CAT")}
-              >
-                고양이
-              </button>
+            <div className="flex flex-col w-full mb-9">
+              <div className="flex font-bold gap-1 ">
+                <div className="mb-2">반려동물</div>
+                <div className="text-sm text-red-600">*</div>
+              </div>
+              <div className="w-full flex gap-3">
+                <button
+                  type="button"
+                  className={`rounded-md border flex-1 py-2 ${
+                    petAnimal === "DOG" ? "bg-orange-100" : ""
+                  }`}
+                  onClick={() => setPetAnimal("DOG")}
+                >
+                  강아지
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-md border flex-1 py-2 ${
+                    petAnimal === "CAT" ? "bg-orange-100" : ""
+                  }`}
+                  onClick={() => setPetAnimal("CAT")}
+                >
+                  고양이
+                </button>
+              </div>
             </div>
 
-            <div className="mb-5">
-              <label className="block mb-2">* 이름</label>
+            <div className="mb-9">
+              <div className="flex font-bold items-start gap-1">
+                <div className="mb-2">이름</div>
+                <div className="text-sm text-red-600">*</div>
+              </div>
               <input
                 type="text"
                 value={petName}
                 onChange={(e) => setPetName(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md focus:border-blue-300"
               />
             </div>
 
-            <div className="mb-5">
-              <label className="block mb-2">* 생일</label>
+            <div className="mb-9">
+              <div className="flex font-bold items-start gap-1">
+                <div className="mb-2">생일</div>
+                <div className="text-sm text-red-600">*</div>
+              </div>
               <input
                 type="date"
                 max={today}
@@ -161,28 +168,34 @@ const CreatePetInfo = () => {
                 onChange={(e) => setPetBirth(e.target.value)}
                 required
                 placeholder="YYYY-MM-DD"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md focus:border-blue-300"
               />
             </div>
 
-            <div className="mb-5">
-              <label className="block mb-2">견종/묘종</label>
+            <div className="mb-9">
+              <div className="flex font-bold items-start gap-1">
+                <div className="mb-2">견종/묘종</div>
+                <div className="text-sm text-red-600">*</div>
+              </div>
               <input
                 type="text"
                 value={petBreed}
                 onChange={(e) => setPetBreed(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md focus:border-blue-300"
               />
             </div>
 
-            <div className="mb-5 w-full">
-              <label className="block mb-2">성별</label>
-              <div className="flex justify-around">
+            <div className="mb-9">
+              <div className="flex font-bold gap-1 ">
+                <div className="mb-2">성별</div>
+                <div className="text-sm text-red-600">*</div>
+              </div>
+              <div className="flex w-full gap-3 ">
                 <button
                   type="button"
-                  className={`rounded-md border px-6 py-2 ${
-                    petGender === "MALE" ? "bg-blue-200" : " "
+                  className={`rounded-md border flex-1 py-2 ${
+                    petGender === "MALE" ? "bg-sky-100" : " "
                   }`}
                   onClick={() => {
                     setPetGender("MALE");
@@ -192,8 +205,8 @@ const CreatePetInfo = () => {
                 </button>
                 <button
                   type="button"
-                  className={`rounded-md border px-6 py-2 ${
-                    petGender === "FEMALE" ? "bg-blue-200" : " "
+                  className={`rounded-md border flex-1 py-2 ${
+                    petGender === "FEMALE" ? "bg-violet-100" : " "
                   }`}
                   onClick={() => {
                     setPetGender("FEMALE");
@@ -232,30 +245,37 @@ const CreatePetInfo = () => {
               </div>
             </div> */}
 
-            <div className="mb-5">
-              <label className="block mb-2">몸무게</label>
-              <input
-                type="number"
-                min="0" // 0이상만 입력 가능
-                step="0.01" // 소수점 입력가능
-                value={petWeight}
-                onChange={(e) => setPetWeight(e.target.value)}
-                required
-                className="px-3 py-2 mr-2 border border-gray-300 rounded-md focus:border-blue-300"
-              />
-              kg
-              <p className="text-base ml-2 mt-1 text-gray-500">
-                * 1kg미만인 경우, 750g이라면 0.75 입력
+            <div className="mb-12">
+              <div className="flex font-bold gap-1 ">
+                <div>몸무게</div>
+                <div className="text-sm text-red-600">*</div>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">
+                1kg미만인 경우, 750g이라면 0.75 입력해주세요.
               </p>
+              <div className="relative flex w-full">
+                <input
+                  type="number"
+                  min="0" // 0이상만 입력 가능
+                  step="0.01" // 소수점 입력가능
+                  value={petWeight}
+                  onChange={(e) => setPetWeight(e.target.value)}
+                  required
+                  className="flex-1 py-2 pr-10 pl-3 border border-gray-200 rounded-md bg-transparent backdrop-blur-md border-gray-500/50 focus:outline-none"
+                />
+                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700">
+                  kg
+                </span>
+              </div>
             </div>
 
             <div>
               <button
                 type="submit"
-                className="w-full bg-yellow-100 py-2 px-4 rounded-md hover:bg-pink-100"
+                className="w-full py-3 px-4 rounded-md bg-gray-800 text-white"
                 disabled={isLoading}
               >
-                {isLoading ? "등록 중.." : "등록하기"}
+                등록하기
               </button>
             </div>
           </form>
