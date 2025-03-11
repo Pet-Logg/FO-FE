@@ -1,12 +1,13 @@
 import { FaTimes, FaLink, FaInstagram } from "react-icons/fa";
 import { RiKakaoTalkFill } from "react-icons/ri";
-import Confetti from "react-confetti";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Confetti from "react-confetti";
+import Button from "./Button";
 
 const SuccessPopup: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(true);
-
+  const nav = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 3000); // 3초후 Confetti 사라짐
     return () => clearTimeout(timer);
@@ -24,7 +25,7 @@ const SuccessPopup: React.FC = () => {
             함께하고 싶은 친구들에게 반려동물을 공유해 보세요!
           </p>
 
-          <div className="flex justify-around mt-4">
+          {/* <div className="flex justify-around mt-4">
             <button className="flex flex-col items-center">
               <FaLink />
               <span className="mt-2">링크 복사</span>
@@ -37,15 +38,16 @@ const SuccessPopup: React.FC = () => {
               <FaInstagram />
               <span className="mt-2">링크 복사</span>
             </button>
-          </div>
+          </div> */}
 
-          <div>
-            <Link
-              to="/"
-              className="mt-4 w-16 h-10 rounded-full bg-blue-400 text-white"
-            >
-              확인
-            </Link>
+          <div className="mt-6 flex justify-center">
+            <Button
+              text="확인"
+              type="normal"
+              onClick={() => {
+                nav("/");
+              }}
+            />
           </div>
         </div>
       </div>
