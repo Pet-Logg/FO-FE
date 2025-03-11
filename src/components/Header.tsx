@@ -10,8 +10,8 @@ const Header = () => {
   const nav = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const isLoggedin = !!cookies.Authorization;
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const clickLogout = () => {
@@ -70,27 +70,27 @@ const Header = () => {
 
         <div className="relative" ref={dropdownRef}>
           {isLoggedin ? (
-            // <>
-            //   <button>
-            //     <img src={icon_user} className="mt-2" />
-            //   </button>
-            //   {/* <button className="px-5" onClick={clickLogout}>
-            //     로그아웃
-            //   </button> */}
-            // </>
             <>
               <button onClick={toggleDropdown}>
                 <img src={icon_user} className="mt-2" />
               </button>
               {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute right-0 mt-2 w-36 border border-gray-300 rounded-md shadow-lg bg-white">
                   <ul className="py-2">
+                    <li>
+                      <Link
+                        to="/petManagement"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        반려동물 관리
+                      </Link>
+                    </li>
                     <li>
                       <Link
                         to="/"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                       >
-                        반려동물 관리
+                        육아일기
                       </Link>
                     </li>
                     <li>

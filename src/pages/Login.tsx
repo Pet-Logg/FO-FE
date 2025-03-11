@@ -24,7 +24,7 @@ const Login = () => {
 
       setCookie("Authorization", data.data, { path: "/" });
 
-      nav("/createPetInfo");
+      nav("/");
     } catch (err) {
       setError("로그인에 실패했습니다.");
       console.log(err);

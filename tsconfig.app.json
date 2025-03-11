@@ -21,6 +21,9 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
+    /* 추가 */
+    "types": ["swiper"]
   },
-  "include": ["src"]
+  "include": ["src"],
 }
