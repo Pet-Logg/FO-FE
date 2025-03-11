@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        gongbuFont: ["gongbuFont", "sans-serif"] // 폰트 추가
+        gongbuFont: ["gongbuFont", "sans-serif"],
+        gamhong: ['Mungyeong-Gamhong-Apple', 'sans-serif'], // 커스텀 폰트 추가
       }
     },
   },
