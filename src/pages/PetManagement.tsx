@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getPetsById } from "../api/auth";
 import basicPicture from "../assets/basicPicture.png";
+import Button from "../components/Button";
 
 interface Pet {
   petId: number;
@@ -34,12 +35,13 @@ const PetManagement = () => {
   return (
     <div className="relative px-40 pt-16 min-h-screen">
       <h1 className="text-3xl font-bold mb-14">반려동물 하우스 🏠</h1>
-      <Link
-        to="/createPetInfo"
-        className="absolute right-72 top-20 bg-blue-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center hover:bg-blue-500 transition"
-      >
-        + 추가하기
-      </Link>
+      <div className="absolute right-72 top-20">
+        <Button
+          text="추가하기"
+          type="normal"
+          onClick={() => nav("/createPetInfo")}
+        />
+      </div>
 
       {loading && <p className="text-center text-3xl">로딩 중..</p>}
 

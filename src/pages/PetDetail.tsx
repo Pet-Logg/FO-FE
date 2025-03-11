@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPetDetailById } from "../api/auth";
 import basicPicture from "../assets/basicPicture.png";
 import { deletePet } from "../api/auth";
-import DeleteConfirmPopup from "../components/DeleteConfirmPopup";
+import ConfirmPopup from "../components/ConfirmPopup";
+import Button from "../components/Button";
 
 interface Pet {
   petId: number;
@@ -96,22 +97,25 @@ const PetDetail = () => {
           <p>{pet?.petWeight ? `${pet?.petWeight} kg` : "-"} </p>
         </div>
 
-        <div className="flex justify-center pt-9">
-          <button className=" bg-blue-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center mr-5 hover:bg-blue-500 transition">
-            수정하기
-          </button>
-          <button
+        <div className="flex justify-center pt-9 gap-7">
+          <Button
+            text={"수정"}
+            type={"normal"}
+            onClick={function (): void {}}
+          />
+          <Button
+            text={"삭제"}
+            type={"delete"}
             onClick={() => setOpenPopup(true)}
-            className=" bg-red-400 rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center hover:bg-red-500 transition"
-          >
-            삭제하기
-          </button>
+          />
         </div>
       </div>
 
       {openPopup && (
-        <DeleteConfirmPopup
-          onClose={() => {
+        <ConfirmPopup
+          text="반려동물을 삭제하시겠습니까?"
+          subText="삭제한 반려동물은 복구할 수 없습니다."
+          onCancle={() => {
             setOpenPopup(false);
           }}
           onConfirm={clickDeletePet}

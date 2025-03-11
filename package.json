@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.0.6",
     "axios": "^1.7.9",
+    "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-confetti": "^6.2.2",
