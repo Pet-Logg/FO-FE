@@ -13,7 +13,7 @@ const Footer = () => {
           <a>이용약관</a>
         </div>
 
-        <div className="border-l border-gray-500 px-8">
+        <div className="border-l border-gray-500 pl-12">
           <h1 className="text-yellow-400 text-xl font-bold pb-5">고객센터</h1>
           <p className="text-3xl font-bold text-white">1688-0000</p>
           <p className="text-sm">평일 09:00 ~ 18:00</p>
@@ -21,12 +21,12 @@ const Footer = () => {
           <p className="text-sm">영업시간 외에는 1:1 게시판을 이용해주세요.</p>
         </div>
 
-        <div className="border-l border-gray-500 px-8">
+        <div className="border-l border-gray-500 pl-12">
           <h1 className="text-yellow-400 text-xl font-bold pb-5">
             무통장 입금
           </h1>
           <p className="text-3xl font-bold text-white">1234-56-78900</p>
-          <p>로그은행 김호박</p>
+          <p>국민은행 김호박</p>
         </div>
       </div>
     </div>
