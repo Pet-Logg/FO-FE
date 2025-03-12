@@ -5,22 +5,12 @@ import basicPicture from "../assets/basicPicture.png";
 import { deletePet } from "../api/auth";
 import ConfirmPopup from "../components/ConfirmPopup";
 import Button from "../components/Button";
-
-interface Pet {
-  petId: number;
-  petImg: string | null;
-  animal: string;
-  petName: string;
-  petBirth: string | null;
-  petBreed: string | null;
-  petGender: string | null;
-  petWeight: number | null;
-}
+import { PetData } from "../types/PetData";
 
 const PetDetail = () => {
   const nav = useNavigate();
   const { petId } = useParams();
-  const [pet, setPet] = useState<Pet | null>(null);
+  const [pet, setPet] = useState<PetData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openPopup, setOpenPopup] = useState(false);
@@ -63,45 +53,64 @@ const PetDetail = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white max-w-md w-full mx-4 p-6 rounded-2xl shadow-lg">
-        <h1 className="text-center text-3xl font-bold mb-5">동물 등록증</h1>
+      <div className="bg-white max-w-md w-full p-8 rounded-2xl shadow-lg">
         <img
           src={pet?.petImg || basicPicture}
           className="w-60 h-60 mx-auto mb-6 object-cover rounded-full border border-gray-300"
         />
+
         <h1 className="text-3xl font-bold mb-6 text-center">{pet?.petName}</h1>
 
-        <div className="mx-20 grid grid-cols-2 gap-y-2">
-          <p className="text-left font-medium">
-            {pet?.animal === "DOG" ? "🐶 견종" : "🐱 묘종"}
-          </p>
-          <p>{pet?.petBreed || "-"}</p>
+        <div>
+          <h1 className="text-lg font-bold ml-2 mb-3">🐶 기본 정보</h1>
+          <div className="mx-10 grid grid-cols-2 gap-y-2 border-b pb-5">
+            <p className="text-left font-medium">
+              {pet?.animal === "DOG" ? "견종" : "묘종"}
+            </p>
+            <p>{pet?.petBreed || "-"}</p>
 
-          <p className="text-left font-medium">🌼 성별</p>
-          <p>
-            {pet?.petGender
-              ? pet.petGender === "MALE"
-                ? "남자"
-                : "여자"
-              : "-"}
-          </p>
+            <p className="text-left font-medium">성별</p>
+            <p>
+              {pet?.petGender
+                ? pet.petGender === "MALE"
+                  ? "남자"
+                  : "여자"
+                : "-"}
+            </p>
 
-          <p className="text-left font-medium">🎂 생년월일</p>
-          <p>
-            {pet?.petBirth
-              ? new Date(pet.petBirth).toISOString().split("T")[0]
-              : "-"}
-          </p>
+            <p className="text-left font-medium">생년월일</p>
+            <p>
+              {pet?.petBirth
+                ? new Date(pet.petBirth).toISOString().split("T")[0]
+                : "-"}
+            </p>
 
-          <p className="text-left font-medium">👀 몸무게</p>
-          <p>{pet?.petWeight ? `${pet?.petWeight} kg` : "-"} </p>
+            <p className="text-left font-medium">몸무게</p>
+            <p>{pet?.petWeight ? `${pet?.petWeight} kg` : "-"} </p>
+          </div>
+
+          <h1 className="text-lg font-bold ml-2 mb-3 pt-5">💊 건강 정보</h1>
+          <div className="mx-10 grid grid-cols-2 gap-y-2 ">
+            <p className="text-left font-medium">중성화 여부</p>
+            <p>-</p>
+
+            <p className="text-left font-medium">염려질환</p>
+            <p>-</p>
+
+            <p className="text-left font-medium">알러지</p>
+            <p>-</p>
+          </div>
         </div>
 
         <div className="flex justify-center pt-9 gap-7">
           <Button
             text={"수정"}
             type={"normal"}
-            onClick={function (): void {}}
+            onClick={() => {
+              nav(`/createPetInfo?petId=${petId}`, {
+                state: { mode: "edit" },
+              });
+            }}
           />
           <Button
             text={"삭제"}
