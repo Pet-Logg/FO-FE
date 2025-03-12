@@ -24,7 +24,7 @@ const CreatePetInfo = () => {
     petWeight: null,
 
     // 수정 모드에서만 필요한 데이터 추가 가능
-    isNeutered: false, // 중성화 여부
+    isNeutered: "", // 중성화 여부
     disease: [], // 염려질환
     allergy: [], // 알러지
   });
@@ -90,7 +90,7 @@ const CreatePetInfo = () => {
       return;
     }
 
-    if (!petData.petFile || !petData.petImg) {
+    if (mode !== "edit" && (!petData.petFile || !petData.petImg)) {
       alert("귀여운 반려동물의 사진을 넣어주세요");
       setIsLoading(false);
       return;
@@ -99,11 +99,18 @@ const CreatePetInfo = () => {
     try {
       const formData = new FormData();
 
-      formData.append("petImg", petData.petFile);
+      if (petData.petFile) {
+        formData.append("petImg", petData.petFile);
+      }
+
       Object.entries(petData).forEach(([key, value]) => {
-        if (value && key !== "petFile") {
-          formData.append(key, value);
+        if (key === "petFile") return;
+
+        if (value === null || value === undefined) {
+          value = "";
         }
+
+        formData.append(key, value);
       });
 
       if (mode === "edit" && petData.petId !== null) {
@@ -183,7 +190,7 @@ const CreatePetInfo = () => {
                     <img
                       src={petData.petImg}
                       alt="pet preview"
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded-full"
                     />
                   ) : (
                     <FaCamera className="text-gray-400 text-2xl" />
@@ -333,10 +340,10 @@ const CreatePetInfo = () => {
                       name="isNeutered"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.isNeutered === true ? "bg-orange-100" : ""
+                        petData.isNeutered === "Y" ? "bg-orange-100" : ""
                       }`}
                       onClick={() =>
-                        setPetData({ ...petData, isNeutered: true })
+                        setPetData({ ...petData, isNeutered: "Y" })
                       }
                     >
                       했어요
@@ -345,10 +352,10 @@ const CreatePetInfo = () => {
                       name="isNeutered"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.isNeutered === false ? "bg-orange-100" : ""
+                        petData.isNeutered === "N" ? "bg-orange-100" : ""
                       }`}
                       onClick={() =>
-                        setPetData({ ...petData, isNeutered: false })
+                        setPetData({ ...petData, isNeutered: "N" })
                       }
                     >
                       안했어요

@@ -57,7 +57,7 @@ const Header = () => {
 
         <form onSubmit={a} className="relative flex items-center">
           <input
-            type="text"
+            type="button"
             placeholder="궁금한 것을 물어보세요!"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
