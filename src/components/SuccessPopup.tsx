@@ -25,27 +25,12 @@ const SuccessPopup: React.FC = () => {
             함께하고 싶은 친구들에게 반려동물을 공유해 보세요!
           </p>
 
-          {/* <div className="flex justify-around mt-4">
-            <button className="flex flex-col items-center">
-              <FaLink />
-              <span className="mt-2">링크 복사</span>
-            </button>
-            <button className="flex flex-col items-center">
-              <RiKakaoTalkFill />
-              <span className="mt-2">링크 복사</span>
-            </button>
-            <button className="flex flex-col items-center">
-              <FaInstagram />
-              <span className="mt-2">링크 복사</span>
-            </button>
-          </div> */}
-
           <div className="mt-6 flex justify-center">
             <Button
               text="확인"
               type="normal"
               onClick={() => {
-                nav("/");
+                nav("/petManagement");
               }}
             />
           </div>

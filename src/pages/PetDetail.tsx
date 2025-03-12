@@ -116,7 +116,9 @@ const PetDetail = () => {
           <Button
             text={"수정"}
             type={"normal"}
-            onClick={function (): void {}}
+            onClick={() => {
+              nav("/editPetInfo");
+            }}
           />
           <Button
             text={"삭제"}
