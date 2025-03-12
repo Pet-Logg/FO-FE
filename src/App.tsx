@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import PetManagement from "./pages/PetManagement";
 import PetDetail from "./pages/PetDetail";
-import EditPetInfo from "./pages/EditPetInfo";
 
 const App = () => {
   return (
@@ -21,7 +20,6 @@ const App = () => {
           <Route path="/createPetInfo" element={<CreatePetInfo />} />
           <Route path="/petManagement" element={<PetManagement />} />
           <Route path="/getPetDetail/:petId" element={<PetDetail />} />
-          <Route path="/editPetInfo" element={<EditPetInfo />} />
         </Routes>
         <Footer />
       </BrowserRouter>

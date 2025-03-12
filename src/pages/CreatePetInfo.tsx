@@ -25,9 +25,12 @@ const CreatePetInfo = () => {
 
     // 수정 모드에서만 필요한 데이터 추가 가능
     isNeutered: false, // 중성화 여부
-    disease: "", // 염려질환
-    allergy: "", // 알러지
+    disease: [], // 염려질환
+    allergy: [], // 알러지
   });
+
+  const [hasDisease, setHasDisease] = useState(false); // 염려질환 있어요 버튼 선택됐는지
+  const [hasAllergy, setHasAllergy] = useState(false); // 알러지 있어요 버튼 선택됐는지
 
   // 수정모드일때 기존데이터 불러오기
   useEffect(() => {
@@ -116,6 +119,46 @@ const CreatePetInfo = () => {
   };
 
   const today: string = new Date().toISOString().split("T")[0];
+
+  const diseaseOptions = [
+    "피부",
+    "눈",
+    "눈물",
+    "귀",
+    "관절",
+    "치아",
+    "모질",
+    "호흡기",
+    "소화기",
+    "체중",
+    "노환",
+    "신장",
+  ];
+
+  const allergyOptions = [
+    "소고기",
+    "유제품",
+    "생선",
+    "양고기",
+    "말",
+    "닭",
+    "옥수수",
+    "달걀",
+  ];
+
+  const handleSelectOption = (type: "disease" | "allergy", value: string) => {
+    setPetData((data) => {
+      const currentValues = data[type] || [];
+      const isSelected = currentValues.includes(value);
+
+      return {
+        ...data,
+        [type]: isSelected
+          ? currentValues.filter((item) => item !== value) // 이미선택된거면 제거
+          : [...currentValues, value],
+      };
+    });
+  };
 
   return (
     <>
@@ -321,9 +364,11 @@ const CreatePetInfo = () => {
                       name="disease"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.disease === "1" ? "bg-orange-100" : ""
+                        hasDisease === true ? "bg-orange-100" : ""
                       }`}
-                      onClick={() => setPetData({ ...petData, disease: "" })}
+                      onClick={() => {
+                        setHasDisease(true);
+                      }}
                     >
                       있어요
                     </button>
@@ -331,14 +376,40 @@ const CreatePetInfo = () => {
                       name="disease"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.disease === "1" ? "bg-orange-100" : ""
+                        hasDisease === false ? "bg-orange-100" : ""
                       }`}
-                      onClick={() =>
-                        setPetData({ ...petData, disease: "false" })
-                      }
+                      onClick={() => {
+                        setHasDisease(false);
+                        setPetData((data) => ({
+                          ...data,
+                          disease: [], // 없어요 선택 시 초기화
+                        }));
+                      }}
                     >
                       없어요
                     </button>
+                  </div>
+                  <div>
+                    {hasDisease === true && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {diseaseOptions.map((disease) => (
+                          <button
+                            type="button"
+                            key={disease}
+                            className={`px-4 py-2 border rounded-md ${
+                              petData.disease?.includes(disease)
+                                ? "bg-blue-100 text-white font-bold"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              handleSelectOption("disease", disease)
+                            }
+                          >
+                            {disease}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -352,9 +423,9 @@ const CreatePetInfo = () => {
                       name="allergy"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.allergy === "1" ? "bg-orange-100" : ""
+                        hasAllergy === true ? "bg-orange-100" : ""
                       }`}
-                      onClick={() => setPetData({ ...petData, allergy: "" })}
+                      onClick={() => setHasAllergy(true)}
                     >
                       있어요
                     </button>
@@ -362,12 +433,34 @@ const CreatePetInfo = () => {
                       name="allergy"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.allergy === "1" ? "bg-orange-100" : ""
+                        hasAllergy === false ? "bg-orange-100" : ""
                       }`}
-                      onClick={() => setPetData({ ...petData, allergy: "" })}
+                      onClick={() => setHasAllergy(false)}
                     >
                       없어요
                     </button>
+                  </div>
+                  <div>
+                    {hasAllergy === true && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {allergyOptions.map((allergy) => (
+                          <button
+                            type="button"
+                            key={allergy}
+                            className={`px-4 py-2 border rounded-md ${
+                              petData.allergy?.includes(allergy)
+                                ? "bg-blue-100 text-white font-bold"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              handleSelectOption("allergy", allergy)
+                            }
+                          >
+                            {allergy}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </>
