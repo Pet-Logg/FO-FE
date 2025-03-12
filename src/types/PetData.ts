@@ -7,7 +7,8 @@ export interface PetData{
   petBirth: string;
   petBreed: string;
   petGender: string;
-  petWeight: number;
-  petIsNeutered?: string;
-  petConcernedDiseases?: string;
+  petWeight: number | null;
+  isNeutered?: boolean | null;
+  disease?: string | null;
+  allergy?: string | null;
 }

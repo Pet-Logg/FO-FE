@@ -107,7 +107,7 @@ const PetDetail = () => {
             text={"수정"}
             type={"normal"}
             onClick={() => {
-              nav("/createPetInfo");
+              nav("/createPetInfo", { state: { mode: "edit" } });
             }}
           />
           <Button
