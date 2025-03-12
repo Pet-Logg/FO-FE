@@ -5,22 +5,12 @@ import basicPicture from "../assets/basicPicture.png";
 import { deletePet } from "../api/auth";
 import ConfirmPopup from "../components/ConfirmPopup";
 import Button from "../components/Button";
-
-interface Pet {
-  petId: number;
-  petImg: string | null;
-  animal: string;
-  petName: string;
-  petBirth: string | null;
-  petBreed: string | null;
-  petGender: string | null;
-  petWeight: number | null;
-}
+import { PetData } from "../types/PetData";
 
 const PetDetail = () => {
   const nav = useNavigate();
   const { petId } = useParams();
-  const [pet, setPet] = useState<Pet | null>(null);
+  const [pet, setPet] = useState<PetData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openPopup, setOpenPopup] = useState(false);
@@ -117,7 +107,7 @@ const PetDetail = () => {
             text={"수정"}
             type={"normal"}
             onClick={() => {
-              nav("/editPetInfo");
+              nav("/createPetInfo");
             }}
           />
           <Button
