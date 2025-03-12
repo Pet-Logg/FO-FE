@@ -75,8 +75,7 @@ const CreatePetInfo = () => {
       return;
     }
 
-    const imageUrl = URL.createObjectURL(file);
-
+    const imageUrl = URL.createObjectURL(file); // 미리보기 URL 생성
     setPetData({ ...petData, petImg: imageUrl, petFile: file });
   };
 
@@ -100,8 +99,9 @@ const CreatePetInfo = () => {
     try {
       const formData = new FormData();
 
+      formData.append("petImg", petData.petFile);
       Object.entries(petData).forEach(([key, value]) => {
-        if (value) {
+        if (value && key !== "petFile") {
           formData.append(key, value);
         }
       });
@@ -130,7 +130,6 @@ const CreatePetInfo = () => {
   const diseaseOptions = [
     "피부",
     "눈",
-    "눈물",
     "귀",
     "관절",
     "치아",
