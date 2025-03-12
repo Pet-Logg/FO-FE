@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
 import { createPetInfo, getPetDetailById, updatePet } from "../api/auth";
 import { PetData } from "../types/PetData";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import SuccessPopup from "../components/SuccessPopup";
 
 const CreatePetInfo = () => {
-  const { petId } = useParams();
+  const [searchParams] = useSearchParams();
+  const paramPetId = searchParams.get("petId") || null;
 
   const location = useLocation();
   const mode = location.state?.mode || "create";
@@ -29,23 +29,30 @@ const CreatePetInfo = () => {
     allergy: [], // 알러지
   });
 
-  const [hasDisease, setHasDisease] = useState(false); // 염려질환 있어요 버튼 선택됐는지
-  const [hasAllergy, setHasAllergy] = useState(false); // 알러지 있어요 버튼 선택됐는지
+  const [hasDisease, setHasDisease] = useState<boolean | null>(null); // 염려질환 있어요 버튼 선택됐는지
+  const [hasAllergy, setHasAllergy] = useState<boolean | null>(null); // 알러지 있어요 버튼 선택됐는지
 
   // 수정모드일때 기존데이터 불러오기
   useEffect(() => {
-    if (mode === "edit" && petData.petId) {
+    if (mode === "edit" && paramPetId) {
       const fetchPetData = async () => {
         try {
-          const response = await getPetDetailById(Number(petId));
-          setPetData({ ...response });
+          const response = await getPetDetailById(Number(paramPetId));
+          setPetData({
+            ...response,
+            petBreed: "",
+            petBirth: response.petBirth
+              ? new Date(response.petBirth).toISOString().split("T")[0]
+              : "",
+          });
         } catch (error) {
           console.error("펫 정보 불러오기 실패", error);
         }
       };
+
       fetchPetData();
     }
-  }, [mode, petData.petId]);
+  }, [mode, paramPetId]);
 
   // 변경감지
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,7 +251,6 @@ const CreatePetInfo = () => {
                 value={petData.petBirth}
                 onChange={onChangeInput}
                 required
-                placeholder="YYYY-MM-DD"
                 className="w-full px-3 py-2 border border-gray-200 rounded-md focus:border-blue-300"
               />
             </div>
@@ -322,10 +328,7 @@ const CreatePetInfo = () => {
             {mode === "edit" && (
               <>
                 <div className="flex flex-col w-full mb-9">
-                  <div className="flex font-bold gap-1 ">
-                    <div className="mb-2">중성화 여부</div>
-                    <div className="text-sm text-red-600">*</div>
-                  </div>
+                  <div className="mb-2 font-bold">중성화 여부</div>
                   <div className="w-full flex gap-3">
                     <button
                       name="isNeutered"
@@ -355,10 +358,7 @@ const CreatePetInfo = () => {
                 </div>
 
                 <div className="flex flex-col w-full mb-9">
-                  <div className="flex font-bold gap-1 ">
-                    <div className="mb-2">염려질환</div>
-                    <div className="text-sm text-red-600">*</div>
-                  </div>
+                  <div className="mb-2 font-bold">염려질환</div>
                   <div className="w-full flex gap-3">
                     <button
                       name="disease"
@@ -414,10 +414,7 @@ const CreatePetInfo = () => {
                 </div>
 
                 <div className="flex flex-col w-full mb-9">
-                  <div className="flex font-bold gap-1 ">
-                    <div className="mb-2">알러지</div>
-                    <div className="text-sm text-red-600">*</div>
-                  </div>
+                  <div className="mb-2 font-bold">알러지</div>
                   <div className="w-full flex gap-3">
                     <button
                       name="allergy"
