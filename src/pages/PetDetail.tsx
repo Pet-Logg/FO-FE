@@ -78,7 +78,7 @@ const PetDetail = () => {
                 : "-"}
             </p>
 
-            <p className="text-left font-medium">생년월일</p>
+            <p className="text-left font-medium">생일</p>
             <p>
               {pet?.petBirth
                 ? new Date(pet.petBirth).toISOString().split("T")[0]
@@ -92,7 +92,13 @@ const PetDetail = () => {
           <h1 className="text-lg font-bold ml-2 mb-3 pt-5">💊 건강 정보</h1>
           <div className="mx-10 grid grid-cols-2 gap-y-2 ">
             <p className="text-left font-medium">중성화 여부</p>
-            <p>-</p>
+            <p>
+              {pet?.isNeutered
+                ? pet?.isNeutered === "Y"
+                  ? "했어요"
+                  : "안했어요"
+                : "-"}
+            </p>
 
             <p className="text-left font-medium">염려질환</p>
             <p>-</p>
