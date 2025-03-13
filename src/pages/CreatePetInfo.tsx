@@ -40,7 +40,6 @@ const CreatePetInfo = () => {
           const response = await getPetDetailById(Number(paramPetId));
           setPetData({
             ...response,
-            petBreed: "",
             petBirth: response.petBirth
               ? new Date(response.petBirth).toISOString().split("T")[0]
               : "",
@@ -100,11 +99,11 @@ const CreatePetInfo = () => {
       const formData = new FormData();
 
       if (petData.petFile) {
-        formData.append("petImg", petData.petFile);
+        formData.append("petImg", petData.petFile); // 새 이미지 추가
       }
 
       Object.entries(petData).forEach(([key, value]) => {
-        if (key === "petFile") return;
+        if (key === "petFile" || key === "petImg") return;
 
         if (value === null || value === undefined) {
           value = "";
