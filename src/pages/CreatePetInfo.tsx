@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import { createPetInfo, getPetDetailById, updatePet } from "../api/auth";
 import { PetData } from "../types/PetData";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SuccessPopup from "../components/SuccessPopup";
+import OneButtonModal from "../components/OneButtonModal";
 
 const CreatePetInfo = () => {
+  const nav = useNavigate();
+
   const [searchParams] = useSearchParams();
   const paramPetId = searchParams.get("petId") || null;
 
@@ -174,7 +177,17 @@ const CreatePetInfo = () => {
 
   return (
     <>
-      {showPopup && <SuccessPopup />}
+      {showPopup && mode === "create" && <SuccessPopup />}
+      {showPopup && mode === "edit" && (
+        <OneButtonModal
+          text="수정이 완료되었습니다."
+          buttonName="확인"
+          buttonType="normal"
+          onConfirm={() => {
+            nav("/petManagement");
+          }}
+        />
+      )}
 
       <div className="pt-7 w-full h-full flex items-center justify-center p-24">
         <div className="p-8 w-96">

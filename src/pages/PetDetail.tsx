@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPetDetailById } from "../api/auth";
 import basicPicture from "../assets/basicPicture.png";
 import { deletePet } from "../api/auth";
-import ConfirmPopup from "../components/ConfirmPopup";
 import Button from "../components/Button";
 import { PetData } from "../types/PetData";
+import TwoButtonModal from "../components/TwoButtonModal";
 
 const PetDetail = () => {
   const nav = useNavigate();
@@ -127,9 +127,13 @@ const PetDetail = () => {
       </div>
 
       {openPopup && (
-        <ConfirmPopup
+        <TwoButtonModal
           text="반려동물을 삭제하시겠습니까?"
           subText="삭제한 반려동물은 복구할 수 없습니다."
+          firstButton="삭제"
+          secondButton="취소"
+          firstType="delete"
+          secondType="cancel"
           onCancle={() => {
             setOpenPopup(false);
           }}
