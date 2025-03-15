@@ -108,6 +108,20 @@ const CreatePetInfo = () => {
     "달걀",
   ];
 
+  useEffect(() => {
+    if (petData.disease && petData.disease.length > 0) {
+      setHasDisease(true);
+    } else {
+      setHasDisease(false);
+    }
+
+    if (petData.allergy && petData.allergy.length > 0) {
+      setHasAllergy(true);
+    } else {
+      setHasAllergy(false);
+    }
+  }, [petData.disease, petData.allergy]);
+
   // 염려질환, 알러지 선택
   const handleSelectOption = (type: "disease" | "allergy", value: string) => {
     setPetData((data) => {
@@ -155,9 +169,6 @@ const CreatePetInfo = () => {
         }
 
         formData.append(key, value);
-
-        console.log("disease : " + formData.get("disease"));
-        console.log("allergy : " + formData.get("allergy"));
       });
 
       if (mode === "edit" && petData.petId !== null) {
@@ -454,7 +465,13 @@ const CreatePetInfo = () => {
                       className={`rounded-md border flex-1 py-2 ${
                         hasAllergy === false ? "bg-orange-100" : ""
                       }`}
-                      onClick={() => setHasAllergy(false)}
+                      onClick={() => {
+                        setHasAllergy(false);
+                        setPetData((data) => ({
+                          ...data,
+                          allergy: [], // 없어요 선택 시 초기화
+                        }));
+                      }}
                     >
                       없어요
                     </button>
