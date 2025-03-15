@@ -101,10 +101,10 @@ const PetDetail = () => {
             </p>
 
             <p className="text-left font-medium">염려질환</p>
-            <p>-</p>
+            <p>{pet?.disease?.length ? pet?.disease.join(", ") : "-"}</p>
 
             <p className="text-left font-medium">알러지</p>
-            <p>-</p>
+            <p>{pet?.allergy?.length ? pet?.allergy.join(", ") : "-"}</p>
           </div>
         </div>
 

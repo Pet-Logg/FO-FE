@@ -81,6 +81,48 @@ const CreatePetInfo = () => {
     setPetData({ ...petData, petImg: imageUrl, petFile: file });
   };
 
+  const today: string = new Date().toISOString().split("T")[0];
+
+  const diseaseOptions = [
+    "피부",
+    "눈",
+    "귀",
+    "관절",
+    "치아",
+    "모질",
+    "호흡기",
+    "소화기",
+    "체중",
+    "노환",
+    "신장",
+  ];
+
+  const allergyOptions = [
+    "소고기",
+    "유제품",
+    "생선",
+    "양고기",
+    "말",
+    "닭",
+    "옥수수",
+    "달걀",
+  ];
+
+  // 염려질환, 알러지 선택
+  const handleSelectOption = (type: "disease" | "allergy", value: string) => {
+    setPetData((data) => {
+      const currentValues = data[type] || []; // ["피부", "눈"]
+      const isSelected = currentValues.includes(value);
+
+      return {
+        ...data,
+        [type]: isSelected
+          ? currentValues.filter((item) => item !== value) // 이미선택된거면 제거
+          : [...currentValues, value],
+      };
+    });
+  };
+
   // 폼 제출하기
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 기본 폼 제출 동작 방지
@@ -113,6 +155,9 @@ const CreatePetInfo = () => {
         }
 
         formData.append(key, value);
+
+        console.log("disease : " + formData.get("disease"));
+        console.log("allergy : " + formData.get("allergy"));
       });
 
       if (mode === "edit" && petData.petId !== null) {
@@ -132,47 +177,6 @@ const CreatePetInfo = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const today: string = new Date().toISOString().split("T")[0];
-
-  const diseaseOptions = [
-    "피부",
-    "눈",
-    "귀",
-    "관절",
-    "치아",
-    "모질",
-    "호흡기",
-    "소화기",
-    "체중",
-    "노환",
-    "신장",
-  ];
-
-  const allergyOptions = [
-    "소고기",
-    "유제품",
-    "생선",
-    "양고기",
-    "말",
-    "닭",
-    "옥수수",
-    "달걀",
-  ];
-
-  const handleSelectOption = (type: "disease" | "allergy", value: string) => {
-    setPetData((data) => {
-      const currentValues = data[type] || [];
-      const isSelected = currentValues.includes(value);
-
-      return {
-        ...data,
-        [type]: isSelected
-          ? currentValues.filter((item) => item !== value) // 이미선택된거면 제거
-          : [...currentValues, value],
-      };
-    });
   };
 
   return (
