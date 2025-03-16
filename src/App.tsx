@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import PetManagement from "./pages/PetManagement";
 import PetDetail from "./pages/PetDetail";
+import PetDiary from "./pages/PetDiary";
+import CreatePetDiary from "./pages/CreatePetDiary";
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
           <Route path="/createPetInfo" element={<CreatePetInfo />} />
           <Route path="/petManagement" element={<PetManagement />} />
           <Route path="/getPetDetail/:petId" element={<PetDetail />} />
+          <Route path="/petDiary" element={<PetDiary />} />
+          <Route path="/createPetDiary" element={<CreatePetDiary />} />
         </Routes>
         <Footer />
       </BrowserRouter>
