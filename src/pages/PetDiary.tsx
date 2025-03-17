@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../components/Button";
+import { Button } from "antd";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -15,32 +15,26 @@ const PetDiary = () => {
     <>
       <div className="w-full px-40 py-20">
         <div className="flex flex-row justify-between mb-10">
-          <div>
-            <Button
-              text="✏️ 일기 쓰기"
-              type="normal"
-              onClick={() => {
-                nav("/createPetDiary");
-              }}
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => nav("/createPetDiary")}
+          >
+            ✏️ 일기 쓰기
+          </Button>
+
+          <form onSubmit={a} className="relative flex items-center">
+            <input
+              type="text"
+              placeholder="일기 검색"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-64 md:w-96 px-4 py-2 border-2 border-orange-400 rounded-full focus:outline-none text-gray-700"
             />
-          </div>
-          <div className="flex items-center">
-            <form onSubmit={a} className="relative flex items-center">
-              <input
-                type="text"
-                placeholder="궁금한 것을 물어보세요!"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-64 md:w-96 px-4 py-2 border-2 border-orange-400 rounded-full focus:outline-none text-gray-700"
-              />
-              <button
-                type="submit"
-                className="absolute right-4 text-orange-500"
-              >
-                <FaSearch />
-              </button>
-            </form>
-          </div>
+            <button type="submit" className="absolute right-4 text-orange-500">
+              <FaSearch />
+            </button>
+          </form>
         </div>
 
         <div className="grid grid-cols-4 gap-4">

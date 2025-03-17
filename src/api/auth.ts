@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+import { DiaryData } from "../types/DiaryData";
 import apiClient from "./apiClient";
 import petApiClient from "./petApiClient";
 
@@ -43,6 +45,12 @@ export interface GetPetDetailByIdResponse {
   isNeutered?: string | null;
   concernedDiseases?: string | null;
   allergies?: string | null;
+}
+
+export interface CreateDiaryResponse {
+  title: string;
+  content: string;
+  images?: UploadFile[];
 }
 
 // 회원가입
@@ -172,3 +180,19 @@ export async function updatePet(petId: number, formData:FormData): Promise<GetPe
     throw new Error("펫 수정 실패");
   }
 }
+
+// 다이어리 등록
+export async function createDiary (formData: FormData): Promise<CreateDiaryResponse> {
+  try {
+    const response = await petApiClient.post("/createDiary", formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error)
+    throw new Error("펫 정보 등록 실패");
+  }
+};
