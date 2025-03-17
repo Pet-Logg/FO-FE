@@ -5,14 +5,15 @@ import { Upload, UploadFile, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
+type DiaryFormData = Partial<DiaryData>;
 
 const CreatePetDiary = () => {
   const nav = useNavigate();
 
-  const [diaryData, setDiaryData] = useState<DiaryData>({
+  const [diaryData, setDiaryData] = useState<DiaryFormData>({
     title: "",
     content: "",
-    images: [], //
+    images: [],
   });
 
   // 변경감지
