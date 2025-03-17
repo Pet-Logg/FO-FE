@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPetDetailById } from "../api/auth";
 import basicPicture from "../assets/basicPicture.png";
 import { deletePet } from "../api/auth";
-import ConfirmPopup from "../components/ConfirmPopup";
 import Button from "../components/Button";
 import { PetData } from "../types/PetData";
+import TwoButtonModal from "../components/TwoButtonModal";
 
 const PetDetail = () => {
   const nav = useNavigate();
@@ -78,7 +78,7 @@ const PetDetail = () => {
                 : "-"}
             </p>
 
-            <p className="text-left font-medium">생년월일</p>
+            <p className="text-left font-medium">생일</p>
             <p>
               {pet?.petBirth
                 ? new Date(pet.petBirth).toISOString().split("T")[0]
@@ -92,13 +92,19 @@ const PetDetail = () => {
           <h1 className="text-lg font-bold ml-2 mb-3 pt-5">💊 건강 정보</h1>
           <div className="mx-10 grid grid-cols-2 gap-y-2 ">
             <p className="text-left font-medium">중성화 여부</p>
-            <p>-</p>
+            <p>
+              {pet?.isNeutered
+                ? pet?.isNeutered === "Y"
+                  ? "했어요"
+                  : "안했어요"
+                : "-"}
+            </p>
 
             <p className="text-left font-medium">염려질환</p>
-            <p>-</p>
+            <p>{pet?.disease?.length ? pet?.disease.join(", ") : "-"}</p>
 
             <p className="text-left font-medium">알러지</p>
-            <p>-</p>
+            <p>{pet?.allergy?.length ? pet?.allergy.join(", ") : "-"}</p>
           </div>
         </div>
 
@@ -121,9 +127,13 @@ const PetDetail = () => {
       </div>
 
       {openPopup && (
-        <ConfirmPopup
+        <TwoButtonModal
           text="반려동물을 삭제하시겠습니까?"
           subText="삭제한 반려동물은 복구할 수 없습니다."
+          firstButton="삭제"
+          secondButton="취소"
+          firstType="delete"
+          secondType="cancel"
           onCancle={() => {
             setOpenPopup(false);
           }}

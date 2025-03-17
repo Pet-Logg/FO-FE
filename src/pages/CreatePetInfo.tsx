@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import { createPetInfo, getPetDetailById, updatePet } from "../api/auth";
 import { PetData } from "../types/PetData";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SuccessPopup from "../components/SuccessPopup";
+import OneButtonModal from "../components/OneButtonModal";
 
 const CreatePetInfo = () => {
+  const nav = useNavigate();
+
   const [searchParams] = useSearchParams();
   const paramPetId = searchParams.get("petId") || null;
 
@@ -24,7 +27,7 @@ const CreatePetInfo = () => {
     petWeight: null,
 
     // 수정 모드에서만 필요한 데이터 추가 가능
-    isNeutered: false, // 중성화 여부
+    isNeutered: "", // 중성화 여부
     disease: [], // 염려질환
     allergy: [], // 알러지
   });
@@ -40,7 +43,6 @@ const CreatePetInfo = () => {
           const response = await getPetDetailById(Number(paramPetId));
           setPetData({
             ...response,
-            petBreed: "",
             petBirth: response.petBirth
               ? new Date(response.petBirth).toISOString().split("T")[0]
               : "",
@@ -75,54 +77,8 @@ const CreatePetInfo = () => {
       return;
     }
 
-    const imageUrl = URL.createObjectURL(file);
-
+    const imageUrl = URL.createObjectURL(file); // 미리보기 URL 생성
     setPetData({ ...petData, petImg: imageUrl, petFile: file });
-  };
-
-  // 폼 제출하기
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // 기본 폼 제출 동작 방지
-    setIsLoading(true);
-
-    if (!petData.petName || !petData.petBirth || !petData.petWeight) {
-      alert("모든 필수 항목을 입력해주세요.");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!petData.petFile || !petData.petImg) {
-      alert("귀여운 반려동물의 사진을 넣어주세요");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-
-      Object.entries(petData).forEach(([key, value]) => {
-        if (value) {
-          formData.append(key, value);
-        }
-      });
-
-      if (mode === "edit" && petData.petId !== null) {
-        await updatePet(petData.petId, formData);
-      } else {
-        await createPetInfo(formData); // API
-      }
-
-      setShowPopup(true);
-    } catch (error) {
-      console.error(mode === "edit" ? "수정 실패" : "등록 실패", error);
-      alert(
-        mode === "edit"
-          ? "펫 정보 수정에 실패했습니다."
-          : "펫 정보 등록에 실패했습니다."
-      );
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const today: string = new Date().toISOString().split("T")[0];
@@ -130,7 +86,6 @@ const CreatePetInfo = () => {
   const diseaseOptions = [
     "피부",
     "눈",
-    "눈물",
     "귀",
     "관절",
     "치아",
@@ -153,9 +108,24 @@ const CreatePetInfo = () => {
     "달걀",
   ];
 
+  useEffect(() => {
+    if (petData.disease && petData.disease.length > 0) {
+      setHasDisease(true);
+    } else {
+      setHasDisease(false);
+    }
+
+    if (petData.allergy && petData.allergy.length > 0) {
+      setHasAllergy(true);
+    } else {
+      setHasAllergy(false);
+    }
+  }, [petData.disease, petData.allergy]);
+
+  // 염려질환, 알러지 선택
   const handleSelectOption = (type: "disease" | "allergy", value: string) => {
     setPetData((data) => {
-      const currentValues = data[type] || [];
+      const currentValues = data[type] || []; // ["피부", "눈"]
       const isSelected = currentValues.includes(value);
 
       return {
@@ -167,9 +137,72 @@ const CreatePetInfo = () => {
     });
   };
 
+  // 폼 제출하기
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // 기본 폼 제출 동작 방지
+    setIsLoading(true);
+
+    if (!petData.petName || !petData.petBirth || !petData.petWeight) {
+      alert("모든 필수 항목을 입력해주세요.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (mode !== "edit" && (!petData.petFile || !petData.petImg)) {
+      alert("귀여운 반려동물의 사진을 넣어주세요");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+
+      if (petData.petFile) {
+        formData.append("petImg", petData.petFile); // 새 이미지 추가
+      }
+
+      Object.entries(petData).forEach(([key, value]) => {
+        if (key === "petFile" || key === "petImg") return;
+
+        if (value === null || value === undefined) {
+          value = "";
+        }
+
+        formData.append(key, value);
+      });
+
+      if (mode === "edit" && petData.petId !== null) {
+        await updatePet(petData.petId, formData);
+      } else {
+        await createPetInfo(formData); // API
+      }
+
+      setShowPopup(true);
+    } catch (error) {
+      console.error(mode === "edit" ? "수정 실패" : "등록 실패", error);
+      alert(
+        mode === "edit"
+          ? "펫 정보 수정에 실패했습니다."
+          : "펫 정보 등록에 실패했습니다."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
-      {showPopup && <SuccessPopup />}
+      {showPopup && mode === "create" && <SuccessPopup />}
+      {showPopup && mode === "edit" && (
+        <OneButtonModal
+          text="수정이 완료되었습니다."
+          buttonName="확인"
+          buttonType="normal"
+          onConfirm={() => {
+            nav("/petManagement");
+          }}
+        />
+      )}
 
       <div className="pt-7 w-full h-full flex items-center justify-center p-24">
         <div className="p-8 w-96">
@@ -184,7 +217,7 @@ const CreatePetInfo = () => {
                     <img
                       src={petData.petImg}
                       alt="pet preview"
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded-full"
                     />
                   ) : (
                     <FaCamera className="text-gray-400 text-2xl" />
@@ -334,10 +367,10 @@ const CreatePetInfo = () => {
                       name="isNeutered"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.isNeutered === true ? "bg-orange-100" : ""
+                        petData.isNeutered === "Y" ? "bg-orange-100" : ""
                       }`}
                       onClick={() =>
-                        setPetData({ ...petData, isNeutered: true })
+                        setPetData({ ...petData, isNeutered: "Y" })
                       }
                     >
                       했어요
@@ -346,10 +379,10 @@ const CreatePetInfo = () => {
                       name="isNeutered"
                       type="button"
                       className={`rounded-md border flex-1 py-2 ${
-                        petData.isNeutered === false ? "bg-orange-100" : ""
+                        petData.isNeutered === "N" ? "bg-orange-100" : ""
                       }`}
                       onClick={() =>
-                        setPetData({ ...petData, isNeutered: false })
+                        setPetData({ ...petData, isNeutered: "N" })
                       }
                     >
                       안했어요
@@ -432,7 +465,13 @@ const CreatePetInfo = () => {
                       className={`rounded-md border flex-1 py-2 ${
                         hasAllergy === false ? "bg-orange-100" : ""
                       }`}
-                      onClick={() => setHasAllergy(false)}
+                      onClick={() => {
+                        setHasAllergy(false);
+                        setPetData((data) => ({
+                          ...data,
+                          allergy: [], // 없어요 선택 시 초기화
+                        }));
+                      }}
                     >
                       없어요
                     </button>

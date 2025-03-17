@@ -1,6 +1,7 @@
+import { UploadFile } from "antd";
+import { DiaryData } from "../types/DiaryData";
 import apiClient from "./apiClient";
 import petApiClient from "./petApiClient";
-import { useCookies } from "react-cookie";
 
 // 백엔드 기본 URL
 const API_BASE_URL = 'http://localhost:8080/api/v1/user';
@@ -12,7 +13,6 @@ export interface signupResponse {
 };
 
 export interface LoginResponse {
-  [x: string]: string;
   token: string;
   user: {
     id: number;
@@ -33,7 +33,7 @@ export interface Pet {
 export type GetPetsByIdResponse = Pet[];
 
 export interface GetPetDetailByIdResponse {
-  petId: number;
+  petId: number | null;
   petImg: string;
   animal: string;
   petName: string;
@@ -41,6 +41,16 @@ export interface GetPetDetailByIdResponse {
   petBreed: string;
   petGender: string;
   petWeight: number;
+
+  isNeutered?: string | null;
+  concernedDiseases?: string | null;
+  allergies?: string | null;
+}
+
+export interface CreateDiaryResponse {
+  title: string;
+  content: string;
+  images?: UploadFile[];
 }
 
 // 회원가입
@@ -93,6 +103,7 @@ export async function createPetInfo (formData: FormData): Promise<CreatePetInfoR
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log("formData 은 과연" + formData.get("petImg"));
     return response.data;
   } catch (error) {
     console.log("error : " + error)
@@ -119,6 +130,7 @@ export async function getPetsById(): Promise<GetPetsByIdResponse> {
   }
 };
 
+//  반려동물 정보 가져오기
 export async function getPetDetailById(petId: number): Promise<GetPetDetailByIdResponse>{
   try {
     const response = await petApiClient.get(`/getPetDetail/${petId}`, {
@@ -136,6 +148,7 @@ export async function getPetDetailById(petId: number): Promise<GetPetDetailByIdR
   }
 }
 
+// 반려동물 삭제
 export async function deletePet(petId: number): Promise<void> {
   try {
     await petApiClient.delete(`/${petId}`, {
@@ -149,3 +162,55 @@ export async function deletePet(petId: number): Promise<void> {
     throw new Error("펫 삭제 실패");
   }
 }
+
+// 반려동물 수정
+export async function updatePet(petId: number, formData:FormData): Promise<GetPetDetailByIdResponse> {
+  try {
+    const response = await petApiClient.post(`updatePet/${petId}`, formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.log("error : " + error);
+    throw new Error("펫 수정 실패");
+  }
+}
+
+// 다이어리 등록
+export async function createDiary (formData: FormData): Promise<CreateDiaryResponse> {
+  try {
+    const response = await petApiClient.post("/createDiary", formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error)
+    throw new Error("펫 정보 등록 실패");
+  }
+};
+
+// 다이어리 목록 가져오기  
+export async function getDiaryById (): Promise<DiaryData[]> {
+  try {
+    console.log("durl");
+    const response = await petApiClient.get("/getDiaryById", {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error)
+    throw new Error("펫 정보 등록 실패");
+  }
+};

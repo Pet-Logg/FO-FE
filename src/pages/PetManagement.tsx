@@ -33,7 +33,7 @@ const PetManagement = () => {
   }, []);
 
   return (
-    <div className="relative px-40 pt-16 min-h-screen">
+    <div className="relative px-40 py-16 min-h-screen ">
       <h1 className="text-3xl font-bold mb-14">반려동물 하우스 🏠</h1>
       <div className="absolute right-72 top-20">
         <Button

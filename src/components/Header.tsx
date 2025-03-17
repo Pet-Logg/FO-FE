@@ -57,7 +57,7 @@ const Header = () => {
 
         <form onSubmit={a} className="relative flex items-center">
           <input
-            type="text"
+            type="button"
             placeholder="궁금한 것을 물어보세요!"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -87,7 +87,7 @@ const Header = () => {
                     </li>
                     <li>
                       <Link
-                        to="/"
+                        to="/petDiary"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                       >
                         육아일기

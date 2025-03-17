@@ -8,7 +8,7 @@ interface DeleteButtonProps {
 
 const Button: React.FC<DeleteButtonProps> = ({ text, type, onClick }) => {
   const buttonClass = clsx(
-    "rounded-full w-24 h-10 text-white font-semibold shadow-md flex items-center justify-center transition ",
+    "rounded-full text-white font-semibold shadow-md flex items-center justify-center transition px-4 py-2 ",
     {
       "bg-red-400 hover:bg-red-500": type === "delete",
       "bg-gray-400 hover:bg-gray-500": type === "cancel",
