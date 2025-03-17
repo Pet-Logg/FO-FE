@@ -69,7 +69,7 @@ const PetDiary = () => {
               <div
                 key={diary.diaryId}
                 className="border p-5 rounded-lg shadow-md hover:shadow-lg cursor-pointer"
-                onClick={() => nav(`/petDiary/${diary.diaryId}`)}
+                onClick={() => nav(`/petDiaryDetail/${diary.diaryId}`)}
               >
                 <div className="flex justify-between items-center border-b pb-3">
                   <span className="font-bold text-xl">{diary.title}</span>
@@ -78,7 +78,7 @@ const PetDiary = () => {
                   </span>
                 </div>
                 <img
-                  src={diary.imgUrl || defaultImg}
+                  src={diary.imgUrl?.[0] || defaultImg}
                   alt="Diary Image"
                   className="w-full h-40 object-cover rounded-md mt-3"
                 />
