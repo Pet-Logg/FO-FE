@@ -44,29 +44,21 @@ const Header = () => {
     };
   }, [isOpen]);
 
-  const a = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
   return (
-    <nav className="p-4 sticky top-0 bg-white shadow-md z-50">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center">
-          <img src={logo} alt="로고" className="h-14" />
-        </Link>
+    <nav className="px-24 py-4 sticky top-0 bg-white shadow-sm z-50">
+      <div className="flex justify-between items-center w-4/5 m-auto">
+        <div>
+          <Link to="/">
+            <img src={logo} alt="로고" className="h-14" />
+          </Link>
+        </div>
 
-        <form onSubmit={a} className="relative flex items-center">
-          <input
-            type="button"
-            placeholder="궁금한 것을 물어보세요!"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-64 md:w-96 px-4 py-2 border-2 border-orange-400 rounded-full focus:outline-none text-gray-700"
-          />
-          <button type="submit" className="absolute right-4 text-orange-500">
-            <FaSearch />
-          </button>
-        </form>
+        <div className="w-4/5 flex justify-end items-center">
+          <div className="flex gap-8">
+            <Link to="/petManagement">반려동물 관리</Link>
+            <Link to="/petDiary">육아일기</Link>
+          </div>
+        </div>
 
         <div className="relative" ref={dropdownRef}>
           {isLoggedin ? (
@@ -77,22 +69,6 @@ const Header = () => {
               {isOpen && (
                 <div className="absolute right-0 mt-2 w-36 border border-gray-300 rounded-md shadow-lg bg-white">
                   <ul className="py-2">
-                    <li>
-                      <Link
-                        to="/petManagement"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        반려동물 관리
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/petDiary"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        육아일기
-                      </Link>
-                    </li>
                     <li>
                       <Link
                         to="/"
