@@ -9,6 +9,7 @@ import PetManagement from "./pages/PetManagement";
 import PetDetail from "./pages/PetDetail";
 import PetDiary from "./pages/PetDiary";
 import CreatePetDiary from "./pages/CreatePetDiary";
+import PetDiaryDetail from "./pages/PetDiaryDetail";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/getPetDetail/:petId" element={<PetDetail />} />
           <Route path="/petDiary" element={<PetDiary />} />
           <Route path="/createPetDiary" element={<CreatePetDiary />} />
+          <Route path="/petDiaryDetail/:diaryId" element={<PetDiaryDetail />} />
         </Routes>
         <Footer />
       </BrowserRouter>

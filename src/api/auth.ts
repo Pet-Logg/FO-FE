@@ -200,17 +200,31 @@ export async function createDiary (formData: FormData): Promise<CreateDiaryRespo
 // 다이어리 목록 가져오기  
 export async function getDiaryById (): Promise<DiaryData[]> {
   try {
-    console.log("durl");
     const response = await petApiClient.get("/getDiaryById", {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error : " + error)
+    console.log("error : " + error);
+    throw new Error("펫 정보 등록 실패");
+  }
+};
+
+// diaryId로 다이어리 가져오기
+export async function getDiaryDetailById (diaryId: number): Promise<DiaryData[]> {
+  try {
+    const response = await petApiClient.get(`/getDiaryDetailById/${diaryId}`, {
+      withCredentials: true,
+      headers: {
+         "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error);
     throw new Error("펫 정보 등록 실패");
   }
 };
