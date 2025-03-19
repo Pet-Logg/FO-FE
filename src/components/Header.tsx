@@ -46,7 +46,7 @@ const Header = () => {
 
   return (
     <nav className="px-24 py-4 sticky top-0 bg-white shadow-sm z-50">
-      <div className="flex justify-between items-center w-4/5 m-auto">
+      <div className="flex justify-between items-center w-[1050px] m-auto">
         <div>
           <Link to="/">
             <img src={logo} alt="로고" className="h-14" />
@@ -79,7 +79,7 @@ const Header = () => {
                     </li>
                     <li>
                       <Link
-                        to="/"
+                        to="/changePassword"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                       >
                         비밀번호 변경
