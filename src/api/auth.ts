@@ -3,6 +3,9 @@ import { DiaryData } from "../types/DiaryData";
 import apiClient from "./apiClient";
 import petApiClient from "./petApiClient";
 import { PasswordData } from "../types/PasswordData";
+import { ProductData } from "../types/ProductData";
+import { ProductUploadData } from "../types/ProductUploadData";
+import productApiClient from "./productApiClient";
 
 // 백엔드 기본 URL
 const API_BASE_URL = 'http://localhost:8080/api/v1/user';
@@ -233,7 +236,7 @@ export async function getDiaryDetailById (diaryId: number): Promise<DiaryData[]>
 // 비밀번호 변경
 export async function changePassword(password: string): Promise<PasswordData> {
    try {
-    const response = await apiClient.post(`/changePassword`, { password }, {
+    const response = await apiClient.post(`/changePassword`, password , {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -245,3 +248,19 @@ export async function changePassword(password: string): Promise<PasswordData> {
     throw new Error("펫 정보 등록 실패");
   }
 };
+
+export async function uploadProduct(formData: FormData): Promise<void> {
+
+  try {
+    const response = await productApiClient.post("", formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("상품 등록 오류:", error);
+    throw new Error("상품 등록 실패");
+  }
+}
