@@ -2,15 +2,15 @@ import { useState } from "react";
 import { Upload, message } from "antd";
 import { UploadFile } from "antd/es/upload/interface";
 import { InboxOutlined } from "@ant-design/icons";
-import { uploadProduct } from "../api/auth"; // API 요청 함수
-import { ProductUploadData } from "../types/ProductUploadData";
+import { createProduct } from "../api/auth"; // API 요청 함수
+import { PcreateProductData } from "../types/ProductUploadData";
 import OneButtonModal from "../components/OneButtonModal";
 
 const { Dragger } = Upload;
 
 // ProductUpload 타입 정의
 const ProductUpload: React.FC = () => {
-  const [formData, setFormData] = useState<ProductUploadData>({
+  const [formData, setFormData] = useState<PcreateProductData>({
     name: "",
     productImg: [],
     price: 0,
@@ -79,7 +79,7 @@ const ProductUpload: React.FC = () => {
     });
 
     try {
-      await uploadProduct(data);
+      await createProduct(data);
       setFormData({
         name: "",
         price: 0,

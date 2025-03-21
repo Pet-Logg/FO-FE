@@ -249,8 +249,8 @@ export async function changePassword(password: string): Promise<PasswordData> {
   }
 };
 
-export async function uploadProduct(formData: FormData): Promise<void> {
-
+// 상품 등록
+export async function createProduct(formData: FormData): Promise<void> {
   try {
     const response = await productApiClient.post("", formData, {
       withCredentials: true,
@@ -264,3 +264,19 @@ export async function uploadProduct(formData: FormData): Promise<void> {
     throw new Error("상품 등록 실패");
   }
 }
+
+// 상품 전체 조회
+export async function getProducts(): Promise<ProductData[]> {
+  try {
+    const response = await productApiClient.get("", {
+      withCredentials: true,
+    });
+    console.log(response.data.data);
+    return response.data.data;
+    
+  } catch (error) {
+    console.error("상품 목록 가져오기 실패:", error);
+    throw new Error("상품 목록을 불러올 수 없습니다.");
+  }
+}
+
