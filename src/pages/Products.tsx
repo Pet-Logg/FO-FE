@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { ProductData } from "../types/ProductData";
 import { getProducts } from "../api/auth"; // 백엔드 API 호출 함수
 import { Link } from "react-router-dom";
+import { getUserRole } from "../utils/getUserRole";
+import Button from "../components/Button";
 
 // 첫 번째 이미지를 가져오는 함수
 const getFirstImage = (imgUrls: string[] | string): string => {
@@ -13,6 +15,7 @@ const getFirstImage = (imgUrls: string[] | string): string => {
 
 const Products = () => {
   const [products, setProducts] = useState<ProductData[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,11 +28,22 @@ const Products = () => {
     };
 
     fetchProducts();
+
+    const role = getUserRole();
+    console.log("role : " + role);
+    if (role === "ADMIN") {
+      setIsAdmin(true);
+    }
   }, []);
 
   return (
     <div className="w-[1050px] min-h-[600px] mx-auto py-12">
       <h2 className="text-2xl font-bold mb-10">상품 목록</h2>
+      {isAdmin && (
+        <Link to={"/createProduct"} className="flex justify-end mb-5">
+          <Button text={"상품 등록"} type={"normal"} onClick={() => {}} />
+        </Link>
+      )}
       <div className="grid grid-cols-4 gap-8">
         {products.map((product) => (
           <Link to={`/${product.productId}`}>

@@ -55,7 +55,7 @@ const Header = () => {
         <div className="w-4/5 flex justify-end items-center">
           <div className="flex gap-8">
             <Link to="/products">로그몰</Link>
-            <Link to="/productUpload">상품 등록</Link>
+            <Link to="/createProduct">상품 등록</Link>
             <Link to="/petManagement">반려동물 관리</Link>
             <Link to="/petDiary">육아일기</Link>
           </div>
