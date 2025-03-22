@@ -9,6 +9,10 @@ import PetManagement from "./pages/PetManagement";
 import PetDetail from "./pages/PetDetail";
 import PetDiary from "./pages/PetDiary";
 import CreatePetDiary from "./pages/CreatePetDiary";
+import PetDiaryDetail from "./pages/PetDiaryDetail";
+import ChangePassword from "./pages/ChangePassword";
+import Products from "./pages/Products";
+import ProductUpload from "./pages/ProductUpload";
 
 const App = () => {
   return (
@@ -24,6 +28,10 @@ const App = () => {
           <Route path="/getPetDetail/:petId" element={<PetDetail />} />
           <Route path="/petDiary" element={<PetDiary />} />
           <Route path="/createPetDiary" element={<CreatePetDiary />} />
+          <Route path="/petDiaryDetail/:diaryId" element={<PetDiaryDetail />} />
+          <Route path="/changePassword" element={<ChangePassword />} />
+          <Route path="/productUpload" element={<ProductUpload />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
         <Footer />
       </BrowserRouter>

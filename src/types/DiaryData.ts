@@ -5,6 +5,6 @@ export interface DiaryData {
   title: string;
   content: string;
   images?: UploadFile[];
+  imgUrl?: string[];
   createdAt: string; 
-  imgUrl?: string;
 }

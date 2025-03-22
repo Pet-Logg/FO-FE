@@ -2,6 +2,10 @@ import { UploadFile } from "antd";
 import { DiaryData } from "../types/DiaryData";
 import apiClient from "./apiClient";
 import petApiClient from "./petApiClient";
+import { PasswordData } from "../types/PasswordData";
+import { ProductData } from "../types/ProductData";
+import { ProductUploadData } from "../types/ProductUploadData";
+import productApiClient from "./productApiClient";
 
 // 백엔드 기본 URL
 const API_BASE_URL = 'http://localhost:8080/api/v1/user';
@@ -200,17 +204,79 @@ export async function createDiary (formData: FormData): Promise<CreateDiaryRespo
 // 다이어리 목록 가져오기  
 export async function getDiaryById (): Promise<DiaryData[]> {
   try {
-    console.log("durl");
     const response = await petApiClient.get("/getDiaryById", {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error : " + error)
+    console.log("error : " + error);
     throw new Error("펫 정보 등록 실패");
   }
 };
+
+// diaryId로 다이어리 가져오기
+export async function getDiaryDetailById (diaryId: number): Promise<DiaryData[]> {
+  try {
+    const response = await petApiClient.get(`/getDiaryDetailById/${diaryId}`, {
+      withCredentials: true,
+      headers: {
+         "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error);
+    throw new Error("펫 정보 등록 실패");
+  }
+};
+
+// 비밀번호 변경
+export async function changePassword(password: string): Promise<PasswordData> {
+   try {
+    const response = await apiClient.post(`/changePassword`, password , {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("error : " + error);
+    throw new Error("펫 정보 등록 실패");
+  }
+};
+
+// 상품 등록
+export async function createProduct(formData: FormData): Promise<void> {
+  try {
+    const response = await productApiClient.post("", formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("상품 등록 오류:", error);
+    throw new Error("상품 등록 실패");
+  }
+}
+
+// 상품 전체 조회
+export async function getProducts(): Promise<ProductData[]> {
+  try {
+    const response = await productApiClient.get("", {
+      withCredentials: true,
+    });
+    console.log(response.data.data);
+    return response.data.data;
+    
+  } catch (error) {
+    console.error("상품 목록 가져오기 실패:", error);
+    throw new Error("상품 목록을 불러올 수 없습니다.");
+  }
+}
+

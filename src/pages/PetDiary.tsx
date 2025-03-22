@@ -10,7 +10,8 @@ const PetDiary = () => {
   const nav = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [diaries, setDiaries] = useState<DiaryData[]>([]);
-  const MAX_LENGTH = 37; // 내용 최대 표시할 글자 수
+  const MAX_CONTENT_LENGTH = 37; // 내용 최대 표시할 글자 수
+  const MAX_TITLE_LENGTH = 10;
 
   useEffect(() => {
     fetchDiaries();
@@ -21,17 +22,18 @@ const PetDiary = () => {
     try {
       const response = await getDiaryById();
       setDiaries(response.data);
-      console.log(diaries);
+
+      console.log("diary : " + response);
     } catch (error) {
       console.error("다이어리 목록을 가져오는 중 오류 발생", error);
       alert("펫 목록 가져오기에 실패했습니다.");
     }
   };
 
-  // 검색
-  const filteredDiaries = diaries.filter((diary) =>
-    diary.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // // 검색
+  // const filteredDiaries = diaries.filter((diary) =>
+  //   diary.title.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
   const a = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ const PetDiary = () => {
 
   return (
     <>
-      <div className="w-full h-[800px] px-72 py-20">
+      <div className="w-full h-auto px-72 py-20">
         <div className="flex flex-row justify-between mb-10">
           <Button
             type="primary"
@@ -64,36 +66,34 @@ const PetDiary = () => {
         </div>
 
         <div className="grid grid-cols-4 gap-x-5 gap-y-9">
-          {filteredDiaries.length > 0 ? (
-            filteredDiaries.map((diary) => (
-              <div
-                key={diary.diaryId}
-                className="border p-5 rounded-lg shadow-md hover:shadow-lg cursor-pointer"
-                onClick={() => nav(`/petDiary/${diary.diaryId}`)}
-              >
-                <div className="flex justify-between items-center border-b pb-3">
-                  <span className="font-bold text-xl">{diary.title}</span>
-                  <span className="text-gray-500 text-sm">
-                    {diary.createdAt.split("T")[0]}
-                  </span>
-                </div>
-                <img
-                  src={diary.imgUrl || defaultImg}
-                  alt="Diary Image"
-                  className="w-full h-40 object-cover rounded-md mt-3"
-                />
-                <p className="text-gray-600 text-sm mt-4">
-                  {diary.content.length > MAX_LENGTH
-                    ? `${diary.content.substring(0, MAX_LENGTH)}...`
-                    : diary.content}
-                </p>
+          {diaries.map((diary) => (
+            <div
+              key={diary.diaryId}
+              className="border p-5 rounded-lg shadow-md hover:shadow-lg cursor-pointer"
+              onClick={() => nav(`/petDiaryDetail/${diary.diaryId}`)}
+            >
+              <div className="flex justify-between items-center border-b pb-3">
+                <span className="font-bold text-lg">
+                  {diary.title.length > MAX_TITLE_LENGTH
+                    ? `${diary.title.substring(0, MAX_TITLE_LENGTH)}...`
+                    : diary.title}
+                </span>
+                <span className="text-gray-500 text-xs">
+                  {diary.createdAt.split("T")[0]}
+                </span>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-500 col-span-4 text-center">
-              작성된 다이어리가 없습니다.
-            </p>
-          )}
+              <img
+                src={diary.imgUrl?.[0] || defaultImg}
+                alt="Diary Image"
+                className="w-full h-40 object-cover rounded-md mt-3"
+              />
+              <p className="text-gray-600 text-sm mt-4">
+                {diary.content.length > MAX_CONTENT_LENGTH
+                  ? `${diary.content.substring(0, MAX_CONTENT_LENGTH)}...`
+                  : diary.content}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </>
