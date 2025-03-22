@@ -8,8 +8,8 @@ import OneButtonModal from "../components/OneButtonModal";
 
 const { Dragger } = Upload;
 
-// ProductUpload 타입 정의
-const ProductUpload: React.FC = () => {
+// CreateProduct 타입 정의
+const CreateProduct: React.FC = () => {
   const [formData, setFormData] = useState<PcreateProductData>({
     name: "",
     productImg: [],
@@ -184,4 +184,4 @@ const ProductUpload: React.FC = () => {
   );
 };
 
-export default ProductUpload;
+export default CreateProduct;

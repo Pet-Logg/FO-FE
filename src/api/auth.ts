@@ -210,7 +210,7 @@ export async function getDiaryById (): Promise<DiaryData[]> {
         "Content-Type": "application/json",
       },
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.log("error : " + error);
     throw new Error("펫 정보 등록 실패");
