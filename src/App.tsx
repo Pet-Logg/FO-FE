@@ -13,6 +13,7 @@ import PetDiaryDetail from "./pages/PetDiaryDetail";
 import ChangePassword from "./pages/ChangePassword";
 import Products from "./pages/Products";
 import ProductUpload from "./pages/ProductUpload";
+import ProductDetail from "./pages/ProductDetail";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/changePassword" element={<ChangePassword />} />
           <Route path="/productUpload" element={<ProductUpload />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/:productId" element={<ProductDetail />} />
         </Routes>
         <Footer />
       </BrowserRouter>

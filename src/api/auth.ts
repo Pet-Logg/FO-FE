@@ -268,10 +268,9 @@ export async function createProduct(formData: FormData): Promise<void> {
 // 상품 전체 조회
 export async function getProducts(): Promise<ProductData[]> {
   try {
-    const response = await productApiClient.get("", {
+    const response = await productApiClient.get("/products", {
       withCredentials: true,
     });
-    console.log(response.data.data);
     return response.data.data;
     
   } catch (error) {
@@ -280,3 +279,16 @@ export async function getProducts(): Promise<ProductData[]> {
   }
 }
 
+// productId로 상품 하나 조회
+export async function getProductById(productId: number): Promise<ProductData> {
+  try {
+    const response = await productApiClient.get(`/${productId}`, {
+      withCredentials: true,
+    });
+    return response.data.data;
+    
+  } catch (error) {
+    console.error("상품 상세 조회 실패:", error);
+    throw error;
+  }
+}
