@@ -12,7 +12,8 @@ import CreatePetDiary from "./pages/CreatePetDiary";
 import PetDiaryDetail from "./pages/PetDiaryDetail";
 import ChangePassword from "./pages/ChangePassword";
 import Products from "./pages/Products";
-import ProductUpload from "./pages/ProductUpload";
+import ProductDetail from "./pages/ProductDetail";
+import CreateProduct from "./pages/CreateProduct";
 
 const App = () => {
   return (
@@ -30,8 +31,9 @@ const App = () => {
           <Route path="/createPetDiary" element={<CreatePetDiary />} />
           <Route path="/petDiaryDetail/:diaryId" element={<PetDiaryDetail />} />
           <Route path="/changePassword" element={<ChangePassword />} />
-          <Route path="/productUpload" element={<ProductUpload />} />
+          <Route path="/createProduct" element={<CreateProduct />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/:productId" element={<ProductDetail />} />
         </Routes>
         <Footer />
       </BrowserRouter>

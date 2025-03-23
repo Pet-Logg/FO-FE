@@ -1,20 +1,10 @@
 import { UploadFile } from "antd";
 import { DiaryData } from "../types/DiaryData";
-import apiClient from "./apiClient";
+import apiClient from "./userApiClient";
 import petApiClient from "./petApiClient";
 import { PasswordData } from "../types/PasswordData";
 import { ProductData } from "../types/ProductData";
-import { ProductUploadData } from "../types/ProductUploadData";
 import productApiClient from "./productApiClient";
-
-// 백엔드 기본 URL
-const API_BASE_URL = 'http://localhost:8080/api/v1/user';
-
-export interface signupResponse {
-  id: number;
-  username: string;
-  email: string;
-};
 
 export interface LoginResponse {
   token: string;
@@ -56,27 +46,6 @@ export interface CreateDiaryResponse {
   content: string;
   images?: UploadFile[];
 }
-
-// 회원가입
-export async function signupUser(
-  email: string,
-  password: string
-): Promise<signupResponse> {
-  
-  try {
-    const response = await apiClient.post("/signup", { email, password }, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch(error) {
-    // throw new Error(errer.response?.data?.message || "회원가입 실패");
-    throw new Error( "회원가입 실패");
-  }
-  
-};
 
 // 로그인
 export async function loginUser(
@@ -210,7 +179,7 @@ export async function getDiaryById (): Promise<DiaryData[]> {
         "Content-Type": "application/json",
       },
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.log("error : " + error);
     throw new Error("펫 정보 등록 실패");
@@ -268,10 +237,9 @@ export async function createProduct(formData: FormData): Promise<void> {
 // 상품 전체 조회
 export async function getProducts(): Promise<ProductData[]> {
   try {
-    const response = await productApiClient.get("", {
+    const response = await productApiClient.get("/products", {
       withCredentials: true,
     });
-    console.log(response.data.data);
     return response.data.data;
     
   } catch (error) {
@@ -280,3 +248,46 @@ export async function getProducts(): Promise<ProductData[]> {
   }
 }
 
+// productId로 상품 하나 조회
+export async function getProductById(productId: number): Promise<ProductData> {
+  try {
+    const response = await productApiClient.get(`/${productId}`, {
+      withCredentials: true,
+    });
+    return response.data.data;
+    
+  } catch (error) {
+    console.error("상품 상세 조회 실패:", error);
+    throw error;
+  }
+}
+
+// 상품 삭제
+export async function deleteProduct(productId: number): Promise<void> {
+  try {
+    await productApiClient.delete(`/${productId}`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("상품 삭제 실패:", error);
+    throw error;
+  }
+}
+
+// 상품 수정
+export async function updateProduct(productId: number, formData: FormData): Promise<void> {
+  try {
+    await productApiClient.put(`/${productId}`, formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error) {
+    console.error("상품 삭제 실패:", error);
+    throw error;
+  }
+}

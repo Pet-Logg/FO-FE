@@ -23,7 +23,12 @@
     "noUncheckedSideEffectImports": true,
 
     /* 추가 */
-    "types": ["swiper"]
+    "types": ["swiper"],
+    
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"],
 }

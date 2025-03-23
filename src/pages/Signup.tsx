@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { signupUser } from "../api/auth";
-import Header from "../components/Header";
+import { useSignUpUser } from "@/services/auth";
+
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errer, setError] = useState("");
+  const signUpMutate = useSignUpUser();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 폼 제출 시 새로고침 방지
@@ -17,26 +18,29 @@ const Signup = () => {
       return;
     }
 
-    try {
-      const data = await signupUser(email, password);
-      console.log("회원가입 성공!", data);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("알 수 없는 에러가 발생했습니다.");
+    signUpMutate.mutate(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          console.log("회원가입 성공!", data);
+        },
+        onError: (err) => {
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError("알 수 없는 에러가 발생했습니다.");
+          }
+          console.log(err);
+        },
       }
-      console.log(err);
-    }
+    );
   };
 
   return (
     <>
-      <Header />
-
-      <div className="w-full h-screen flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
-          <h2 className="text-2xl font-semibold mb-6 text-center">회원가입</h2>
+      <div className="w-[1050px] min-h-[650px] mx-auto flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg border w-96">
+          <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
           {errer && <p className="text-red-500 mb-4">{errer}</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -80,7 +84,7 @@ const Signup = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline"
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline"
             >
               회원가입
             </button>
