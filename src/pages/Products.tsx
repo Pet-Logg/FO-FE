@@ -30,7 +30,7 @@ const Products = () => {
     fetchProducts();
 
     const role = getUserRole();
-    console.log("role : " + role);
+
     if (role === "ADMIN") {
       setIsAdmin(true);
     }

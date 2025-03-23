@@ -292,3 +292,18 @@ export async function getProductById(productId: number): Promise<ProductData> {
     throw error;
   }
 }
+
+// 상품 삭제
+export async function deleteProduct(productId: number): Promise<void> {
+  try {
+    await productApiClient.delete(`/${productId}`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("상품 삭제 실패:", error);
+    throw error;
+  }
+}
