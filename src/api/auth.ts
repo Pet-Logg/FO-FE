@@ -1,20 +1,10 @@
 import { UploadFile } from "antd";
 import { DiaryData } from "../types/DiaryData";
-import apiClient from "./apiClient";
+import apiClient from "./userApiClient";
 import petApiClient from "./petApiClient";
 import { PasswordData } from "../types/PasswordData";
 import { ProductData } from "../types/ProductData";
-import { ProductUploadData } from "../types/ProductUploadData";
 import productApiClient from "./productApiClient";
-
-// 백엔드 기본 URL
-const API_BASE_URL = 'http://localhost:8080/api/v1/user';
-
-export interface signupResponse {
-  id: number;
-  username: string;
-  email: string;
-};
 
 export interface LoginResponse {
   token: string;
@@ -56,27 +46,6 @@ export interface CreateDiaryResponse {
   content: string;
   images?: UploadFile[];
 }
-
-// 회원가입
-export async function signupUser(
-  email: string,
-  password: string
-): Promise<signupResponse> {
-  
-  try {
-    const response = await apiClient.post("/signup", { email, password }, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch(error) {
-    // throw new Error(errer.response?.data?.message || "회원가입 실패");
-    throw new Error( "회원가입 실패");
-  }
-  
-};
 
 // 로그인
 export async function loginUser(
