@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCreatePet, useGetPet } from '@/services/pet'
 import { useEffect, useState } from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
@@ -37,27 +37,19 @@ const CreatePetInfo = () => {
   const [hasAllergy, setHasAllergy] = useState<boolean | null>(null) // 알러지 있어요 버튼 선택됐는지
 
   const createPetMutate = useCreatePet()
+  const { data } = useGetPet(Number(paramPetId))
 
   // 수정모드일때 기존데이터 불러오기
   useEffect(() => {
-    if (mode === "edit" && paramPetId) {
-      const fetchPetData = async () => {
-        try {
-          const response = await getPetDetailById(Number(paramPetId));
-          setPetData({
-            ...response,
-            petBirth: response.petBirth
-              ? new Date(response.petBirth).toISOString().split("T")[0]
-              : "",
-          });
-        } catch (error) {
-          console.error("펫 정보 불러오기 실패", error);
-        }
-      };
-
-      fetchPetData();
+    if (data) {
+      setPetData({
+        ...data,
+        petBirth: data.petBirth
+          ? new Date(data.petBirth).toISOString().split('T')[0]
+          : ''
+      })
     }
-  }, [mode, paramPetId]);
+  }, [data])
 
   // 변경감지
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
