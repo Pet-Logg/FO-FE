@@ -4,10 +4,6 @@ import petApiClient from "./petApiClient";
 import { ProductData } from "../types/ProductData";
 import productApiClient from "./productApiClient";
 
-export interface CreatePetInfoResponse {
-  id: number;
-}
-
 export interface Pet {
   petId: number;
   petImg: string;
@@ -35,23 +31,6 @@ export interface CreateDiaryResponse {
   content: string;
   images?: UploadFile[];
 }
-
-// 펫 정보 등록
-export async function createPetInfo (formData: FormData): Promise<CreatePetInfoResponse> {
-  try {
-    const response = await petApiClient.post("/createPetInfo", formData, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log("formData 은 과연" + formData.get("petImg"));
-    return response.data;
-  } catch (error) {
-    console.log("error : " + error)
-    throw new Error("펫 정보 등록 실패");
-  }
-};
 
 // 유저의 모든 펫 정보 불러오기
 export async function getPetsById(): Promise<GetPetsByIdResponse> {
@@ -122,22 +101,6 @@ export async function updatePet(petId: number, formData:FormData): Promise<GetPe
     throw new Error("펫 수정 실패");
   }
 }
-
-// 다이어리 등록
-export async function createDiary (formData: FormData): Promise<CreateDiaryResponse> {
-  try {
-    const response = await petApiClient.post("/createDiary", formData, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.log("error : " + error)
-    throw new Error("펫 정보 등록 실패");
-  }
-};
 
 // 다이어리 목록 가져오기  
 export async function getDiaryById (): Promise<DiaryData[]> {

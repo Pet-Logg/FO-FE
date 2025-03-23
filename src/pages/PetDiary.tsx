@@ -37,7 +37,7 @@ const PetDiary = () => {
 
   return (
     <>
-      <div className="w-full h-auto px-72 py-20">
+      <div className="w-[1050px] min-h-[750px] mx-auto py-20">
         <div className="flex flex-row justify-between mb-10">
           <Button
             type="primary"

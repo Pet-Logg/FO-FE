@@ -33,9 +33,9 @@ const PetManagement = () => {
   }, []);
 
   return (
-    <div className="relative px-40 py-16 min-h-screen ">
-      <h1 className="text-3xl font-bold mb-14">반려동물 하우스 🏠</h1>
-      <div className="absolute right-72 top-20">
+    <div className="py-16 min-h-screen w-[1050px] mx-auto flex flex-col">
+      <h1 className="text-3xl font-bold mb-8">반려동물 하우스 🏠</h1>
+      <div className="self-end">
         <Button
           text="추가하기"
           type="normal"
@@ -48,7 +48,9 @@ const PetManagement = () => {
       {error && <p className="text-center text-3xl text-red-500">{error}</p>}
 
       {!loading && !error && pets.length === 0 && (
-        <p className="text-center text-3xl">등록된 반려동물이 없습니다.</p>
+        <p className="w-[1050px] min-h-[650px] mx-auto flex justify-center items-center text-3xl">
+          등록된 반려동물이 없습니다.
+        </p>
       )}
 
       {!loading && !error && (
