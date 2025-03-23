@@ -1,100 +1,100 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import { useLogin } from "@/services/auth/queries/useLogin";
+import { useLogin } from '@/services/auth/queries/useLogin'
+import { useState } from 'react'
+import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [cookie, setCookie] = useCookies(["Authorization"]);
-  const nav = useNavigate();
-  const loginMutate = useLogin();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [cookie, setCookie] = useCookies(['Authorization'])
+  const nav = useNavigate()
+  const loginMutate = useLogin()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // 1. 폼 제출 시 기본 동작(페이지 새로고침) 방지
-    e.preventDefault();
+    e.preventDefault()
 
-    setError("");
+    setError('')
 
     loginMutate.mutate(
       { email, password },
       {
         onSuccess: (data) => {
-          console.log("로그인 성공!", data);
-          setCookie("Authorization", data, { path: "/" });
-          nav("/");
+          console.log('로그인 성공!', data)
+          setCookie('Authorization', data, { path: '/' })
+          nav('/')
         },
         onError: (err) => {
-          setError("로그인에 실패했습니다.");
-          console.log(err);
-        },
+          setError('로그인에 실패했습니다.')
+          console.log(err)
+        }
       }
-    );
-  };
+    )
+  }
 
   return (
     <>
-      <div className="w-full h-screen flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
-          <h2 className="text-2xl font-semibold mb-6 text-center">로그인</h2>
-          <form onSubmit={handleSubmit} id="loginForm">
-            <div className="mb-4">
-              {error && <p className="text-red-500 mb-4">{error}</p>}
+      <div className='flex h-screen w-full items-center justify-center'>
+        <div className='w-96 rounded-lg bg-white p-8 shadow-md'>
+          <h2 className='mb-6 text-center text-2xl font-semibold'>로그인</h2>
+          <form onSubmit={handleSubmit} id='loginForm'>
+            <div className='mb-4'>
+              {error && <p className='mb-4 text-red-500'>{error}</p>}
               <label
-                htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor='email'
+                className='mb-2 block text-sm font-bold text-gray-700'
               >
                 이메일
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                type='email'
+                id='email'
+                name='email'
+                className='w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-300 focus:outline-none focus:ring'
                 required
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  setEmail(e.target.value)
                 }}
               />
             </div>
-            <div className="mb-6">
+            <div className='mb-6'>
               <label
-                htmlFor="password"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor='password'
+                className='mb-2 block text-sm font-bold text-gray-700'
               >
                 Password
               </label>
               <input
-                type="password"
-                id="password"
-                name="password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                type='password'
+                id='password'
+                name='password'
+                className='w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-300 focus:outline-none focus:ring'
                 required
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  setPassword(e.target.value)
                 }}
               />
             </div>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center">
+            <div className='mb-6 flex items-center justify-between'>
+              <div className='flex items-center'>
                 <input
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  type='checkbox'
+                  id='remember'
+                  name='remember'
+                  className='h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
                 />
                 <label
-                  htmlFor="remember"
-                  className="ml-2 block text-sm text-grㄹay-900"
+                  htmlFor='remember'
+                  className='text-grㄹay-900 ml-2 block text-sm'
                 >
                   자동로그인
                 </label>
               </div>
-              <div className="text-sm">
+              <div className='text-sm'>
                 <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  href='#'
+                  className='font-medium text-blue-600 hover:text-blue-500'
                 >
                   비밀번호를 잊으셨나요?
                 </a>
@@ -102,8 +102,8 @@ const Login = () => {
             </div>
             <div>
               <button
-                type="submit"
-                className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline"
+                type='submit'
+                className='focus:shadow-outline w-full rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 focus:outline-none'
               >
                 로그인
               </button>
@@ -112,7 +112,7 @@ const Login = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

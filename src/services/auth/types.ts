@@ -1,8 +1,8 @@
 export type UserAuthRequest = {
-  email: string;
-  password: string;
-};
+  email: string
+  password: string
+}
 
 export type ChangePasswordRequest = {
-  password: string;
+  password: string
 }
