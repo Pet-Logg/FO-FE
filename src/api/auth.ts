@@ -307,3 +307,18 @@ export async function deleteProduct(productId: number): Promise<void> {
     throw error;
   }
 }
+
+// 상품 수정
+export async function updateProduct(productId: number, formData: FormData): Promise<void> {
+  try {
+    await productApiClient.put(`/${productId}`, formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error) {
+    console.error("상품 삭제 실패:", error);
+    throw error;
+  }
+}

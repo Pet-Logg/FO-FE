@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Upload, message } from "antd";
 import { UploadFile } from "antd/es/upload/interface";
 import { InboxOutlined } from "@ant-design/icons";
-import { createProduct } from "../api/auth"; // API 요청 함수
+import { createProduct, updateProduct } from "../api/auth";
 import { PcreateProductData } from "../types/ProductUploadData";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { getProductById } from "../api/auth";
 import OneButtonModal from "../components/OneButtonModal";
 
 const { Dragger } = Upload;
 
-// CreateProduct 타입 정의
 const CreateProduct: React.FC = () => {
   const [formData, setFormData] = useState<PcreateProductData>({
     name: "",
@@ -16,6 +17,11 @@ const CreateProduct: React.FC = () => {
     price: 0,
     quantity: 0,
   });
+
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const mode = location.state?.mode || "create";
+  const paramProductId = searchParams.get("productId");
 
   const [showModal, setShowModal] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -78,6 +84,18 @@ const CreateProduct: React.FC = () => {
       }
     });
 
+    // 수정할 때
+    if (mode === "edit" && paramProductId) {
+      try {
+        await updateProduct(Number(paramProductId), data); // 수정 API 호출
+        console.log("상품이 성공적으로 수정되었습니다!");
+        setShowModal(true);
+      } catch (error) {
+        console.log("상품 수정에 실패했습니다.");
+      }
+      return;
+    }
+
     try {
       await createProduct(data);
       setFormData({
@@ -93,6 +111,46 @@ const CreateProduct: React.FC = () => {
       message.error("상품 등록에 실패했습니다.");
     }
   };
+
+  // 이미지 URL을 UploadFile[]로 변환
+  const mapImageUrlsToFileList = (urls: string[]): UploadFile[] => {
+    return urls.map((url, index) => ({
+      uid: `existing-${index}`,
+      name: `이미지${index + 1}`,
+      status: "done",
+      url, // 이미지 미리보기 URL
+    }));
+  };
+
+  // 수정모드일 때 정보 불러오기
+  useEffect(() => {
+    const fetchProductData = async () => {
+      if (mode === "edit" && paramProductId) {
+        try {
+          const data = await getProductById(Number(paramProductId));
+
+          const imageArray = Array.isArray(data.imgUrl)
+            ? data.imgUrl
+            : [data.imgUrl];
+
+          const mappedImages = mapImageUrlsToFileList(imageArray);
+
+          setFileList(mappedImages);
+
+          setFormData({
+            name: data.name,
+            price: data.price,
+            quantity: data.quantity,
+            productImg: mappedImages,
+          });
+        } catch (error) {
+          console.error("상품 정보 불러오기 실패", error);
+        }
+      }
+    };
+
+    fetchProductData();
+  }, [mode, paramProductId]);
 
   return (
     <div className="w-[1050px] mx-auto">

@@ -150,13 +150,13 @@ const ProductDetail = () => {
             </div>
           </div>
           {isAdmin && (
-            <div className="flex justify-end">
-              {/* <Link
-              to={`/createProduct?productId=${product.productId}`}
-              state={{ mode: "edit" }}
-            >
-              <Button text={"수정"} type={"normal"} onClick={() => {}} />
-            </Link> */}
+            <div className="flex justify-end gap-4">
+              <Link
+                to={`/createProduct?productId=${product.productId}`}
+                state={{ mode: "edit" }}
+              >
+                <Button text={"수정"} type={"normal"} onClick={() => {}} />
+              </Link>
               <Button
                 text={"삭제"}
                 type={"delete"}
