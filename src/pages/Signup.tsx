@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useSignUpUser } from "@/services/auth";
+import { useSignUp } from "@/services/auth";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errer, setError] = useState("");
-  const signUpMutate = useSignUpUser();
+  const signUpMutate = useSignUp();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 폼 제출 시 새로고침 방지

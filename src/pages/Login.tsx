@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../api/auth";
 import { useCookies } from "react-cookie";
+import { useLogin } from "@/services/auth/queries/useLogin";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,26 +9,28 @@ const Login = () => {
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["Authorization"]);
   const nav = useNavigate();
+  const loginMutate = useLogin();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // 1. 폼 제출 시 기본 동작(페이지 새로고침) 방지
     e.preventDefault();
 
-    // 2. 이전의 에러 메시지를 초기화
     setError("");
 
-    try {
-      // loginUser API 호출
-      const data = await loginUser(email, password);
-      console.log("로그인 성공", data);
-
-      setCookie("Authorization", data.data, { path: "/" });
-
-      nav("/");
-    } catch (err) {
-      setError("로그인에 실패했습니다.");
-      console.log(err);
-    }
+    loginMutate.mutate(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          console.log("로그인 성공!", data);
+          setCookie("Authorization", data, { path: "/" });
+          nav("/");
+        },
+        onError: (err) => {
+          setError("로그인에 실패했습니다.");
+          console.log(err);
+        },
+      }
+    );
   };
 
   return (

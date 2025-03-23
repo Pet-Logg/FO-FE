@@ -1,19 +1,8 @@
 import { UploadFile } from "antd";
 import { DiaryData } from "../types/DiaryData";
-import apiClient from "./userApiClient";
 import petApiClient from "./petApiClient";
-import { PasswordData } from "../types/PasswordData";
 import { ProductData } from "../types/ProductData";
 import productApiClient from "./productApiClient";
-
-export interface LoginResponse {
-  token: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-  };
-};
 
 export interface CreatePetInfoResponse {
   id: number;
@@ -46,26 +35,6 @@ export interface CreateDiaryResponse {
   content: string;
   images?: UploadFile[];
 }
-
-// 로그인
-export async function loginUser(
-  email: string,
-  password: string,
-): Promise<LoginResponse> {
-  try {
-    const response = await apiClient.post("/login", { email, password }, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    // throw new Error(error.response?.data?.message || "로그인 실패");
-    throw new Error("로그인 실패");
-
-  }
-};
 
 // 펫 정보 등록
 export async function createPetInfo (formData: FormData): Promise<CreatePetInfoResponse> {
@@ -202,21 +171,7 @@ export async function getDiaryDetailById (diaryId: number): Promise<DiaryData[]>
   }
 };
 
-// 비밀번호 변경
-export async function changePassword(password: string): Promise<PasswordData> {
-   try {
-    const response = await apiClient.post(`/changePassword`, password , {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.log("error : " + error);
-    throw new Error("펫 정보 등록 실패");
-  }
-};
+
 
 // 상품 등록
 export async function createProduct(formData: FormData): Promise<void> {

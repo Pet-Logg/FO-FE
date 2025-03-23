@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { changePassword } from "../api/auth";
-import { PasswordData } from "../types/PasswordData";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
-type ChangePasswordForm = Omit<PasswordData, "password"> & {
-  password: string;
-  confirmPassword: string;
-};
+import { useChangePassword } from "@/services/auth/queries/useChangePasswordUser";
+import { ChangePasswordRequest } from "@/services/auth";
+
+type ChangePasswordForm = ChangePasswordRequest & { confirmPassword: string };
 
 const ChangePassword = () => {
   const nav = useNavigate();
-
+  const changePasswordMutate = useChangePassword();
+  const [passwordError, setPasswordError] = useState(""); // 비밀번호 길이 오류
+  const [isDisabled, setIsDisabled] = useState(true);
   const [formValues, setFormValues] = useState<ChangePasswordForm>({
     password: "",
     confirmPassword: "",
@@ -18,10 +18,6 @@ const ChangePassword = () => {
 
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*?_])[A-Za-z\d!@#$%^&*?_]{8,16}$/;
-
-  const [passwordError, setPasswordError] = useState(""); // 비밀번호 길이 오류
-  // const [confirmPasswordError, setConfirmPasswordError] = useState(""); // 비밀번호 불일치 오류
-  const [isDisabled, setIsDisabled] = useState(true);
 
   // 비밀번호 유효성 검사
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,15 +63,20 @@ const ChangePassword = () => {
   const handleChangePassword = async () => {
     if (isDisabled) return;
 
-    try {
-      await changePassword(formValues.password);
-      alert("비밀번호가 성공적으로 변경되었습니다!");
-
-      nav("/");
-    } catch (error) {
-      console.error("비밀번호 변경 실패:", error);
-      alert("비밀번호 변경에 실패했습니다.");
-    }
+    changePasswordMutate.mutate(
+      { password: formValues.password },
+      {
+        onSuccess: (data) => {
+          console.log("비밀번호 변경 성공!", data);
+          alert("비밀번호가 성공적으로 변경되었습니다!");
+          nav("/");
+        },
+        onError: (err) => {
+          console.log(err);
+          alert("비밀번호 변경에 실패했습니다.");
+        },
+      }
+    );
   };
 
   return (

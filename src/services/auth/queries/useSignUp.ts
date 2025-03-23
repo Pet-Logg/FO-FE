@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { UseMutationCustomOptions } from "@/types/api";
-import { signupUser } from "../api";
+import { signup } from "../api";
 
-export const useSignUpUser = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
 return useMutation({
-    mutationFn: signupUser,
+    mutationFn: signup,
     throwOnError: error => Number(error.response?.status) >= 500,
     ...mutationOptions,
   });
