@@ -1,49 +1,38 @@
-import { message } from 'antd'
+import { useDeleteProduct } from '@/services/product/queries/useDeleteProduct'
+import { useGetProduct } from '@/services/product/queries/useGetProduct'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { deleteProduct, getProductById } from '../api/auth'
 import Button from '../components/Button'
 import OneButtonModal from '../components/OneButtonModal'
-import { ProductData } from '../types/ProductData'
 import { getUserRole } from '../utils/getUserRole'
 
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>()
-  const [product, setProduct] = useState<ProductData | null>(null)
+  const { data, isError } = useGetProduct(Number(productId))
   const [mainImage, setMainImage] = useState<string>('')
   const [quantity, setQuantity] = useState<number>(1)
   const [isAdmin, setIsAdmin] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const deleteProductMutate = useDeleteProduct()
   const nav = useNavigate()
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        if (!productId) return
-        const data = await getProductById(Number(productId))
-        setProduct(data)
+    if (!data) return
 
-        // 대표 이미지 설정
-        if (Array.isArray(data.imgUrl)) {
-          setMainImage(data.imgUrl[0])
-        } else {
-          setMainImage(data.imgUrl)
-        }
-      } catch (error) {
-        console.error('상품 정보 가져오기 실패:', error)
-      }
+    if (Array.isArray(data.imgUrl)) {
+      setMainImage(data.imgUrl[0])
+    } else {
+      setMainImage(data.imgUrl)
     }
-
-    fetchProduct()
 
     const role = getUserRole()
 
     if (role === 'ADMIN') {
       setIsAdmin(true)
     }
-  }, [productId])
+  }, [data])
 
-  if (!product) {
+  if (isError) {
     return (
       <div className='mx-auto flex min-h-[600px] w-[1050px] items-center justify-center'>
         상품을 불러 올 수 없습니다.
@@ -51,9 +40,7 @@ const ProductDetail = () => {
     )
   }
 
-  const imageList = Array.isArray(product.imgUrl)
-    ? product.imgUrl
-    : [product.imgUrl]
+  const imageList = Array.isArray(data?.imgUrl) ? data.imgUrl : [data?.imgUrl]
 
   const handleQuantityChange = (type: 'increase' | 'decrease') => {
     setQuantity((prev) => {
@@ -62,7 +49,7 @@ const ProductDetail = () => {
     })
   }
 
-  const totalPrice = product.price * quantity
+  const totalPrice = (data?.price ?? 0) * quantity
 
   const closeModal = () => {
     setShowModal(false)
@@ -70,13 +57,19 @@ const ProductDetail = () => {
   }
 
   const deleteProductBtn = async () => {
-    try {
-      await deleteProduct(Number(productId))
-      console.log('상품이 성공적으로 삭제되었습니다.')
-      setShowModal(true)
-    } catch (error) {
-      message.error('상품 등록에 실패했습니다.')
-    }
+    deleteProductMutate.mutate(
+      { productId: Number(productId) },
+      {
+        onSuccess: (data) => {
+          console.log('상품이 성공적으로 삭제되었습니다.')
+          setShowModal(true)
+        },
+        onError: (err) => {
+          console.log(err)
+          alert('상품삭제 중 에러가 발생했습니다.')
+        }
+      }
+    )
   }
 
   return (
@@ -104,13 +97,13 @@ const ProductDetail = () => {
       <div className='flex-1'>
         <div className='flex h-full flex-col justify-between'>
           <div>
-            <h1 className='mb-3 text-2xl font-bold'>{product.name}</h1>
+            <h1 className='mb-3 text-2xl font-bold'>{data?.name}</h1>
             <p className='mb-6 text-2xl font-bold text-red-600'>
-              {product.price.toLocaleString()}원
+              {data?.price.toLocaleString()}원
             </p>
 
             <div className='mb-6 rounded-md bg-gray-50 p-4'>
-              <div className='mb-2 font-medium'>{product.name}</div>
+              <div className='mb-2 font-medium'>{data?.name}</div>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center rounded-md border'>
                   <button
@@ -128,7 +121,7 @@ const ProductDetail = () => {
                   </button>
                 </div>
                 <div className='text-lg font-bold'>
-                  {(product.price * quantity).toLocaleString()}원
+                  {totalPrice.toLocaleString()}원
                 </div>
               </div>
             </div>
@@ -152,7 +145,7 @@ const ProductDetail = () => {
           {isAdmin && (
             <div className='flex justify-end gap-4'>
               <Link
-                to={`/createProduct?productId=${product.productId}`}
+                to={`/createProduct?productId=${data?.productId}`}
                 state={{ mode: 'edit' }}
               >
                 <Button text={'수정'} type={'normal'} onClick={() => {}} />

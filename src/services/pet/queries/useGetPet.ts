@@ -1,17 +1,17 @@
 import { queryKeys } from '@/constants'
 import { UseQueryCustomOptions } from '@/types/api'
 import { useQuery } from '@tanstack/react-query'
-import { getPetDetailById } from '../api'
-import { GetPetDetailByIdResponse } from '../types'
+import { getPet } from '../api'
+import { GetPetResponse } from '../types'
 
 export const useGetPet = (
-  id: number | null,
-  queryOptions?: UseQueryCustomOptions<GetPetDetailByIdResponse>
+  petId: number | null,
+  queryOptions?: UseQueryCustomOptions<GetPetResponse>
 ) => {
   return useQuery({
-    queryFn: () => getPetDetailById(Number(id)),
-    queryKey: [queryKeys.PET, queryKeys.GET_PET, id],
-    enabled: Boolean(id),
+    queryFn: () => getPet(Number(petId)),
+    queryKey: [queryKeys.PET, queryKeys.GET_PET, petId],
+    enabled: Boolean(petId),
     ...queryOptions
   })
 }

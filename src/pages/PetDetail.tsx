@@ -1,57 +1,63 @@
+import { useGetPet } from '@/services/pet'
+import { useDeletePet } from '@/services/pet/queries/useDeletePet'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { deletePet } from '../api/auth'
 import basicPicture from '../assets/basicPicture.png'
 import Button from '../components/Button'
 import TwoButtonModal from '../components/TwoButtonModal'
 import { PetData } from '../types/PetData'
-import { getPetDetailById } from '@/services/pet'
 
 const PetDetail = () => {
   const nav = useNavigate()
   const { petId } = useParams()
+  const parsedPetId = petId ? Number(petId) : null // 문자열 → 숫자, 없으면 null
+
   const [pet, setPet] = useState<PetData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [openPopup, setOpenPopup] = useState(false)
+  const deletePetMutate = useDeletePet()
+
+  // 펫 정보 가져오기
+  const { data, isLoading, isError, error } = useGetPet(Number(petId))
 
   useEffect(() => {
-    const getPetDetail = async () => {
-      try {
-        if (!petId) {
-          throw new Error('잘못된 요청입니다.')
-        }
-
-        const response = await getPetDetailById(Number(petId))
-
-        setPet(response)
-      } catch (error) {
-        console.error('등록 실패 : ' + error)
-        setError('❌ 데이터를 불러오는 중 오류가 발생했습니다. ❌')
-      } finally {
-        setLoading(false)
-      }
+    if (data) {
+      setPet(data)
     }
-
-    getPetDetail()
-  }, [petId])
+  }, [data])
 
   const clickDeletePet = async () => {
-    if (!petId) return
-
-    try {
-      await deletePet(Number(petId))
-      nav('/petManagement')
-    } catch (error) {
-      console.error('삭제 실패', error)
+    if (parsedPetId) {
+      deletePetMutate.mutate(
+        { petId: parsedPetId },
+        {
+          onSuccess: (data) => {
+            console.log('반려동물 삭제 성공!', data)
+            nav('/petManagement')
+          },
+          onError: (err) => {
+            console.log(err)
+          }
+        }
+      )
     }
   }
 
-  if (loading) return <p className='text-center text-3xl'>⏳ 로딩 중...</p>
-  if (error) return <p className='text-center text-3xl text-red-500'>{error}</p>
+  if (isLoading)
+    return (
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl'>
+        ⏳ 로딩 중...
+      </p>
+    )
+
+  if (isError)
+    return (
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl text-red-500'>
+        {error.message}
+      </p>
+    )
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-100'>
+    <div className='flex min-h-[1000px] items-center justify-center bg-gray-100'>
       <div className='w-full max-w-md rounded-2xl bg-white p-8 shadow-lg'>
         <img
           src={pet?.petImg || basicPicture}

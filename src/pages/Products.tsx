@@ -1,8 +1,7 @@
+import { useGetAllProduct } from '@/services/product/queries/useGetAllProduct'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getProducts } from '../api/auth' // 백엔드 API 호출 함수
 import Button from '../components/Button'
-import { ProductData } from '../types/ProductData'
 import { getUserRole } from '../utils/getUserRole'
 
 // 첫 번째 이미지를 가져오는 함수
@@ -14,27 +13,16 @@ const getFirstImage = (imgUrls: string[] | string): string => {
 }
 
 const Products = () => {
-  const [products, setProducts] = useState<ProductData[]>([])
   const [isAdmin, setIsAdmin] = useState(false)
+  const { data } = useGetAllProduct()
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getProducts() // 백엔드 API에서 상품 데이터 가져오기
-        setProducts(data)
-      } catch (error) {
-        console.error('상품 목록을 불러오는 중 오류 발생:', error)
-      }
-    }
-
-    fetchProducts()
-
     const role = getUserRole()
 
     if (role === 'ADMIN') {
       setIsAdmin(true)
     }
-  }, [])
+  }, [data])
 
   return (
     <div className='mx-auto min-h-[600px] w-[1050px] py-12'>
@@ -45,7 +33,7 @@ const Products = () => {
         </Link>
       )}
       <div className='grid grid-cols-4 gap-8'>
-        {products.map((product) => (
+        {data?.map((product) => (
           <Link to={`/${product.productId}`}>
             <div key={product.productId} className='rounded-lg border p-4'>
               <img

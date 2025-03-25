@@ -1,29 +1,33 @@
+import { useCreateProduct } from '@/services/product/queries/useCreateProduct'
+import { useGetProduct } from '@/services/product/queries/useGetProduct'
+import { useUpdateProduct } from '@/services/product/queries/useUpdateProduct'
+import { createProductData } from '@/types/ProductUploadData'
 import { InboxOutlined } from '@ant-design/icons'
 import { Upload, message } from 'antd'
 import { UploadFile } from 'antd/es/upload/interface'
 import { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
-import { createProduct, getProductById, updateProduct } from '../api/auth'
 import OneButtonModal from '../components/OneButtonModal'
-import { PcreateProductData } from '../types/ProductUploadData'
 
 const { Dragger } = Upload
 
 const CreateProduct: React.FC = () => {
-  const [formData, setFormData] = useState<PcreateProductData>({
+  const [formData, setFormData] = useState<createProductData>({
     name: '',
     productImg: [],
     price: 0,
     quantity: 0
   })
 
+  const createProductMutate = useCreateProduct()
+  const updateProductMutate = useUpdateProduct()
+
   const location = useLocation()
   const [searchParams] = useSearchParams()
   const mode = location.state?.mode || 'create'
-  const paramProductId = searchParams.get('productId')
-
   const [showModal, setShowModal] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const paramProductId = searchParams.get('productId')
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -83,32 +87,42 @@ const CreateProduct: React.FC = () => {
       }
     })
 
-    // 수정할 때
+    // 펫 수정 제출
     if (mode === 'edit' && paramProductId) {
-      try {
-        await updateProduct(Number(paramProductId), data) // 수정 API 호출
-        console.log('상품이 성공적으로 수정되었습니다!')
-        setShowModal(true)
-      } catch (error) {
-        console.log('상품 수정에 실패했습니다.')
-      }
-      return
+      updateProductMutate.mutate(
+        { productId: Number(paramProductId), formData: data },
+        {
+          onSuccess: (data) => {
+            console.log('반려동물 수정 성공!', data)
+            setShowModal(true)
+          },
+          onError: (err) => {
+            console.log(err)
+          }
+        }
+      )
     }
 
-    try {
-      await createProduct(data)
-      setFormData({
-        name: '',
-        price: 0,
-        quantity: 0,
-        productImg: []
-      })
-      setFileList([])
-      message.success('상품이 성공적으로 등록되었습니다!')
-      setShowModal(true)
-    } catch (error) {
-      message.error('상품 등록에 실패했습니다.')
-    }
+    // 펫 생성 제출
+    createProductMutate.mutate(
+      { formData: data },
+      {
+        onSuccess: (data) => {
+          setFormData({
+            name: '',
+            price: 0,
+            quantity: 0,
+            productImg: []
+          })
+          setFileList([])
+          console.log('상품이 성공적으로 등록되었습니다!', data)
+          setShowModal(true)
+        },
+        onError: (err) => {
+          console.log('상품 등록에 실패했습니다')
+        }
+      }
+    )
   }
 
   // 이미지 URL을 UploadFile[]로 변환
@@ -121,35 +135,26 @@ const CreateProduct: React.FC = () => {
     }))
   }
 
-  // 수정모드일 때 정보 불러오기
+  const { data } = useGetProduct(Number(paramProductId))
+
   useEffect(() => {
-    const fetchProductData = async () => {
-      if (mode === 'edit' && paramProductId) {
-        try {
-          const data = await getProductById(Number(paramProductId))
+    if (data) {
+      const imageArray = Array.isArray(data.imgUrl)
+        ? data.imgUrl
+        : [data.imgUrl]
 
-          const imageArray = Array.isArray(data.imgUrl)
-            ? data.imgUrl
-            : [data.imgUrl]
+      const mappedImages = mapImageUrlsToFileList(imageArray)
 
-          const mappedImages = mapImageUrlsToFileList(imageArray)
+      setFileList(mappedImages)
 
-          setFileList(mappedImages)
-
-          setFormData({
-            name: data.name,
-            price: data.price,
-            quantity: data.quantity,
-            productImg: mappedImages
-          })
-        } catch (error) {
-          console.error('상품 정보 불러오기 실패', error)
-        }
-      }
+      setFormData({
+        name: data.name,
+        price: data.price,
+        quantity: data.quantity,
+        productImg: mappedImages
+      })
     }
-
-    fetchProductData()
-  }, [mode, paramProductId])
+  }, [data])
 
   return (
     <div className='mx-auto w-[1050px]'>

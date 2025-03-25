@@ -1,21 +1,20 @@
 import { useCreatePet, useGetPet } from '@/services/pet'
+import { useUpdatePet } from '@/services/pet/queries/useUpdatePet'
 import { useEffect, useState } from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { updatePet } from '../api/auth'
 import OneButtonModal from '../components/OneButtonModal'
 import SuccessPopup from '../components/SuccessPopup'
 import { PetData } from '../types/PetData'
 
 const CreatePetInfo = () => {
   const nav = useNavigate()
-
+  const createPetMutate = useCreatePet()
+  const updatePetMutate = useUpdatePet()
   const [searchParams] = useSearchParams()
-  const paramPetId = searchParams.get('petId') || null
-
   const location = useLocation()
-  const mode = location.state?.mode || 'create'
-
+  const [hasDisease, setHasDisease] = useState<boolean | null>(null) // 염려질환 있어요 버튼 선택됐는지
+  const [hasAllergy, setHasAllergy] = useState<boolean | null>(null) // 알러지 있어요 버튼 선택됐는지
   const [petData, setPetData] = useState<PetData>({
     petId: null,
     petImg: null,
@@ -33,13 +32,13 @@ const CreatePetInfo = () => {
     allergy: [] // 알러지
   })
 
-  const [hasDisease, setHasDisease] = useState<boolean | null>(null) // 염려질환 있어요 버튼 선택됐는지
-  const [hasAllergy, setHasAllergy] = useState<boolean | null>(null) // 알러지 있어요 버튼 선택됐는지
+  const paramPetId = searchParams.get('petId') || null
 
-  const createPetMutate = useCreatePet()
+  const mode = location.state?.mode || 'create'
+
+  // 펫 수정시 정보 가져오기
   const { data } = useGetPet(Number(paramPetId))
 
-  // 수정모드일때 기존데이터 불러오기
   useEffect(() => {
     if (data) {
       setPetData({
@@ -167,7 +166,17 @@ const CreatePetInfo = () => {
       })
 
       if (mode === 'edit' && petData.petId !== null) {
-        await updatePet(petData.petId, formData)
+        updatePetMutate.mutate(
+          { petId: petData.petId, formData },
+          {
+            onSuccess: (data) => {
+              console.log('반려동물 수정 성공!', data)
+            },
+            onError: (err) => {
+              console.log(err)
+            }
+          }
+        )
       } else {
         createPetMutate.mutate(
           { formData },

@@ -1,51 +1,19 @@
+import { useGetDiary } from '@/services/pet/queries/useGetDiary'
 import { Button, Upload, UploadFile } from 'antd'
-import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getDiaryDetailById } from '../api/auth'
-import { DiaryData } from '../types/DiaryData'
-
+import logo from '../assets/logo.png'
 const PetDiaryDetail = () => {
   const { diaryId } = useParams()
   const navigate = useNavigate()
-  const [fileList, setFileList] = useState<UploadFile[]>([])
 
-  const [diary, setDiary] = useState<DiaryData>({
-    diaryId: 0,
-    title: '',
-    content: '',
-    imgUrl: [],
-    createdAt: ''
-  })
+  // 다이어리 수정시 정보 가져오기
+  const { data, isLoading, isError } = useGetDiary(Number(diaryId))
 
-  useEffect(() => {
-    if (diaryId) {
-      getDiaryDetail(Number(diaryId))
-    }
-  }, [diaryId])
-
-  const getDiaryDetail = async (id: number) => {
-    try {
-      const response = await getDiaryDetailById(id)
-      setDiary(response.data[0])
-
-      if (response.data[0]?.imgUrl) {
-        const files: UploadFile[] = response.data[0].imgUrl.map(
-          (url: string, index: number) => ({
-            uid: `${index}`,
-            name: `image-${index}`,
-            url: url, // 백엔드에서 받은 이미지 URL
-            status: 'done'
-          })
-        )
-        setFileList(files)
-      }
-    } catch (error) {
-      console.error('다이어리 상세 정보를 가져오는 중 오류 발생', error)
-      alert('다이어리 정보를 가져올 수 없습니다.')
-    }
+  if (isLoading) {
+    return <div></div>
   }
 
-  if (!diary) {
+  if (isError) {
     return (
       <div className='flex h-[800px] w-full items-center justify-center'>
         <p className='text-lg text-gray-500'>다이어리를 찾을 수 없습니다.</p>
@@ -53,13 +21,22 @@ const PetDiaryDetail = () => {
     )
   }
 
+  const processImage = (imgUrls: string[]): UploadFile[] => {
+    return imgUrls.map((url: string, index: number) => ({
+      uid: `${index}`,
+      name: `image-${index}`,
+      url: url,
+      status: 'done'
+    }))
+  }
+
   return (
     <div className='relative mx-auto mb-12 w-1/2 py-16'>
       <div className='mb-5'>
-        {fileList.length > 0 && (
+        {data?.imgUrl && data.imgUrl.length > 0 && (
           <Upload
             listType='picture-card'
-            fileList={fileList}
+            fileList={processImage(data.imgUrl) || { logo }}
             showUploadList={{ showRemoveIcon: false }} // 삭제 버튼 숨김
             beforeUpload={() => false} // 실제 업로드 방지 (미리보기 용도)
           />
@@ -73,14 +50,14 @@ const PetDiaryDetail = () => {
               type='text'
               className='mb-4 size-full h-8 bg-white text-2xl focus:outline-none'
               disabled
-              value={diary.title}
+              value={data?.title}
             />
           </div>
           <div className='h-[388px] w-full'>
             <textarea
               className='mt-4 h-full w-full resize-none bg-white focus:outline-none'
               disabled
-              value={diary.content}
+              value={data?.content}
             />
           </div>
         </div>
