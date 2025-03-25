@@ -10,8 +10,6 @@ productApiClient.interceptors.request.use(
   (config) => {
     const authCookie = Cookies.get('Authorization') // 쿠키에서 토큰 가져오기
 
-    console.log('Authorization 쿠키 값: ', authCookie)
-
     if (authCookie) {
       config.headers['Authorization'] = `Bearer ${authCookie}`
     }

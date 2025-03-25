@@ -24,10 +24,12 @@ const CreateProduct: React.FC = () => {
 
   const location = useLocation()
   const [searchParams] = useSearchParams()
+
   const mode = location.state?.mode || 'create'
   const [showModal, setShowModal] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const paramProductId = searchParams.get('productId')
+  const { data } = useGetProduct(Number(paramProductId))
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -87,7 +89,7 @@ const CreateProduct: React.FC = () => {
       }
     })
 
-    // 펫 수정 제출
+    // product 수정 제출
     if (mode === 'edit' && paramProductId) {
       updateProductMutate.mutate(
         { productId: Number(paramProductId), formData: data },
@@ -103,7 +105,7 @@ const CreateProduct: React.FC = () => {
       )
     }
 
-    // 펫 생성 제출
+    // product 생성 제출
     createProductMutate.mutate(
       { formData: data },
       {
@@ -134,8 +136,6 @@ const CreateProduct: React.FC = () => {
       url // 이미지 미리보기 URL
     }))
   }
-
-  const { data } = useGetProduct(Number(paramProductId))
 
   useEffect(() => {
     if (data) {

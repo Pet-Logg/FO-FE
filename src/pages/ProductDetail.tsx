@@ -7,7 +7,7 @@ import OneButtonModal from '../components/OneButtonModal'
 import { getUserRole } from '../utils/getUserRole'
 
 const ProductDetail = () => {
-  const { productId } = useParams<{ productId: string }>()
+  const { productId } = useParams()
   const { data, isError } = useGetProduct(Number(productId))
   const [mainImage, setMainImage] = useState<string>('')
   const [quantity, setQuantity] = useState<number>(1)

@@ -9,12 +9,16 @@ import { PetData } from '../types/PetData'
 
 const CreatePetInfo = () => {
   const nav = useNavigate()
+  const [searchParams] = useSearchParams()
+  const paramPetId = searchParams.get('petId') || null
+  const { data } = useGetPet(Number(paramPetId))
   const createPetMutate = useCreatePet()
   const updatePetMutate = useUpdatePet()
-  const [searchParams] = useSearchParams()
   const location = useLocation()
   const [hasDisease, setHasDisease] = useState<boolean | null>(null) // 염려질환 있어요 버튼 선택됐는지
   const [hasAllergy, setHasAllergy] = useState<boolean | null>(null) // 알러지 있어요 버튼 선택됐는지
+  const [showPopup, setShowPopup] = useState(false) // 팝업 상태
+  const [isLoading, setIsLoading] = useState(false) // 로딩 상태
   const [petData, setPetData] = useState<PetData>({
     petId: null,
     petImg: null,
@@ -32,20 +36,14 @@ const CreatePetInfo = () => {
     allergy: [] // 알러지
   })
 
-  const paramPetId = searchParams.get('petId') || null
-
   const mode = location.state?.mode || 'create'
 
   // 펫 수정시 정보 가져오기
-  const { data } = useGetPet(Number(paramPetId))
-
   useEffect(() => {
     if (data) {
       setPetData({
         ...data,
-        petBirth: data.petBirth
-          ? new Date(data.petBirth).toISOString().split('T')[0]
-          : ''
+        petBirth: new Date(data.petBirth).toISOString().split('T')[0]
       })
     }
   }, [data])
@@ -56,9 +54,6 @@ const CreatePetInfo = () => {
 
     setPetData({ ...petData, [name]: value })
   }
-
-  const [showPopup, setShowPopup] = useState(false) // 팝업 상태
-  const [isLoading, setIsLoading] = useState(false) // 로딩 상태
 
   // 이미지 업로드
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -6,7 +6,7 @@ export interface PetRequestWithFormData {
 
 export interface GetPetResponse {
   petId: number | null
-  petImg: string
+  petImg: string | null
   animal: string
   petName: string
   petBirth: string
@@ -15,8 +15,8 @@ export interface GetPetResponse {
   petWeight: number
 
   isNeutered?: string | null
-  concernedDiseases?: string | null
-  allergies?: string | null
+  disease?: string[] | null
+  allergy?: string[] | null
 }
 
 export interface UpdatePetRequest {

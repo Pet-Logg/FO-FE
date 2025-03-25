@@ -5,7 +5,6 @@ import Button from '../components/Button'
 
 const PetManagement = () => {
   const { data, isLoading, isError } = useGetAllPet()
-
   const nav = useNavigate()
 
   return (
