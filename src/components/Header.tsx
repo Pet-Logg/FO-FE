@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Link, useNavigate } from 'react-router-dom'
+import cartImg from '../assets/cart.png'
 import icon_user from '../assets/icon_user.svg'
 import logo from '../assets/logo.png'
 
@@ -51,10 +52,13 @@ const Header = () => {
         </div>
 
         <div className='flex w-4/5 items-center justify-end'>
-          <div className='flex gap-8'>
+          <div className='flex items-center gap-8'>
             <Link to='/products'>로그몰</Link>
             <Link to='/petManagement'>반려동물 관리</Link>
             <Link to='/petDiary'>육아일기</Link>
+            <Link to='/cartView'>
+              <img src={cartImg} alt='장바구니' className='h-6' />
+            </Link>
           </div>
         </div>
 

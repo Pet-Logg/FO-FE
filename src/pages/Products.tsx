@@ -25,7 +25,7 @@ const Products = () => {
   }, [data])
 
   return (
-    <div className='mx-auto min-h-[600px] w-[1050px] py-12'>
+    <div className='mx-auto min-h-[750px] w-[1050px] py-12'>
       <h2 className='mb-10 text-2xl font-bold'>상품 목록</h2>
       {isAdmin && (
         <Link to={'/createProduct'} className='mb-5 flex justify-end'>

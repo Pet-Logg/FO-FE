@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Footer from './components/Footer'
 import Header from './components/Header'
+import CartView from './pages/CartView'
 import ChangePassword from './pages/ChangePassword'
 import CreatePetDiary from './pages/CreatePetDiary'
 import CreatePetInfo from './pages/CreatePetInfo'
@@ -34,6 +35,7 @@ const App = () => {
           <Route path='/createProduct' element={<CreateProduct />} />
           <Route path='/products' element={<Products />} />
           <Route path='/:productId' element={<ProductDetail />} />
+          <Route path='/cartView' element={<CartView />} />
         </Routes>
         <Footer />
       </BrowserRouter>
