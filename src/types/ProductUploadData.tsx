@@ -1,8 +1,8 @@
-import { UploadFile } from "antd";
+import { UploadFile } from 'antd'
 
-export interface PcreateProductData {
-  name: string;
-  productImg: UploadFile[];
-  price: number;
-  quantity: number;
+export interface createProductData {
+  name: string
+  productImg: UploadFile[]
+  price: number
+  quantity: number
 }

@@ -4,26 +4,27 @@
 
 @font-face {
   font-family: gongbuFont;
-  src: url("/fonts/gongbuFont.ttf") format(truetype);
+  src: url('/fonts/gongbuFont.ttf') format(truetype);
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Mungyeong-Gamhong-Apple';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-2@1.0/Mungyeong-Gamhong-Apple.woff2') format('woff2');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-2@1.0/Mungyeong-Gamhong-Apple.woff2')
+    format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 /* Chrome, Safari, Edge, Opera - 인풋박스에 화살표 제거*/
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox - 인풋박스에 화살표 제거 */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }

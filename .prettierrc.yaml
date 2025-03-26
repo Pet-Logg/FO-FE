@@ -1,0 +1,27 @@
+# .prettierrc or .prettierrc.yaml
+semi: false
+singleQuote: true
+trailingComma: "none"
+printWidth: 80
+arrowParens: "always"
+bracketSameLine: false
+bracketSpacing: true
+embeddedLanguageFormatting: "auto"
+endOfLine: "lf"
+htmlWhitespaceSensitivity: "css"
+insertPragma: false
+jsxSingleQuote: true
+proseWrap: "preserve"
+quoteProps: "as-needed"
+requirePragma: false
+singleAttributePerLine: false
+tabWidth: 2
+useTabs: false
+plugins: ["prettier-plugin-tailwindcss"]
+# https://github.com/tailwindlabs/prettier-plugin-tailwindcss?tab=readme-ov-file#sorting-classes-in-function-calls
+tailwindFunctions: ["clsx"]
+overrides:
+  - files: "*.md"
+    options:
+      parser: "markdown"
+      tabWidth: 4
