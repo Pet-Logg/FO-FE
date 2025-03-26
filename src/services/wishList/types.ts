@@ -3,10 +3,14 @@ export interface CartItemRequest {
   quantity: number
 }
 export interface GetWishListResponse {
-  id: number
+  id: number // wishListId
   productId: number
   name: string
   price: number
   quantity: number
   imgUrl: string[]
+}
+
+export interface DeleteWishListRequest {
+  selectedItems: number[]
 }

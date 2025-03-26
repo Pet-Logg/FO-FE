@@ -1,8 +1,8 @@
 import productApiClient from '@/api/productApiClient'
 import {
   CartItemRequest,
-  GetWishListResponse,
-  UpdateWishListRequest
+  DeleteWishListRequest,
+  GetWishListResponse
 } from './types'
 
 // 위시리스트 추가
@@ -50,4 +50,18 @@ export async function updateWishList({
     }
   )
   return response.data.data
+}
+
+// 위시리스트 삭제
+export async function deleteWishList({
+  selectedItems
+}: DeleteWishListRequest): Promise<void> {
+  const response = await productApiClient.delete('/wishList', {
+    data: { selectedItems },
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  return response.data
 }

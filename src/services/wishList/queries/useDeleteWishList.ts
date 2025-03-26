@@ -1,12 +1,14 @@
-import { queryKeys } from '@/constants'
 import { UseMutationCustomOptions } from '@/types/api'
-import { queryClient } from '@/utils/queryClient'
 import { useMutation } from '@tanstack/react-query'
-import { addWishList } from '../api'
+import { deleteWishList } from '../api'
+import { queryClient } from '@/utils/queryClient'
+import { queryKeys } from '@/constants'
 
-export const useAddWishList = (mutationOptions?: UseMutationCustomOptions) => {
+export const useDeleteWishList = (
+  mutationOptions?: UseMutationCustomOptions
+) => {
   return useMutation({
-    mutationFn: addWishList,
+    mutationFn: deleteWishList,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.WISHLIST, queryKeys.GET_WISHLIST]
