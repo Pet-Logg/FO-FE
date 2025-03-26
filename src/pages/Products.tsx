@@ -1,7 +1,7 @@
-import { useGetAllProduct } from '@/services/product/queries/useGetAllProduct'
+import { useGetAllProduct } from '@/services/product'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Button from '../components/Button'
+import Button from '@/components/common/Button'
 import { getUserRole } from '../utils/getUserRole'
 
 // 첫 번째 이미지를 가져오는 함수

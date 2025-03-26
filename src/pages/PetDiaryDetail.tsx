@@ -1,7 +1,8 @@
-import { useGetDiary } from '@/services/pet/queries/useGetDiary'
+import { useGetDiary } from '@/services/pet'
 import { Button, Upload, UploadFile } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import logo from '../assets/logo.png'
+
 const PetDiaryDetail = () => {
   const { diaryId } = useParams()
   const navigate = useNavigate()

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Link, useNavigate } from 'react-router-dom'
-import cartImg from '../assets/cart.png'
-import icon_user from '../assets/icon_user.svg'
-import logo from '../assets/logo.png'
+import cartImg from '@/assets/cart.png'
+import icon_user from '@/assets/icon_user.svg'
+import logo from '@/assets/logo.png'
 
 const Header = () => {
   const nav = useNavigate()

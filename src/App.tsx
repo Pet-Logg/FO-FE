@@ -1,6 +1,6 @@
+import Footer from '@/components/common/Footer'
+import Header from '@/components/common/Header'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Footer from './components/Footer'
-import Header from './components/Header'
 import CartView from './pages/CartView'
 import ChangePassword from './pages/ChangePassword'
 import CreatePetDiary from './pages/CreatePetDiary'

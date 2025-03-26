@@ -7,7 +7,7 @@ import { Upload, message } from 'antd'
 import { UploadFile } from 'antd/es/upload/interface'
 import { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
-import OneButtonModal from '../components/OneButtonModal'
+import OneButtonModal from '@/components/common/OneButtonModal'
 
 const { Dragger } = Upload
 

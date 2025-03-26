@@ -1,7 +1,7 @@
-import { useGetAllPet } from '@/services/pet/queries/useGetAllPet'
+import Button from '@/components/common/Button'
+import { useGetAllPet } from '@/services/pet'
 import { useNavigate } from 'react-router-dom'
 import basicPicture from '../assets/basicPicture.png'
-import Button from '../components/Button'
 
 const PetManagement = () => {
   const { data, isLoading, isError } = useGetAllPet()

@@ -3,8 +3,8 @@ import { useUpdatePet } from '@/services/pet/queries/useUpdatePet'
 import { useEffect, useState } from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import OneButtonModal from '../components/OneButtonModal'
-import SuccessPopup from '../components/SuccessPopup'
+import OneButtonModal from '@/components/common/OneButtonModal'
+import SuccessPopup from '@/components/common/SuccessPopup'
 import { PetData } from '../types/PetData'
 
 const CreatePetInfo = () => {

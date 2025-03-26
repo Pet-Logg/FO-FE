@@ -2,7 +2,7 @@ import { ChangePasswordRequest } from '@/services/auth'
 import { useChangePassword } from '@/services/auth/queries/useChangePasswordUser'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Button from '../components/Button'
+import Button from '@/components/common/Button'
 
 type ChangePasswordForm = ChangePasswordRequest & { confirmPassword: string }
 

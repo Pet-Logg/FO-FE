@@ -1,12 +1,13 @@
-import { useDeleteProduct } from '@/services/product/queries/useDeleteProduct'
-import { useGetProduct } from '@/services/product/queries/useGetProduct'
-import { useAddWishList } from '@/services/wishList/queries/useAddWishList'
-import { useGetWishList } from '@/services/wishList/queries/useGetWishList'
-import { useUpdateWishList } from '@/services/wishList/queries/useUpdateWishList'
+import Button from '@/components/common/Button'
+import OneButtonModal from '@/components/common/OneButtonModal'
+import { useDeleteProduct, useGetProduct } from '@/services/product'
+import {
+  useAddWishList,
+  useGetWishList,
+  useUpdateWishList
+} from '@/services/wishList'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import Button from '../components/Button'
-import OneButtonModal from '../components/OneButtonModal'
 import { getUserRole } from '../utils/getUserRole'
 
 const ProductDetail = () => {
