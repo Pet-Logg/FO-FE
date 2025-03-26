@@ -1,5 +1,6 @@
 import { useDeleteProduct } from '@/services/product/queries/useDeleteProduct'
 import { useGetProduct } from '@/services/product/queries/useGetProduct'
+import { useAddWishList } from '@/services/wishList/queries/useAddWishList'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Button from '../components/Button'
@@ -7,19 +8,20 @@ import OneButtonModal from '../components/OneButtonModal'
 import { getUserRole } from '../utils/getUserRole'
 
 const ProductDetail = () => {
-  const { productId } = useParams()
+  const { productId } = useParams<{ productId: string }>()
   const { data, isError } = useGetProduct(Number(productId))
   const [mainImage, setMainImage] = useState<string>('')
   const [quantity, setQuantity] = useState<number>(1)
   const [isAdmin, setIsAdmin] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const deleteProductMutate = useDeleteProduct()
+  const addWishListMutate = useAddWishList()
   const nav = useNavigate()
 
   useEffect(() => {
     if (!data) return
 
-    if (Array.isArray(data.imgUrl)) {
+    if (Array.isArray(data.imgUrl) && data.imgUrl.length > 0) {
       setMainImage(data.imgUrl[0])
     } else {
       setMainImage(data.imgUrl)
@@ -41,7 +43,9 @@ const ProductDetail = () => {
   }
 
   const imageList = Array.isArray(data?.imgUrl) ? data.imgUrl : [data?.imgUrl]
+  const totalPrice = (data?.price ?? 0) * quantity // 총가격
 
+  // 수량 증가 감소
   const handleQuantityChange = (type: 'increase' | 'decrease') => {
     setQuantity((prev) => {
       if (type === 'increase') return prev + 1
@@ -49,13 +53,13 @@ const ProductDetail = () => {
     })
   }
 
-  const totalPrice = (data?.price ?? 0) * quantity
-
+  // 모달창 닫기
   const closeModal = () => {
     setShowModal(false)
     nav('/products')
   }
 
+  // 상품 삭제
   const deleteProductBtn = async () => {
     deleteProductMutate.mutate(
       { productId: Number(productId) },
@@ -72,12 +76,36 @@ const ProductDetail = () => {
     )
   }
 
+  // 장바구니에 추가
+  const handleAddToCart = () => {
+    addWishListMutate.mutate(
+      {
+        productId: Number(productId),
+        quantity
+      },
+      {
+        onSuccess: () => {
+          console.log('장바구니 담기에 성공했습니다.')
+        },
+        onError: () => {
+          console.log('장바구니 담기에 실패했습니다.')
+        }
+      }
+    )
+  }
+
   return (
     <div className='mx-auto flex w-[1050px] gap-12 py-20'>
       {/* 왼쪽 상품 정보 */}
       <div className='w-[450px]'>
         <div className='mb-3 overflow-hidden rounded-lg border'>
-          <img src={mainImage} alt='대표 이미지' className='h-[450px] w-full' />
+          {mainImage && (
+            <img
+              src={mainImage}
+              alt='대표 이미지'
+              className='h-[450px] w-full'
+            />
+          )}
         </div>
 
         <div className='flex justify-center gap-2'>
@@ -134,7 +162,10 @@ const ProductDetail = () => {
             </div>
 
             <div className='flex gap-4'>
-              <button className='flex-1 rounded-full border border-gray-300 py-3 hover:bg-gray-100'>
+              <button
+                onClick={handleAddToCart}
+                className='flex-1 rounded-full border border-gray-300 py-3 hover:bg-gray-100'
+              >
                 장바구니 담기
               </button>
               <button className='flex-1 rounded-full bg-red-500 py-3 text-white hover:bg-red-600'>
