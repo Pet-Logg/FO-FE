@@ -15,7 +15,7 @@ const PetDetail = () => {
 
   const parsedPetId = petId ? Number(petId) : null // 문자열 → 숫자, 없으면 null
 
-  const clickDeletePet = async () => {
+  const clickDeletePet = () => {
     if (parsedPetId) {
       deletePetMutate.mutate(
         { petId: parsedPetId },

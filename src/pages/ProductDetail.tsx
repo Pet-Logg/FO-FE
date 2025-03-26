@@ -64,7 +64,7 @@ const ProductDetail = () => {
   }
 
   // 상품 삭제
-  const deleteProductBtn = async () => {
+  const deleteProductBtn = () => {
     deleteProductMutate.mutate(
       { productId: Number(productId) },
       {

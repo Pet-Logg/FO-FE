@@ -55,7 +55,7 @@ const CreateProduct: React.FC = () => {
     setShowModal(false)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (formData.name === '' || formData.name === null) {

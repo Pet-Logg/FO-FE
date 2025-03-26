@@ -44,7 +44,7 @@ const CreatePetDiary = () => {
   }
 
   // 폼 제출하기
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() // 기본 폼 제출 동작 방지
 
     if (!diaryData.title) {

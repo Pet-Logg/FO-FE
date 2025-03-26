@@ -60,7 +60,7 @@ const ChangePassword = () => {
   }
 
   // 비밀번호 변경 API 호출
-  const handleChangePassword = async () => {
+  const handleChangePassword = () => {
     if (isDisabled) return
 
     changePasswordMutate.mutate(

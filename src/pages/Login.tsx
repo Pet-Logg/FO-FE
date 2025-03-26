@@ -11,7 +11,7 @@ const Login = () => {
   const nav = useNavigate()
   const loginMutate = useLogin()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // 1. 폼 제출 시 기본 동작(페이지 새로고침) 방지
     e.preventDefault()
 

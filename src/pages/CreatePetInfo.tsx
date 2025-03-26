@@ -56,7 +56,7 @@ const CreatePetInfo = () => {
   }
 
   // 이미지 업로드
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -127,7 +127,7 @@ const CreatePetInfo = () => {
   }
 
   // 폼 제출하기
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() // 기본 폼 제출 동작 방지
     setIsLoading(true)
 

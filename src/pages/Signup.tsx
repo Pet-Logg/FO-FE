@@ -8,7 +8,7 @@ const Signup = () => {
   const [errer, setError] = useState('')
   const signUpMutate = useSignUp()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() // 폼 제출 시 새로고침 방지
     setError('') // 이전 에러 초기화
 
