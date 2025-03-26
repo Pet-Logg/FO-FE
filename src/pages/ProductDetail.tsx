@@ -1,6 +1,8 @@
 import { useDeleteProduct } from '@/services/product/queries/useDeleteProduct'
 import { useGetProduct } from '@/services/product/queries/useGetProduct'
 import { useAddWishList } from '@/services/wishList/queries/useAddWishList'
+import { useGetWishList } from '@/services/wishList/queries/useGetWishList'
+import { useUpdateWishList } from '@/services/wishList/queries/useUpdateWishList'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Button from '../components/Button'
@@ -8,6 +10,7 @@ import OneButtonModal from '../components/OneButtonModal'
 import { getUserRole } from '../utils/getUserRole'
 
 const ProductDetail = () => {
+  const { data: wishList = [] } = useGetWishList() // 장바구니 상품 조회
   const { productId } = useParams<{ productId: string }>()
   const { data, isError } = useGetProduct(Number(productId))
   const [mainImage, setMainImage] = useState<string>('')
@@ -16,6 +19,7 @@ const ProductDetail = () => {
   const [showModal, setShowModal] = useState(false)
   const deleteProductMutate = useDeleteProduct()
   const addWishListMutate = useAddWishList()
+  const updateWishListMutate = useUpdateWishList()
   const nav = useNavigate()
 
   useEffect(() => {
@@ -78,20 +82,44 @@ const ProductDetail = () => {
 
   // 장바구니에 추가
   const handleAddToCart = () => {
-    addWishListMutate.mutate(
-      {
-        productId: Number(productId),
-        quantity
-      },
-      {
-        onSuccess: () => {
-          console.log('장바구니 담기에 성공했습니다.')
-        },
-        onError: () => {
-          console.log('장바구니 담기에 실패했습니다.')
-        }
-      }
+    const existingItem = wishList.find(
+      (item) => item.productId === Number(productId)
     )
+
+    if (existingItem) {
+      // 이미 장바구니에 있음 → 수량 추가
+      const newQuantity = existingItem.quantity + quantity
+      updateWishListMutate.mutate(
+        {
+          productId: Number(productId),
+          quantity: newQuantity
+        },
+        {
+          onSuccess: () => {
+            console.log('장바구니 수량이 증가되었습니다.')
+          },
+          onError: () => {
+            console.log('장바구니 수량 증가에 실패했습니다.')
+          }
+        }
+      )
+    } else {
+      // 장바구니에 없으면 새로 생성
+      addWishListMutate.mutate(
+        {
+          productId: Number(productId),
+          quantity
+        },
+        {
+          onSuccess: () => {
+            console.log('장바구니 담기에 성공했습니다.')
+          },
+          onError: () => {
+            console.log('장바구니 담기에 실패했습니다.')
+          }
+        }
+      )
+    }
   }
 
   return (

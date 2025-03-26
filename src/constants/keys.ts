@@ -4,5 +4,7 @@ export const queryKeys = {
   PRODUCT: 'product',
   GET_PRODUCT: 'GetProduct',
   DIARY: 'Diary',
-  GET_DIARY: 'GetDiary'
+  GET_DIARY: 'GetDiary',
+  WISHLIST: 'WishList',
+  GET_WISHLIST: 'GetWishList'
 }
