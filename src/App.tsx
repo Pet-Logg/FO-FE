@@ -6,7 +6,6 @@ import ChangePassword from './pages/ChangePassword'
 import CreatePetDiary from './pages/CreatePetDiary'
 import CreatePetInfo from './pages/CreatePetInfo'
 import CreateProduct from './pages/CreateProduct'
-import Home from './pages/Home'
 import Login from './pages/Login'
 import PetDetail from './pages/PetDetail'
 import PetDiary from './pages/PetDiary'
@@ -15,6 +14,7 @@ import PetManagement from './pages/PetManagement'
 import ProductDetail from './pages/ProductDetail'
 import Products from './pages/Products'
 import Signup from './pages/Signup'
+import { Home } from './pages/Home'
 
 const App = () => {
   return (

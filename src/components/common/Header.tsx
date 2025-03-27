@@ -43,7 +43,7 @@ const Header = () => {
   }, [isOpen])
 
   return (
-    <nav className='sticky top-0 z-50 bg-white px-24 py-4 shadow-sm'>
+    <nav className='sticky top-0 z-50 border-b bg-white py-8'>
       <div className='m-auto flex w-[1050px] items-center justify-between'>
         <div>
           <Link to='/'>
