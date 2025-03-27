@@ -1,12 +1,12 @@
 interface FormInputProps {
-  label: string
+  title: string
   type: 'email' | 'password'
   required?: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const FormInput = ({
-  label,
+  title,
   type,
   required = false,
   onChange
@@ -14,11 +14,11 @@ export const FormInput = ({
   return (
     <div className='mb-4'>
       <label className='mb-2 block text-sm font-bold text-gray-700'>
-        {label}
+        {title}
       </label>
       <input
         type={type}
-        className='w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-300 focus:outline-none focus:ring'
+        className='w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none'
         required={required}
         onChange={onChange}
       />

@@ -40,11 +40,6 @@ const Signup = () => {
           console.log('회원가입 성공!', data)
         },
         onError: (err) => {
-          if (err instanceof Error) {
-            setError(err.message)
-          } else {
-            setError('알 수 없는 에러가 발생했습니다.')
-          }
           console.log(err)
         }
       }
@@ -59,19 +54,19 @@ const Signup = () => {
           {error && <p className='mb-4 text-red-500'>{error}</p>}
           <form onSubmit={handleSubmit}>
             <FormInput
-              label='이메일'
+              title='이메일'
               type='email'
               required={true}
               onChange={handleChangeEmail}
             />
             <FormInput
-              label='비밀번호'
+              title='비밀번호'
               type='password'
               required={true}
               onChange={handleChangePassword}
             />
             <FormInput
-              label='비밀번호 확인'
+              title='비밀번호 확인'
               type='password'
               required={true}
               onChange={handleChangeConfirmPassword}

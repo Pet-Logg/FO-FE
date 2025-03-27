@@ -1,3 +1,4 @@
+import { FormInput } from '@/components/common/FormInput'
 import { useLogin } from '@/services/auth/queries/useLogin'
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
@@ -26,7 +27,7 @@ const Login = () => {
           nav('/')
         },
         onError: (err) => {
-          setError('로그인에 실패했습니다.')
+          setError('아이디 또는 비밀번호를 잘못입력하셨습니다.')
           console.log(err)
         }
       }
@@ -35,59 +36,33 @@ const Login = () => {
 
   return (
     <>
-      <div className='flex h-screen w-full items-center justify-center'>
-        <div className='w-96 rounded-lg bg-white p-8 shadow-md'>
-          <h2 className='mb-6 text-center text-2xl font-semibold'>로그인</h2>
+      <div className='mx-auto flex min-h-[850px] w-[1050px] items-center justify-center'>
+        <div className='w-96 rounded-lg border p-8'>
+          <h2 className='mb-6 text-center text-2xl font-bold'>로그인</h2>
+          {error && <p className='mb-4 text-red-500'>{error}</p>}
           <form onSubmit={handleSubmit} id='loginForm'>
-            <div className='mb-4'>
-              {error && <p className='mb-4 text-red-500'>{error}</p>}
-              <label
-                htmlFor='email'
-                className='mb-2 block text-sm font-bold text-gray-700'
-              >
-                이메일
-              </label>
-              <input
-                type='email'
-                id='email'
-                name='email'
-                className='w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-300 focus:outline-none focus:ring'
-                required
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                }}
-              />
-            </div>
-            <div className='mb-6'>
-              <label
-                htmlFor='password'
-                className='mb-2 block text-sm font-bold text-gray-700'
-              >
-                Password
-              </label>
-              <input
-                type='password'
-                id='password'
-                name='password'
-                className='w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-300 focus:outline-none focus:ring'
-                required
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}
-              />
-            </div>
+            <FormInput
+              title={'이메일'}
+              type={'email'}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
+            />
+            <FormInput
+              title={'비밀번호'}
+              type={'password'}
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
+            />
             <div className='mb-6 flex items-center justify-between'>
               <div className='flex items-center'>
                 <input
                   type='checkbox'
-                  id='remember'
                   name='remember'
-                  className='h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+                  className='text-blue-60 h-4 w-4 rounded border-gray-300'
                 />
-                <label
-                  htmlFor='remember'
-                  className='text-grㄹay-900 ml-2 block text-sm'
-                >
+                <label className='text-grㄹay-900 ml-2 block text-sm'>
                   자동로그인
                 </label>
               </div>

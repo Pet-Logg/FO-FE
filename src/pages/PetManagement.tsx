@@ -8,9 +8,9 @@ const PetManagement = () => {
   const nav = useNavigate()
 
   return (
-    <div className='mx-auto flex min-h-screen w-[1050px] flex-col py-16'>
+    <div className='mx-auto flex min-h-[800px] w-[1050px] flex-col py-16'>
       <h1 className='mb-8 text-3xl font-bold'>반려동물 하우스 🏠</h1>
-      <div className='self-end'>
+      <div className='mb-5 self-end'>
         <Button
           text='추가하기'
           type='normal'
@@ -18,16 +18,14 @@ const PetManagement = () => {
         />
       </div>
 
-      {isLoading && <p className='text-center text-3xl'>로딩 중..</p>}
+      {isLoading && <p className='text-center'>로딩 중</p>}
 
       {isError && (
-        <p className='text-center text-3xl text-red-500'>
-          오류가 발생했습니다.
-        </p>
+        <p className='text-center text-red-500'>오류가 발생했습니다.</p>
       )}
 
       {!isLoading && !isError && data?.length === 0 && (
-        <p className='mx-auto flex min-h-[650px] w-[1050px] items-center justify-center text-3xl'>
+        <p className='mx-auto flex items-center justify-center'>
           등록된 반려동물이 없습니다.
         </p>
       )}
@@ -43,11 +41,11 @@ const PetManagement = () => {
               <img
                 src={pet.petImg || basicPicture}
                 alt={pet.petName}
-                className='mx-auto mb-4 h-60 w-60 rounded-full'
+                className='mx-auto mb-4 h-60 w-60 cursor-pointer rounded-full'
                 onClick={() => nav(`/getPetDetail/${pet.petId}`)}
               />
               <h2
-                className='text-xl font-semibold'
+                className='cursor-pointer text-xl font-semibold'
                 onClick={() => nav(`/getPetDetail/${pet.petId}`)}
               >
                 {pet.petName}

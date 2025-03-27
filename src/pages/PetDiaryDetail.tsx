@@ -33,6 +33,7 @@ const PetDiaryDetail = () => {
 
   return (
     <div className='relative mx-auto mb-12 w-1/2 py-16'>
+      {/* 펫 이미지 */}
       <div className='mb-5'>
         {data?.imgUrl && data.imgUrl.length > 0 && (
           <Upload
@@ -44,6 +45,7 @@ const PetDiaryDetail = () => {
         )}
       </div>
 
+      {/* 기본 정보 */}
       <div className='flex items-center justify-center'>
         <div className='h-[500px] w-full rounded-2xl border border-gray-300 px-6 py-6'>
           <div className='border-b border-gray-300'>
@@ -64,6 +66,7 @@ const PetDiaryDetail = () => {
         </div>
       </div>
 
+      {/* 건강 정보 */}
       <div className='flex justify-end gap-3'>
         <div className='mt-10'>
           <Button

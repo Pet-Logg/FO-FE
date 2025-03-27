@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getUserRole } from '../utils/getUserRole'
+import { ProductImg } from '@/components/product/ProductImage'
 
 const ProductDetail = () => {
   const { data: wishList = [] } = useGetWishList() // 장바구니 상품 조회
@@ -47,7 +48,13 @@ const ProductDetail = () => {
     )
   }
 
-  const imageList = Array.isArray(data?.imgUrl) ? data.imgUrl : [data?.imgUrl]
+  // 이미지 리스트
+  const imageList = Array.isArray(data?.imgUrl)
+    ? data.imgUrl
+    : data?.imgUrl
+      ? [data.imgUrl]
+      : []
+
   const totalPrice = (data?.price ?? 0) * quantity // 총가격
 
   // 수량 증가 감소
@@ -124,31 +131,12 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className='mx-auto flex w-[1050px] gap-12 py-20'>
-      {/* 왼쪽 상품 정보 */}
-      <div className='w-[450px]'>
-        <div className='mb-3 overflow-hidden rounded-lg border'>
-          {mainImage && (
-            <img
-              src={mainImage}
-              alt='대표 이미지'
-              className='h-[450px] w-full'
-            />
-          )}
-        </div>
-
-        <div className='flex justify-center gap-2'>
-          {imageList.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`img-${idx}`}
-              onMouseEnter={() => setMainImage(img)}
-              className='h-20 w-20 cursor-pointer rounded-md border object-cover hover:border-blue-500'
-            />
-          ))}
-        </div>
-      </div>
+    <div className='mx-auto flex min-h-[800px] w-[1050px] gap-12 py-20'>
+      <ProductImg
+        mainImage={mainImage}
+        imageList={imageList}
+        onMouseEnterEvt={setMainImage}
+      />
 
       {/* 오른쪽 상품 정보 */}
       <div className='flex-1'>
