@@ -1,20 +1,20 @@
-import Footer from '@/components/common/Footer'
-import Header from '@/components/common/Header'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import CartView from './pages/CartView'
-import ChangePassword from './pages/ChangePassword'
-import CreatePetDiary from './pages/CreatePetDiary'
-import CreatePetInfo from './pages/CreatePetInfo'
-import CreateProduct from './pages/CreateProduct'
-import Login from './pages/Login'
-import PetDetail from './pages/PetDetail'
-import PetDiary from './pages/PetDiary'
-import PetDiaryDetail from './pages/PetDiaryDetail'
-import PetManagement from './pages/PetManagement'
-import ProductDetail from './pages/ProductDetail'
-import Products from './pages/Products'
-import Signup from './pages/Signup'
+import { Carts } from './pages/Carts'
+import { ChangePassword } from './pages/ChangePassword'
+import { CreatePetDiary } from './pages/CreatePetDiary'
+import { CreatePet } from './pages/CreatePetInfo'
+import { CreateProduct } from './pages/CreateProduct'
 import { Home } from './pages/Home'
+import { Login } from './pages/Login'
+import { PetDetail } from './pages/PetDetail'
+import { PetDiaries } from './pages/PetDiaries'
+import { PetDiaryDetail } from './pages/PetDiaryDetail'
+import { Pets } from './pages/Pets'
+import { ProductDetail } from './pages/ProductDetail'
+import { Products } from './pages/Products'
+import { Signup } from './pages/Signup'
+import { Header } from './components/common/Header'
+import { Footer } from './components/common/Footer'
 
 const App = () => {
   return (
@@ -25,17 +25,17 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/createPetInfo' element={<CreatePetInfo />} />
-          <Route path='/petManagement' element={<PetManagement />} />
+          <Route path='/createPet' element={<CreatePet />} />
+          <Route path='/pets' element={<Pets />} />
           <Route path='/getPetDetail/:petId' element={<PetDetail />} />
-          <Route path='/petDiary' element={<PetDiary />} />
+          <Route path='/petDiaries' element={<PetDiaries />} />
           <Route path='/createPetDiary' element={<CreatePetDiary />} />
           <Route path='/petDiaryDetail/:diaryId' element={<PetDiaryDetail />} />
           <Route path='/changePassword' element={<ChangePassword />} />
           <Route path='/createProduct' element={<CreateProduct />} />
           <Route path='/products' element={<Products />} />
           <Route path='/:productId' element={<ProductDetail />} />
-          <Route path='/cartView' element={<CartView />} />
+          <Route path='/cartView' element={<Carts />} />
         </Routes>
         <Footer />
       </BrowserRouter>

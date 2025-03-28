@@ -1,12 +1,12 @@
+import { Button } from '@/components/common/Button'
 import { ChangePasswordRequest } from '@/services/auth'
 import { useChangePassword } from '@/services/auth/queries/useChangePasswordUser'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Button from '@/components/common/Button'
 
 type ChangePasswordForm = ChangePasswordRequest & { confirmPassword: string }
 
-const ChangePassword = () => {
+export const ChangePassword = () => {
   const nav = useNavigate()
   const changePasswordMutate = useChangePassword()
   const [passwordError, setPasswordError] = useState('') // 비밀번호 길이 오류
@@ -143,5 +143,3 @@ const ChangePassword = () => {
     </div>
   )
 }
-
-export default ChangePassword

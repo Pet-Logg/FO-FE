@@ -7,7 +7,7 @@ interface ProductHeaderPrpos {
 export const ProductHeader = ({ isAdmin }: ProductHeaderPrpos) => {
   return (
     <div>
-      <h2 className='mb-8 text-2xl font-bold'>상품 목록</h2>
+      <h2 className='mb-8 text-3xl font-bold'>상품 목록</h2>
       {isAdmin && (
         <div className='mb-5 flex justify-end'>
           <Link

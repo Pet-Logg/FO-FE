@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import Confetti from 'react-confetti'
 import { useNavigate } from 'react-router-dom'
-import Button from './Button'
+import { Button } from './Button'
 
-const SuccessPopup: React.FC = () => {
+export const SuccessPopup: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(true)
   const nav = useNavigate()
   useEffect(() => {
@@ -37,5 +37,3 @@ const SuccessPopup: React.FC = () => {
     </>
   )
 }
-
-export default SuccessPopup

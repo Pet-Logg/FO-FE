@@ -1,3 +1,4 @@
+import { OneButtonModal } from '@/components/common/OneButtonModal'
 import { useCreateProduct } from '@/services/product/queries/useCreateProduct'
 import { useGetProduct } from '@/services/product/queries/useGetProduct'
 import { useUpdateProduct } from '@/services/product/queries/useUpdateProduct'
@@ -7,11 +8,10 @@ import { Upload, message } from 'antd'
 import { UploadFile } from 'antd/es/upload/interface'
 import { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
-import OneButtonModal from '@/components/common/OneButtonModal'
 
 const { Dragger } = Upload
 
-const CreateProduct: React.FC = () => {
+export const CreateProduct: React.FC = () => {
   const [formData, setFormData] = useState<createProductData>({
     name: '',
     productImg: [],
@@ -245,5 +245,3 @@ const CreateProduct: React.FC = () => {
     </div>
   )
 }
-
-export default CreateProduct

@@ -3,7 +3,7 @@ import { Button, Upload, UploadFile } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import logo from '../assets/logo.png'
 
-const PetDiaryDetail = () => {
+export const PetDiaryDetail = () => {
   const { diaryId } = useParams()
   const navigate = useNavigate()
 
@@ -90,5 +90,3 @@ const PetDiaryDetail = () => {
     </div>
   )
 }
-
-export default PetDiaryDetail

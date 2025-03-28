@@ -1,4 +1,4 @@
-import Button from './Button'
+import { Button } from './Button'
 
 interface PopupProps {
   text: string
@@ -7,7 +7,7 @@ interface PopupProps {
   onConfirm: () => void
 }
 
-const OneButtonModal: React.FC<PopupProps> = ({
+export const OneButtonModal: React.FC<PopupProps> = ({
   text,
   buttonName,
   buttonType,
@@ -24,5 +24,3 @@ const OneButtonModal: React.FC<PopupProps> = ({
     </div>
   )
 }
-
-export default OneButtonModal

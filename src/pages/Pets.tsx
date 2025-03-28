@@ -1,9 +1,9 @@
-import Button from '@/components/common/Button'
+import { Button } from '@/components/common/Button'
 import { useGetAllPet } from '@/services/pet'
 import { useNavigate } from 'react-router-dom'
 import basicPicture from '../assets/basicPicture.png'
 
-const PetManagement = () => {
+export const Pets = () => {
   const { data, isLoading, isError } = useGetAllPet()
   const nav = useNavigate()
 
@@ -57,5 +57,3 @@ const PetManagement = () => {
     </div>
   )
 }
-
-export default PetManagement

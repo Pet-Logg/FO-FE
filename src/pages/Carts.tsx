@@ -4,7 +4,7 @@ import { useGetWishList } from '@/services/wishList/queries/useGetWishList'
 import { useState } from 'react'
 import logo from '../assets/logo.png'
 
-const CartView = () => {
+export const Carts = () => {
   const { data: cartItems = [] } = useGetWishList()
   const deleteWishListMutate = useDeleteWishList()
   const updateWishListMutate = useUpdateWishList()
@@ -201,5 +201,3 @@ const CartView = () => {
     </div>
   )
 }
-
-export default CartView

@@ -1,5 +1,6 @@
-import Button from '@/components/common/Button'
-import OneButtonModal from '@/components/common/OneButtonModal'
+import { Button } from '@/components/common/Button'
+import { OneButtonModal } from '@/components/common/OneButtonModal'
+import { ProductImg } from '@/components/product/ProductImage'
 import { useDeleteProduct, useGetProduct } from '@/services/product'
 import {
   useAddWishList,
@@ -9,9 +10,8 @@ import {
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getUserRole } from '../utils/getUserRole'
-import { ProductImg } from '@/components/product/ProductImage'
 
-const ProductDetail = () => {
+export const ProductDetail = () => {
   const { data: wishList = [] } = useGetWishList() // 장바구니 상품 조회
   const { productId } = useParams<{ productId: string }>()
   const { data, isError } = useGetProduct(Number(productId))
@@ -219,5 +219,3 @@ const ProductDetail = () => {
     </div>
   )
 }
-
-export default ProductDetail

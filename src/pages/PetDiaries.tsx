@@ -4,7 +4,7 @@ import { useGetAllDiary } from '@/services/pet'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const PetDiary = () => {
+export const PetDiaries = () => {
   const nav = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -68,5 +68,3 @@ const PetDiary = () => {
     </>
   )
 }
-
-export default PetDiary
