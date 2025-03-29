@@ -2,17 +2,13 @@ import { Button } from '@/components/common/Button'
 import { OneButtonModal } from '@/components/common/OneButtonModal'
 import { ProductImg } from '@/components/product/ProductImage'
 import { useDeleteProduct, useGetProduct } from '@/services/product'
-import {
-  useAddWishList,
-  useGetWishList,
-  useUpdateWishList
-} from '@/services/wishList'
+import { useAddCart, useGetCart, useUpdateCart } from '@/services/Cart'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getUserRole } from '../utils/getUserRole'
 
 export const ProductDetail = () => {
-  const { data: wishList = [] } = useGetWishList() // 장바구니 상품 조회
+  const { data: cart = [] } = useGetCart() // 장바구니 상품 조회
   const { productId } = useParams<{ productId: string }>()
   const { data, isError } = useGetProduct(Number(productId))
   const [mainImage, setMainImage] = useState<string>('')
@@ -20,8 +16,8 @@ export const ProductDetail = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const deleteProductMutate = useDeleteProduct()
-  const addWishListMutate = useAddWishList()
-  const updateWishListMutate = useUpdateWishList()
+  const addCartMutate = useAddCart()
+  const updateCartMutate = useUpdateCart()
   const nav = useNavigate()
 
   useEffect(() => {
@@ -90,14 +86,14 @@ export const ProductDetail = () => {
 
   // 장바구니에 추가
   const handleAddToCart = () => {
-    const existingItem = wishList.find(
+    const existingItem = cart.find(
       (item) => item.productId === Number(productId)
     )
 
     if (existingItem) {
       // 이미 장바구니에 있음 → 수량 추가
       const newQuantity = existingItem.quantity + quantity
-      updateWishListMutate.mutate(
+      updateCartMutate.mutate(
         {
           productId: Number(productId),
           quantity: newQuantity
@@ -113,7 +109,7 @@ export const ProductDetail = () => {
       )
     } else {
       // 장바구니에 없으면 새로 생성
-      addWishListMutate.mutate(
+      addCartMutate.mutate(
         {
           productId: Number(productId),
           quantity

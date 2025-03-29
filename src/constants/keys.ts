@@ -5,6 +5,6 @@ export const queryKeys = {
   GET_PRODUCT: 'GetProduct',
   DIARY: 'Diary',
   GET_DIARY: 'GetDiary',
-  WISHLIST: 'WishList',
-  GET_WISHLIST: 'GetWishList'
+  CART: 'Cart',
+  GET_CART: 'GetCart'
 }

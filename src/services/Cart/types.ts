@@ -2,8 +2,8 @@ export interface CartItemRequest {
   productId: number
   quantity: number
 }
-export interface GetWishListResponse {
-  id: number // wishListId
+export interface GetCartResponse {
+  id: number // wishListId = cartId
   productId: number
   name: string
   price: number
@@ -11,6 +11,6 @@ export interface GetWishListResponse {
   imgUrl: string[]
 }
 
-export interface DeleteWishListRequest {
+export interface DeleteCartRequest {
   selectedItems: number[]
 }

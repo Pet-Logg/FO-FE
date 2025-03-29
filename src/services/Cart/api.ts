@@ -1,17 +1,13 @@
 import productApiClient from '@/api/productApiClient'
-import {
-  CartItemRequest,
-  DeleteWishListRequest,
-  GetWishListResponse
-} from './types'
+import { CartItemRequest, DeleteCartRequest, GetCartResponse } from './types'
 
-// 위시리스트 추가
-export async function addWishList({
+// 장바구니 추가
+export async function addCart({
   productId,
   quantity
 }: CartItemRequest): Promise<void> {
   const response = await productApiClient.post(
-    '/wishList',
+    '/cart',
     { productId, quantity },
     {
       withCredentials: true,
@@ -23,24 +19,29 @@ export async function addWishList({
   return response.data
 }
 
-// 위시리스트 조회
-export async function getWishList(): Promise<GetWishListResponse[]> {
-  const response = await productApiClient.get('/wishList', {
-    withCredentials: true,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  return response.data.data
+// 장바구니 조회
+export async function getCart(): Promise<GetCartResponse[]> {
+  try {
+    const response = await productApiClient.get('/cart', {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return response.data.data
+  } catch (error) {
+    console.log('error', error)
+    throw new Error('장바구니 조회 실패')
+  }
 }
 
-// 위시리스트 수정
-export async function updateWishList({
+// 장바구니 수정
+export async function updateCart({
   productId,
   quantity
 }: CartItemRequest): Promise<void> {
   const response = await productApiClient.put(
-    '/wishList',
+    '/cart',
     { productId, quantity },
     {
       withCredentials: true,
@@ -52,11 +53,11 @@ export async function updateWishList({
   return response.data.data
 }
 
-// 위시리스트 삭제
-export async function deleteWishList({
+// 장바구니 삭제
+export async function deleteCart({
   selectedItems
-}: DeleteWishListRequest): Promise<void> {
-  const response = await productApiClient.delete('/wishList', {
+}: DeleteCartRequest): Promise<void> {
+  const response = await productApiClient.delete('/cart', {
     data: { selectedItems },
     withCredentials: true,
     headers: {
