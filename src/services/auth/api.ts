@@ -39,3 +39,8 @@ export async function changePassword({
   )
   return response.data
 }
+
+// 로그아웃
+export async function logout(): Promise<void> {
+  await apiClient.post(`/${USER_PREFIX}/logout`)
+}

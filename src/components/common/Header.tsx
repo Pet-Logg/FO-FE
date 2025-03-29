@@ -1,19 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
-import { useCookies } from 'react-cookie'
-import { Link, useNavigate } from 'react-router-dom'
 import cartImg from '@/assets/cart.png'
 import icon_user from '@/assets/icon_user.svg'
 import logo from '@/assets/logo.png'
+import { useLogout } from '@/services/auth'
+import { useEffect, useRef, useState } from 'react'
+import { useCookies } from 'react-cookie'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Header = () => {
   const nav = useNavigate()
-  const [cookies, setCookie, removeCookie] = useCookies(['Authorization'])
+  const [cookies] = useCookies(['Authorization'])
   const isLoggedin = !!cookies.Authorization
+  const logoutMutate = useLogout()
+
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const clickLogout = () => {
-    removeCookie('Authorization', { path: '/' })
+    logoutMutate.mutate({
+      onSuccess: () => {
+        console.log('로그아웃 성공!')
+        nav('/')
+      }
+    })
     nav('/')
   }
 
