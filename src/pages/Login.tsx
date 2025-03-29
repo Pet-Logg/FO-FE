@@ -1,19 +1,16 @@
 import { FormInput } from '@/components/common/FormInput'
 import { useLogin } from '@/services/auth/queries/useLogin'
 import { useState } from 'react'
-import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [cookie, setCookie] = useCookies(['Authorization'])
   const nav = useNavigate()
   const loginMutate = useLogin()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // 1. 폼 제출 시 기본 동작(페이지 새로고침) 방지
     e.preventDefault()
 
     setError('')
@@ -21,9 +18,7 @@ export const Login = () => {
     loginMutate.mutate(
       { email, password },
       {
-        onSuccess: (data) => {
-          console.log('로그인 성공!', data)
-          setCookie('Authorization', data, { path: '/' })
+        onSuccess: () => {
           nav('/')
         },
         onError: (err) => {
