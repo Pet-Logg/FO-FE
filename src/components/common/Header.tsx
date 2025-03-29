@@ -55,7 +55,7 @@ export const Header = () => {
           <div className='flex items-center gap-8'>
             <Link to='/products'>로그몰</Link>
             <Link to='/pets'>반려동물 관리</Link>
-            <Link to='/petDiary'>육아일기</Link>
+            <Link to='/petDiaries'>육아일기</Link>
             <Link to='/cartView'>
               <img src={cartImg} alt='장바구니' className='h-6' />
             </Link>

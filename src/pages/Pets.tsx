@@ -21,11 +21,13 @@ export const Pets = () => {
       {isLoading && <p className='text-center'>로딩 중</p>}
 
       {isError && (
-        <p className='text-center text-red-500'>오류가 발생했습니다.</p>
+        <p className='mx-auto flex min-h-[500px] items-center justify-center text-red-500'>
+          오류가 발생했습니다.
+        </p>
       )}
 
       {!isLoading && !isError && data?.length === 0 && (
-        <p className='mx-auto flex items-center justify-center'>
+        <p className='mx-auto flex min-h-[500px] items-center justify-center'>
           등록된 반려동물이 없습니다.
         </p>
       )}

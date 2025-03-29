@@ -12,7 +12,6 @@ export const Products = () => {
 
   useEffect(() => {
     const role = getUserRole()
-
     if (role === 'ADMIN') {
       setIsAdmin(true)
     }

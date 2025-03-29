@@ -1,4 +1,4 @@
-import productApiClient from '@/api/productApiClient'
+import { apiClient } from '@/api/apiClient'
 import {
   CreateProductRequest,
   DeleteProductRequest,
@@ -6,12 +6,13 @@ import {
   UpdateProductRequest
 } from './types'
 
+const PRODUCT_PREFIX = 'product'
+
 // 상품 등록
 export async function createProduct({
   formData
 }: CreateProductRequest): Promise<void> {
-  const response = await productApiClient.post('', formData, {
-    withCredentials: true,
+  const response = await apiClient.post(`/${PRODUCT_PREFIX}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -24,8 +25,7 @@ export async function updateProduct({
   productId,
   formData
 }: UpdateProductRequest): Promise<void> {
-  await productApiClient.put(`/${productId}`, formData, {
-    withCredentials: true,
+  await apiClient.put(`/${PRODUCT_PREFIX}/${productId}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -35,9 +35,7 @@ export async function updateProduct({
 // 상품 전체 조회
 export async function getAllProduct(): Promise<GetProductResponse[]> {
   try {
-    const response = await productApiClient.get('/products', {
-      withCredentials: true
-    })
+    const response = await apiClient.get(`/${PRODUCT_PREFIX}/products`)
     return response.data.data
   } catch (error) {
     console.error('상품 목록 가져오기 실패:', error)
@@ -50,9 +48,7 @@ export async function getProduct(
   productId: number
 ): Promise<GetProductResponse> {
   try {
-    const response = await productApiClient.get(`/${productId}`, {
-      withCredentials: true
-    })
+    const response = await apiClient.get(`/${PRODUCT_PREFIX}/${productId}`)
     return response.data.data
   } catch (error) {
     console.error('상품 상세 조회 실패:', error)
@@ -64,8 +60,7 @@ export async function getProduct(
 export async function deleteProduct({
   productId
 }: DeleteProductRequest): Promise<void> {
-  await productApiClient.delete(`/${productId}`, {
-    withCredentials: true,
+  await apiClient.delete(`/${PRODUCT_PREFIX}/${productId}`, {
     headers: {
       'Content-Type': 'application/json'
     }
