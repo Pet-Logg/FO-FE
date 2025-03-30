@@ -5,6 +5,7 @@ import {
   GetProductResponse,
   UpdateProductRequest
 } from './types'
+import { HttpContentType, HttpHeader } from '@/constants'
 
 const PRODUCT_PREFIX = 'product'
 
@@ -14,7 +15,7 @@ export async function createProduct({
 }: CreateProductRequest): Promise<void> {
   const response = await apiClient.post(`/${PRODUCT_PREFIX}`, formData, {
     headers: {
-      'Content-Type': 'multipart/form-data'
+      [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
     }
   })
   return response.data
@@ -27,7 +28,7 @@ export async function updateProduct({
 }: UpdateProductRequest): Promise<void> {
   await apiClient.put(`/${PRODUCT_PREFIX}/${productId}`, formData, {
     headers: {
-      'Content-Type': 'multipart/form-data'
+      [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
     }
   })
 }
@@ -60,9 +61,5 @@ export async function getProduct(
 export async function deleteProduct({
   productId
 }: DeleteProductRequest): Promise<void> {
-  await apiClient.delete(`/${PRODUCT_PREFIX}/${productId}`, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  await apiClient.delete(`/${PRODUCT_PREFIX}/${productId}`)
 }

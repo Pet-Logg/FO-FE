@@ -1,6 +1,7 @@
 import cartImg from '@/assets/cart.png'
 import icon_user from '@/assets/icon_user.svg'
 import logo from '@/assets/logo.png'
+import { HttpHeader } from '@/constants'
 import { useLogout } from '@/services/auth'
 import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
@@ -8,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 export const Header = () => {
   const nav = useNavigate()
-  const [cookies] = useCookies(['Authorization'])
+  const [cookies] = useCookies([HttpHeader.AUTHORIZATION])
   const isLoggedin = !!cookies.Authorization
   const logoutMutate = useLogout()
 

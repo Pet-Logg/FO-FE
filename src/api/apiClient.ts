@@ -1,3 +1,4 @@
+import { HttpHeader } from '@/constants'
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 
@@ -8,10 +9,10 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const authCookie = Cookies.get('Authorization') // 쿠키에서 토큰 가져오기
+    const authCookie = Cookies.get(HttpHeader.AUTHORIZATION) // 쿠키에서 토큰 가져오기
 
     if (authCookie) {
-      config.headers['Authorization'] = `Bearer ${authCookie}`
+      config.headers[HttpHeader.AUTHORIZATION] = `Bearer ${authCookie}`
     }
 
     return config

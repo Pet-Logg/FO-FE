@@ -7,6 +7,7 @@ import {
   PetRequestWithFormData,
   UpdatePetRequest
 } from './types'
+import { HttpContentType, HttpHeader } from '@/constants'
 
 const PET_PREFIX = 'pet'
 
@@ -19,7 +20,7 @@ export async function createPet({
     formData,
     {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
       }
     }
   )
@@ -31,8 +32,6 @@ export async function createPet({
 export async function getAllPet(): Promise<GetAllPetResponse[]> {
   try {
     const response = await apiClient.get(`/${PET_PREFIX}/getPetsById`)
-
-    console.log('📌 응답 데이터:', JSON.stringify(response.data, null, 2))
 
     return response.data.data
   } catch (error) {
@@ -50,7 +49,7 @@ export async function createDiary({
     formData,
     {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
       }
     }
   )
@@ -61,8 +60,6 @@ export async function createDiary({
 export async function getPet(petId: number): Promise<GetPetResponse> {
   try {
     const response = await apiClient.get(`/${PET_PREFIX}/getPetDetail/${petId}`)
-
-    console.log('📌 응답 데이터:', JSON.stringify(response.data, null, 2))
     return response.data.data
   } catch (error) {
     console.log('error : ' + error)
@@ -80,7 +77,7 @@ export async function updatePet({
     formData,
     {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
       }
     }
   )
@@ -96,11 +93,7 @@ export async function deletePet({ petId }: DeletePetRequest): Promise<void> {
 // 다이어리 목록 가져오기
 export async function getAllDiary(): Promise<GetDiaryResponse[]> {
   try {
-    const response = await apiClient.get(`/${PET_PREFIX}/getDiaryById`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    const response = await apiClient.get(`/${PET_PREFIX}/getDiaryById`)
     return response.data.data
   } catch (error) {
     console.log('error : ' + error)
@@ -115,12 +108,10 @@ export async function getDiary(diaryId: number): Promise<GetDiaryResponse> {
       `/${PET_PREFIX}/getDiaryDetailById/${diaryId}`,
       {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
         }
       }
     )
-    console.log('다이어리 하나')
-    console.log(response.data.data)
     return response.data.data
   } catch (error) {
     console.log('error : ' + error)
