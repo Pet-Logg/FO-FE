@@ -14,6 +14,7 @@ export interface GetProductResponse {
   price: number
   quantity: number
   userId: number
+  s3Key: string
 }
 
 export interface DeleteProductRequest {

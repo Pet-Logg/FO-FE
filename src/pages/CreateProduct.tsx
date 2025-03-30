@@ -2,12 +2,12 @@ import { OneButtonModal } from '@/components/common/OneButtonModal'
 import { useCreateProduct } from '@/services/product/queries/useCreateProduct'
 import { useGetProduct } from '@/services/product/queries/useGetProduct'
 import { useUpdateProduct } from '@/services/product/queries/useUpdateProduct'
+import { CustomUploadFile } from '@/types/CustomUploadFile'
 import { createProductData } from '@/types/ProductUploadData'
 import { InboxOutlined } from '@ant-design/icons'
 import { Upload, message } from 'antd'
-import { UploadFile } from 'antd/es/upload/interface'
 import { useEffect, useState } from 'react'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 const { Dragger } = Upload
 
@@ -24,10 +24,11 @@ export const CreateProduct: React.FC = () => {
 
   const location = useLocation()
   const [searchParams] = useSearchParams()
+  const nav = useNavigate()
 
   const mode = location.state?.mode || 'create'
   const [showModal, setShowModal] = useState(false)
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileList, setFileList] = useState<CustomUploadFile[]>([])
   const paramProductId = searchParams.get('productId')
   const { data } = useGetProduct(Number(paramProductId))
 
@@ -39,7 +40,8 @@ export const CreateProduct: React.FC = () => {
     }))
   }
 
-  const onChangeFile = ({ fileList }: { fileList: UploadFile[] }) => {
+  // 파일(이미지) 올리기
+  const onChangeFile = ({ fileList }: { fileList: CustomUploadFile[] }) => {
     if (fileList.length > 5) {
       message.error('최대 5개의 이미지만 업로드할 수 있습니다.')
       return
@@ -51,24 +53,27 @@ export const CreateProduct: React.FC = () => {
     }))
   }
 
+  // 모달 닫기
   const closeModal = () => {
     setShowModal(false)
+    nav('/products')
   }
 
+  // 제출하기
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (formData.name === '' || formData.name === null) {
+    if (formData.name === '' || !formData.name) {
       message.error('상품명을 입력해주세요.')
       return
     }
 
-    if (formData.price === 0 || formData.name === null) {
+    if (formData.price === 0 || !formData.name) {
       message.error('상품 가격을 입력해주세요.')
       return
     }
 
-    if (formData.quantity === 0 || formData.quantity === null) {
+    if (formData.quantity === 0 || !formData.quantity) {
       message.error('상품 수량을 입력해주세요.')
       return
     }
@@ -83,13 +88,32 @@ export const CreateProduct: React.FC = () => {
     data.append('price', formData.price.toString())
     data.append('quantity', formData.quantity.toString())
 
-    formData.productImg.forEach((file) => {
+    const originalImageUrls = fileList
+      .filter((file) => !file.originFileObj) // 기존 이미지, file.originFileObj = Ant 라이브러리의 Upload 컴포넌트가 생성한 업로드된 파일의 실제 File 객체
+      .map((file) => file.url!) // string[]
+
+    // 새 이미지만 업로드
+    fileList.forEach((file) => {
       if (file.originFileObj) {
         data.append('productImg', file.originFileObj)
       }
     })
 
-    // product 수정 제출
+    // 기존 이미지 URL을 함께 전송 (imgUrls로)
+    originalImageUrls.forEach((url) => {
+      data.append('imgUrl', url)
+    })
+
+    // 기존 이미지 S3 key 보내기
+    const keepKeys = fileList
+      .filter((file) => !file.originFileObj)
+      .map((file) => file.key!) // 기존 이미지의 key만
+
+    keepKeys.forEach((key) => {
+      data.append('S3Key', key)
+    })
+
+    // product 수정 API
     if (mode === 'edit' && paramProductId) {
       updateProductMutate.mutate(
         { productId: Number(paramProductId), formData: data },
@@ -103,9 +127,10 @@ export const CreateProduct: React.FC = () => {
           }
         }
       )
+      return
     }
 
-    // product 생성 제출
+    // product 생성 API
     createProductMutate.mutate(
       { formData: data },
       {
@@ -121,19 +146,23 @@ export const CreateProduct: React.FC = () => {
           setShowModal(true)
         },
         onError: (err) => {
-          console.log('상품 등록에 실패했습니다')
+          console.log('상품 등록에 실패했습니다', err)
         }
       }
     )
   }
 
   // 이미지 URL을 UploadFile[]로 변환
-  const mapImageUrlsToFileList = (urls: string[]): UploadFile[] => {
+  const mapImageUrlsToFileList = (
+    urls: string[],
+    keys: string[]
+  ): CustomUploadFile[] => {
     return urls.map((url, index) => ({
       uid: `existing-${index}`,
       name: `이미지${index + 1}`,
       status: 'done',
-      url // 이미지 미리보기 URL
+      url, // 이미지 미리보기 URL
+      key: keys[index]
     }))
   }
 
@@ -143,7 +172,11 @@ export const CreateProduct: React.FC = () => {
         ? data.imgUrl
         : [data.imgUrl]
 
-      const mappedImages = mapImageUrlsToFileList(imageArray)
+      const imgS3KeyArray = Array.isArray(data.s3Key)
+        ? data.s3Key
+        : [data.s3Key]
+
+      const mappedImages = mapImageUrlsToFileList(imageArray, imgS3KeyArray)
 
       setFileList(mappedImages)
 
