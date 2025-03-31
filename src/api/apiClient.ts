@@ -1,4 +1,5 @@
 import { HttpHeader } from '@/constants'
+import { ErrorResultResponse } from '@/types/ErrorResponse'
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 
@@ -43,8 +44,7 @@ apiClient.interceptors.response.use(
         // 재발급 성공 → 실패했던 요청 다시 실행
         return apiClient(originalRequest)
       } catch (refreshErr) {
-        const refreshError = refreshErr as AxiosError
-
+        const refreshError = refreshErr as AxiosError<ErrorResultResponse>
         const message = refreshError.response?.data?.resultMessage
 
         if (message === '만료된 JWT 토큰입니다.') {
