@@ -1,13 +1,13 @@
+import { OneButtonModal } from '@/components/common/OneButtonModal'
+import { SuccessPopup } from '@/components/common/SuccessPopup'
 import { useCreatePet, useGetPet } from '@/services/pet'
 import { useUpdatePet } from '@/services/pet/queries/useUpdatePet'
 import { useEffect, useState } from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import OneButtonModal from '../components/OneButtonModal'
-import SuccessPopup from '../components/SuccessPopup'
 import { PetData } from '../types/PetData'
 
-const CreatePetInfo = () => {
+export const CreatePet = () => {
   const nav = useNavigate()
   const [searchParams] = useSearchParams()
   const paramPetId = searchParams.get('petId') || null
@@ -63,6 +63,14 @@ const CreatePetInfo = () => {
     // 파일 타입 확인
     if (!file.type.startsWith('image/')) {
       alert('이미지 파일만 업로드할 수 있습니다.')
+      return
+    }
+
+    // 파일 업로드 전 크기 체크
+    const maxSize = 10 * 1024 * 1024
+
+    if (file.size > maxSize) {
+      alert('파일 크기는 10MB를 초과할 수 없습니다.')
       return
     }
 
@@ -525,5 +533,3 @@ const CreatePetInfo = () => {
     </>
   )
 }
-
-export default CreatePetInfo

@@ -1,12 +1,11 @@
-import { useGetPet } from '@/services/pet'
-import { useDeletePet } from '@/services/pet/queries/useDeletePet'
+import { Button } from '@/components/common/Button'
+import { TwoButtonModal } from '@/components/common/TwoButtonModal'
+import { useDeletePet, useGetPet } from '@/services/pet'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import basicPicture from '../assets/basicPicture.png'
-import Button from '../components/Button'
-import TwoButtonModal from '../components/TwoButtonModal'
 
-const PetDetail = () => {
+export const PetDetail = () => {
   const nav = useNavigate()
   const { petId } = useParams()
   const [openPopup, setOpenPopup] = useState(false)
@@ -138,5 +137,3 @@ const PetDetail = () => {
     </div>
   )
 }
-
-export default PetDetail

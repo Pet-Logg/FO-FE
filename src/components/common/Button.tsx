@@ -7,7 +7,7 @@ interface DeleteButtonProps {
   disabled?: boolean
 }
 
-const Button: React.FC<DeleteButtonProps> = ({
+export const Button: React.FC<DeleteButtonProps> = ({
   text,
   type,
   onClick,
@@ -29,5 +29,3 @@ const Button: React.FC<DeleteButtonProps> = ({
     </button>
   )
 }
-
-export default Button

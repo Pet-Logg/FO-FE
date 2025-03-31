@@ -1,19 +1,28 @@
+import cartImg from '@/assets/cart.png'
+import icon_user from '@/assets/icon_user.svg'
+import logo from '@/assets/logo.png'
+import { HttpHeader } from '@/constants'
+import { useLogout } from '@/services/auth'
 import { useEffect, useRef, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Link, useNavigate } from 'react-router-dom'
-import cartImg from '../assets/cart.png'
-import icon_user from '../assets/icon_user.svg'
-import logo from '../assets/logo.png'
 
-const Header = () => {
+export const Header = () => {
   const nav = useNavigate()
-  const [cookies, setCookie, removeCookie] = useCookies(['Authorization'])
+  const [cookies] = useCookies([HttpHeader.AUTHORIZATION])
   const isLoggedin = !!cookies.Authorization
+  const logoutMutate = useLogout()
+
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const clickLogout = () => {
-    removeCookie('Authorization', { path: '/' })
+    logoutMutate.mutate({
+      onSuccess: () => {
+        console.log('로그아웃 성공!')
+        nav('/')
+      }
+    })
     nav('/')
   }
 
@@ -43,7 +52,7 @@ const Header = () => {
   }, [isOpen])
 
   return (
-    <nav className='sticky top-0 z-50 bg-white px-24 py-4 shadow-sm'>
+    <nav className='sticky top-0 z-50 border-b bg-white py-8'>
       <div className='m-auto flex w-[1050px] items-center justify-between'>
         <div>
           <Link to='/'>
@@ -54,8 +63,8 @@ const Header = () => {
         <div className='flex w-4/5 items-center justify-end'>
           <div className='flex items-center gap-8'>
             <Link to='/products'>로그몰</Link>
-            <Link to='/petManagement'>반려동물 관리</Link>
-            <Link to='/petDiary'>육아일기</Link>
+            <Link to='/pets'>반려동물 관리</Link>
+            <Link to='/petDiaries'>육아일기</Link>
             <Link to='/cartView'>
               <img src={cartImg} alt='장바구니' className='h-6' />
             </Link>
@@ -112,5 +121,3 @@ const Header = () => {
     </nav>
   )
 }
-
-export default Header

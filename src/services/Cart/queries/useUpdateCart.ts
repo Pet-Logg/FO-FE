@@ -1,15 +1,15 @@
-import { queryKeys } from '@/constants'
+import { queryKeys } from '@/constants/keys'
 import { UseMutationCustomOptions } from '@/types/api'
 import { queryClient } from '@/utils/queryClient'
 import { useMutation } from '@tanstack/react-query'
-import { addWishList } from '../api'
+import { updateCart } from '../api'
 
-export const useAddWishList = (mutationOptions?: UseMutationCustomOptions) => {
+export const useUpdateCart = (mutationOptions?: UseMutationCustomOptions) => {
   return useMutation({
-    mutationFn: addWishList,
+    mutationFn: updateCart,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.WISHLIST, queryKeys.GET_WISHLIST]
+        queryKey: [queryKeys.CART, queryKeys.GET_CART]
       })
     },
     throwOnError: (error) => Number(error.response?.status) >= 500,

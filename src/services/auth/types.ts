@@ -6,3 +6,8 @@ export type UserAuthRequest = {
 export type ChangePasswordRequest = {
   password: string
 }
+
+export type LoginResponse = {
+  accessToken: string
+  refreshToken: string
+}

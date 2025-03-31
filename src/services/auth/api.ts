@@ -1,21 +1,17 @@
-import apiClient from '@/api/userApiClient'
-import { ChangePasswordRequest, UserAuthRequest } from './types'
+import { apiClient } from '@/api/apiClient'
+import { ChangePasswordRequest, LoginResponse, UserAuthRequest } from './types'
+
+const USER_PREFIX = 'user'
 
 // 회원가입
 export async function signup({
   email,
   password
 }: UserAuthRequest): Promise<void> {
-  const response = await apiClient.post(
-    '/signup',
-    { email, password },
-    {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  )
+  const response = await apiClient.post(`/${USER_PREFIX}/signup`, {
+    email,
+    password
+  })
 
   return response.data
 }
@@ -24,17 +20,11 @@ export async function signup({
 export async function login({
   email,
   password
-}: UserAuthRequest): Promise<void> {
-  const response = await apiClient.post(
-    '/login',
-    { email, password },
-    {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  )
+}: UserAuthRequest): Promise<LoginResponse> {
+  const response = await apiClient.post(`/${USER_PREFIX}/login`, {
+    email,
+    password
+  })
 
   return response.data.data
 }
@@ -43,11 +33,14 @@ export async function login({
 export async function changePassword({
   password
 }: ChangePasswordRequest): Promise<void> {
-  const response = await apiClient.post(`/changePassword`, password, {
-    withCredentials: true,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  const response = await apiClient.post(
+    `/${USER_PREFIX}/changePassword`,
+    password
+  )
   return response.data
+}
+
+// 로그아웃
+export async function logout(): Promise<void> {
+  await apiClient.post(`/${USER_PREFIX}/logout`)
 }

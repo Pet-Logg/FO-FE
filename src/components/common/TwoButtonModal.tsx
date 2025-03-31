@@ -1,4 +1,4 @@
-import Button from './Button'
+import { Button } from './Button'
 
 interface PopupProps {
   text: string
@@ -11,7 +11,7 @@ interface PopupProps {
   onCancle: () => void
 }
 
-const TwoButtonModal: React.FC<PopupProps> = ({
+export const TwoButtonModal: React.FC<PopupProps> = ({
   text,
   subText,
   firstButton,
@@ -34,5 +34,3 @@ const TwoButtonModal: React.FC<PopupProps> = ({
     </div>
   )
 }
-
-export default TwoButtonModal

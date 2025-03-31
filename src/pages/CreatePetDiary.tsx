@@ -7,7 +7,7 @@ import { DiaryData } from '../types/DiaryData'
 
 type DiaryFormData = Partial<DiaryData>
 
-const CreatePetDiary = () => {
+export const CreatePetDiary = () => {
   const nav = useNavigate()
   const createDiaryMutate = useCreateDiary()
 
@@ -140,5 +140,3 @@ const CreatePetDiary = () => {
     </>
   )
 }
-
-export default CreatePetDiary

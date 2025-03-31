@@ -1,13 +1,11 @@
-import { useUpdateWishList } from '@/services/wishList'
-import { useDeleteWishList } from '@/services/wishList/queries/useDeleteWishList'
-import { useGetWishList } from '@/services/wishList/queries/useGetWishList'
+import { useDeleteCart, useGetCart, useUpdateCart } from '@/services/Cart'
 import { useState } from 'react'
 import logo from '../assets/logo.png'
 
-const CartView = () => {
-  const { data: cartItems = [] } = useGetWishList()
-  const deleteWishListMutate = useDeleteWishList()
-  const updateWishListMutate = useUpdateWishList()
+export const Carts = () => {
+  const { data: cartItems = [] } = useGetCart()
+  const deleteCartMutate = useDeleteCart()
+  const updateCartMutate = useUpdateCart()
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const deliveryFee = 3000 // 배송비
 
@@ -34,7 +32,7 @@ const CartView = () => {
 
     const newQuantity = Math.max(1, currentItem.quantity + amount)
 
-    updateWishListMutate.mutate(
+    updateCartMutate.mutate(
       {
         productId: currentItem.productId,
         quantity: newQuantity
@@ -54,7 +52,7 @@ const CartView = () => {
   const deleteSelectedItemsBtn = () => {
     if (selectedItems.length === 0) return
 
-    deleteWishListMutate.mutate(
+    deleteCartMutate.mutate(
       { selectedItems },
       {
         onSuccess: () => {
@@ -70,17 +68,22 @@ const CartView = () => {
 
   // 총 결제금액 계산
   const calculateTotal = () => {
-    return cartItems
-      .filter((item) => selectedItems.includes(item.id))
-      .reduce(
-        (acc, item) => {
-          const subtotal = item.price * item.quantity
-          return {
-            total: acc.total + subtotal
-          }
-        },
-        { total: 0 }
-      )
+    // 선택된 아이템이 없으면 0 반환
+    if (selectedItems.length === 0 || !cartItems) {
+      return { total: 0 }
+    }
+
+    // 선택된 아이템들만 필터링
+    const selectedCartItems = cartItems.filter((item) =>
+      selectedItems.includes(item.id)
+    )
+
+    // 총 금액 계산
+    const total = selectedCartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    )
+    return { total }
   }
 
   // 총 금액 계산
@@ -103,20 +106,20 @@ const CartView = () => {
 
       {/* 테이블 형식 */}
       <div className='border-t border-gray-300'>
-        <table className='w-full table-auto text-center'>
+        <table className='w-full table-fixed text-center'>
           <thead className='border-b border-gray-300 bg-gray-100'>
             <tr>
-              <th className='p-3'>
+              <th className='w-[8%] p-3'>
                 <input
                   type='checkbox'
                   checked={isAllSelected}
                   onChange={toggleSelectAll}
                 />
               </th>
-              <th className='p-3'>상품명</th>
-              <th className='p-3'>상품금액</th>
-              <th className='p-3'>수량</th>
-              <th className='p-3'>합계금액</th>
+              <th className='w-[42%] p-3'>상품명</th>
+              <th className='w-[15%] p-3'>상품금액</th>
+              <th className='w-[15%] p-3'>수량</th>
+              <th className='w-[20% p-3'>합계금액</th>
             </tr>
           </thead>
           <tbody>
@@ -135,7 +138,7 @@ const CartView = () => {
                     </td>
                     <td className='flex items-center gap-4 py-3 pl-6 pr-3'>
                       <img src={item.imgUrl[0] || logo} className='h-12' />
-                      <div className='font-medium'>{item.name}</div>
+                      <div>{item.name}</div>
                     </td>
                     <td className='p-3'>{item.price.toLocaleString()}원</td>
                     <td className='p-3'>
@@ -201,5 +204,3 @@ const CartView = () => {
     </div>
   )
 }
-
-export default CartView

@@ -1,16 +1,14 @@
-import { useDeleteProduct } from '@/services/product/queries/useDeleteProduct'
-import { useGetProduct } from '@/services/product/queries/useGetProduct'
-import { useAddWishList } from '@/services/wishList/queries/useAddWishList'
-import { useGetWishList } from '@/services/wishList/queries/useGetWishList'
-import { useUpdateWishList } from '@/services/wishList/queries/useUpdateWishList'
+import { Button } from '@/components/common/Button'
+import { OneButtonModal } from '@/components/common/OneButtonModal'
+import { ProductImg } from '@/components/product/ProductImage'
+import { useDeleteProduct, useGetProduct } from '@/services/product'
+import { useAddCart, useGetCart, useUpdateCart } from '@/services/Cart'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import Button from '../components/Button'
-import OneButtonModal from '../components/OneButtonModal'
 import { getUserRole } from '../utils/getUserRole'
 
-const ProductDetail = () => {
-  const { data: wishList = [] } = useGetWishList() // 장바구니 상품 조회
+export const ProductDetail = () => {
+  const { data: cart = [] } = useGetCart() // 장바구니 상품 조회
   const { productId } = useParams<{ productId: string }>()
   const { data, isError } = useGetProduct(Number(productId))
   const [mainImage, setMainImage] = useState<string>('')
@@ -18,8 +16,8 @@ const ProductDetail = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const deleteProductMutate = useDeleteProduct()
-  const addWishListMutate = useAddWishList()
-  const updateWishListMutate = useUpdateWishList()
+  const addCartMutate = useAddCart()
+  const updateCartMutate = useUpdateCart()
   const nav = useNavigate()
 
   useEffect(() => {
@@ -46,7 +44,13 @@ const ProductDetail = () => {
     )
   }
 
-  const imageList = Array.isArray(data?.imgUrl) ? data.imgUrl : [data?.imgUrl]
+  // 이미지 리스트
+  const imageList = Array.isArray(data?.imgUrl)
+    ? data.imgUrl
+    : data?.imgUrl
+      ? [data.imgUrl]
+      : []
+
   const totalPrice = (data?.price ?? 0) * quantity // 총가격
 
   // 수량 증가 감소
@@ -68,7 +72,7 @@ const ProductDetail = () => {
     deleteProductMutate.mutate(
       { productId: Number(productId) },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           console.log('상품이 성공적으로 삭제되었습니다.')
           setShowModal(true)
         },
@@ -82,14 +86,14 @@ const ProductDetail = () => {
 
   // 장바구니에 추가
   const handleAddToCart = () => {
-    const existingItem = wishList.find(
+    const existingItem = cart.find(
       (item) => item.productId === Number(productId)
     )
 
     if (existingItem) {
       // 이미 장바구니에 있음 → 수량 추가
       const newQuantity = existingItem.quantity + quantity
-      updateWishListMutate.mutate(
+      updateCartMutate.mutate(
         {
           productId: Number(productId),
           quantity: newQuantity
@@ -105,7 +109,7 @@ const ProductDetail = () => {
       )
     } else {
       // 장바구니에 없으면 새로 생성
-      addWishListMutate.mutate(
+      addCartMutate.mutate(
         {
           productId: Number(productId),
           quantity
@@ -123,31 +127,12 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className='mx-auto flex w-[1050px] gap-12 py-20'>
-      {/* 왼쪽 상품 정보 */}
-      <div className='w-[450px]'>
-        <div className='mb-3 overflow-hidden rounded-lg border'>
-          {mainImage && (
-            <img
-              src={mainImage}
-              alt='대표 이미지'
-              className='h-[450px] w-full'
-            />
-          )}
-        </div>
-
-        <div className='flex justify-center gap-2'>
-          {imageList.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`img-${idx}`}
-              onMouseEnter={() => setMainImage(img)}
-              className='h-20 w-20 cursor-pointer rounded-md border object-cover hover:border-blue-500'
-            />
-          ))}
-        </div>
-      </div>
+    <div className='mx-auto flex min-h-[800px] w-[1050px] gap-12 py-20'>
+      <ProductImg
+        mainImage={mainImage}
+        imageList={imageList}
+        onMouseEnterEvt={setMainImage}
+      />
 
       {/* 오른쪽 상품 정보 */}
       <div className='flex-1'>
@@ -230,5 +215,3 @@ const ProductDetail = () => {
     </div>
   )
 }
-
-export default ProductDetail
