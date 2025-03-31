@@ -72,7 +72,7 @@ export const ProductDetail = () => {
     deleteProductMutate.mutate(
       { productId: Number(productId) },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           console.log('상품이 성공적으로 삭제되었습니다.')
           setShowModal(true)
         },
