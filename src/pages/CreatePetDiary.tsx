@@ -73,7 +73,7 @@ export const CreatePetDiary = () => {
       {
         onSuccess: (data) => {
           console.log('반려동물 등록 성공!', data)
-          nav('/petDiary')
+          nav('/petDiaries')
         },
         onError: (err) => {
           console.log(err)

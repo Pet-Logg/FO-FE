@@ -14,7 +14,7 @@ export const Pets = () => {
         <Button
           text='추가하기'
           type='normal'
-          onClick={() => nav('/createPetInfo')}
+          onClick={() => nav('/createPet')}
         />
       </div>
 
