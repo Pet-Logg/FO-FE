@@ -1,6 +1,6 @@
 import { UploadFile } from 'antd'
 
-export interface createProductData {
+export interface CreateProductData {
   name: string
   productImg: UploadFile[]
   price: number

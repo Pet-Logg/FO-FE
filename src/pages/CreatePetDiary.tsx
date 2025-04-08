@@ -1,47 +1,14 @@
-import { useCreateDiary } from '@/services/pet'
+import { useCreateDiary } from '@/services/diary'
+import { useDiaryForm } from '@/services/diary/hooks/useDiaryForm'
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Upload, UploadFile, message } from 'antd'
-import { useState } from 'react'
+import { Button, Upload, UploadFile } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { DiaryData } from '../types/DiaryData'
-
-type DiaryFormData = Partial<DiaryData>
 
 export const CreatePetDiary = () => {
   const nav = useNavigate()
   const createDiaryMutate = useCreateDiary()
-
-  const [diaryData, setDiaryData] = useState<DiaryFormData>({
-    title: '',
-    content: '',
-    images: []
-  })
-
-  // 변경감지
-  const onChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-
-    setDiaryData({ ...diaryData, [name]: value })
-  }
-
-  // 이미지 업로드
-  const handleImageUpload = ({ fileList }: { fileList: UploadFile[] }) => {
-    if (fileList.length > 5) {
-      message.error('최대 5장까지만 업로드 가능합니다.')
-      return
-    }
-    setDiaryData({ ...diaryData, images: fileList })
-  }
-
-  // 이미지 삭제
-  const handleRemoveImage = (file: UploadFile) => {
-    const newImages = diaryData.images!.filter(
-      (item: UploadFile) => item.uid !== file.uid
-    )
-    setDiaryData({ ...diaryData, images: newImages })
-  }
+  const { diaryData, handleInputChange, handleImageUpload, handleRemoveImage } =
+    useDiaryForm()
 
   // 폼 제출하기
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -115,7 +82,7 @@ export const CreatePetDiary = () => {
                   className='mb-4 size-full h-8 text-2xl focus:outline-none'
                   name='title'
                   value={diaryData.title}
-                  onChange={onChangeInput}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className='h-[388px] w-full'>
@@ -124,7 +91,7 @@ export const CreatePetDiary = () => {
                   className='mt-4 h-full w-full resize-none focus:outline-none'
                   name='content'
                   value={diaryData.content}
-                  onChange={onChangeInput}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>

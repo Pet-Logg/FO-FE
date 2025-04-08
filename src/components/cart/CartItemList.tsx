@@ -1,4 +1,4 @@
-import { GetCartResponse } from '@/services/Cart'
+import { GetCartResponse } from '@/services/cart'
 import logo from '../../assets/logo.png'
 
 interface DiaryHeaderPrpos {

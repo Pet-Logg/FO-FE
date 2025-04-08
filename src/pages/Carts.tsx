@@ -1,32 +1,17 @@
 import { CartItemList } from '@/components/cart/CartItemList'
 import { CartSummary } from '@/components/cart/CartSummary'
 import { OrderProgress } from '@/components/cart/OrderProgress'
-import { useDeleteCart, useGetCart, useUpdateCart } from '@/services/Cart'
+import { useDeleteCart, useGetCart, useUpdateCart } from '@/services/cart'
+import { useCart } from '@/services/cart/hooks/useCart'
 import { calculateTotal } from '@/services/cart/utils/cartUtils'
-import { useState } from 'react'
 
 export const Carts = () => {
   const { data: cartItems = [] } = useGetCart()
   const deleteCartMutate = useDeleteCart()
   const updateCartMutate = useUpdateCart()
-  const [selectedItems, setSelectedItems] = useState<number[]>([])
+  const { selectedItems, setSelectedItems, toggleSelectAll, toggleSelectItem } =
+    useCart(cartItems)
   const deliveryFee = 3000 // 배송비
-
-  // 전체 선택 체크 박스
-  const toggleSelectAll = () => {
-    if (selectedItems.length === cartItems.length) {
-      setSelectedItems([])
-    } else {
-      setSelectedItems(cartItems.map((item) => item.id))
-    }
-  }
-
-  // 상품 하나 체크 박스
-  const toggleSelectItem = (id: number) => {
-    setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
-    )
-  }
 
   // 수량 증감 버튼
   const updateQuantityBtn = (id: number, amount: number) => {

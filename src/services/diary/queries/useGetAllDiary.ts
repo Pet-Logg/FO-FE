@@ -1,8 +1,8 @@
 import { queryKeys } from '@/constants'
 import { UseQueryCustomOptions } from '@/types/api'
 import { useQuery } from '@tanstack/react-query'
-import { getAllDiary } from '../api'
-import { GetDiaryResponse } from '../types'
+import { getAllDiary } from '../../pet/api'
+import { GetDiaryResponse } from '../../pet/types'
 
 export const useGetAllDiary = (
   queryOptions?: UseQueryCustomOptions<GetDiaryResponse[]>

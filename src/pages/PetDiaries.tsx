@@ -1,6 +1,6 @@
 import defaultImg from '@/assets/logo.png'
 import { DiaryHeader, NoResult } from '@/components/diary'
-import { useGetAllDiary } from '@/services/pet'
+import { useGetAllDiary } from '@/services/diary'
 import { getUserId } from '@/utils/getUserInfo'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
