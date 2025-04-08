@@ -1,8 +1,8 @@
-interface CheckoutStepperProps {
+interface OrderProgressProps {
   currentStep: 1 | 2 | 3
 }
 
-export const OrderProgress = ({ currentStep }: CheckoutStepperProps) => {
+export const OrderProgress = ({ currentStep }: OrderProgressProps) => {
   const steps = [
     { id: 1, label: '01 장바구니' },
     { id: 2, label: '02 주문서 작성/결제' },

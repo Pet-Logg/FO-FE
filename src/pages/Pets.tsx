@@ -2,10 +2,18 @@ import { Button } from '@/components/common/Button'
 import { useGetAllPet } from '@/services/pet'
 import { useNavigate } from 'react-router-dom'
 import basicPicture from '../assets/basicPicture.png'
+import { getUserId } from '@/utils/getUserInfo'
+import { useEffect } from 'react'
 
 export const Pets = () => {
   const { data, isLoading, isError } = useGetAllPet()
   const nav = useNavigate()
+
+  useEffect(() => {
+    if (getUserId() === null) {
+      nav('/login')
+    }
+  }, [nav])
 
   return (
     <div className='mx-auto flex min-h-[800px] w-[1050px] flex-col py-16'>

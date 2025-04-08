@@ -5,7 +5,7 @@ import { useDeleteProduct, useGetProduct } from '@/services/product'
 import { useAddCart, useGetCart, useUpdateCart } from '@/services/Cart'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getUserRole } from '../utils/getUserRole'
+import { getUserRole } from '../utils/getUserInfo'
 
 export const ProductDetail = () => {
   const { data: cart = [] } = useGetCart() // 장바구니 상품 조회

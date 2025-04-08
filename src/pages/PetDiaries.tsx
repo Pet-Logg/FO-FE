@@ -1,7 +1,8 @@
 import defaultImg from '@/assets/logo.png'
 import { DiaryHeader, NoResult } from '@/components/diary'
 import { useGetAllDiary } from '@/services/pet'
-import { useState } from 'react'
+import { getUserId } from '@/utils/getUserInfo'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const PetDiaries = () => {
@@ -10,6 +11,12 @@ export const PetDiaries = () => {
 
   // 다이어리 목록 가져오기
   const { data } = useGetAllDiary()
+
+  useEffect(() => {
+    if (getUserId() === null) {
+      nav('/login')
+    }
+  }, [nav])
 
   // 검색
   const filteredDiaries = (data || []).filter(

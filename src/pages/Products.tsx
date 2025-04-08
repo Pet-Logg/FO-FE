@@ -3,7 +3,7 @@ import { useGetAllProduct } from '@/services/product'
 import { getFirstImage } from '@/utils/getFirstImage'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getUserRole } from '../utils/getUserRole'
+import { getUserRole } from '../utils/getUserInfo'
 
 // 첫 번째 이미지를 가져오는 함수
 export const Products = () => {
