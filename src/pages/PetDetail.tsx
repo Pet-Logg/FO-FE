@@ -107,7 +107,7 @@ export const PetDetail = () => {
             text={'수정'}
             type={'normal'}
             onClick={() => {
-              nav(`/createPetInfo?petId=${petId}`, {
+              nav(`/createPet?petId=${petId}`, {
                 state: { mode: 'edit' }
               })
             }}

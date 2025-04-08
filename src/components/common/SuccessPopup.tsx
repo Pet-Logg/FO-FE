@@ -28,7 +28,7 @@ export const SuccessPopup: React.FC = () => {
               text='확인'
               type='normal'
               onClick={() => {
-                nav('/petManagement')
+                nav('/pets')
               }}
             />
           </div>
