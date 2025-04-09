@@ -1,5 +1,6 @@
-import { useGetDiary } from '@/services/pet'
-import { Button, Upload, UploadFile } from 'antd'
+import { useGetDiary } from '@/services/diary'
+import { changeToUploadFileList } from '@/utils/changeToUploadFileList'
+import { Button, Upload } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import logo from '../assets/logo.png'
 
@@ -11,7 +12,11 @@ export const PetDiaryDetail = () => {
   const { data, isLoading, isError } = useGetDiary(Number(diaryId))
 
   if (isLoading) {
-    return <div></div>
+    return (
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl'>
+        ⏳ 로딩 중...
+      </p>
+    )
   }
 
   if (isError) {
@@ -22,15 +27,6 @@ export const PetDiaryDetail = () => {
     )
   }
 
-  const processImage = (imgUrls: string[]): UploadFile[] => {
-    return imgUrls.map((url: string, index: number) => ({
-      uid: `${index}`,
-      name: `image-${index}`,
-      url: url,
-      status: 'done'
-    }))
-  }
-
   return (
     <div className='relative mx-auto mb-12 w-1/2 py-16'>
       {/* 펫 이미지 */}
@@ -38,14 +34,14 @@ export const PetDiaryDetail = () => {
         {data?.imgUrl && data.imgUrl.length > 0 && (
           <Upload
             listType='picture-card'
-            fileList={processImage(data.imgUrl) || { logo }}
+            fileList={changeToUploadFileList(data.imgUrl) || { logo }}
             showUploadList={{ showRemoveIcon: false }} // 삭제 버튼 숨김
             beforeUpload={() => false} // 실제 업로드 방지 (미리보기 용도)
           />
         )}
       </div>
 
-      {/* 기본 정보 */}
+      {/* 다이어리 본문 */}
       <div className='flex items-center justify-center'>
         <div className='h-[500px] w-full rounded-2xl border border-gray-300 px-6 py-6'>
           <div className='border-b border-gray-300'>
@@ -66,13 +62,13 @@ export const PetDiaryDetail = () => {
         </div>
       </div>
 
-      {/* 건강 정보 */}
+      {/* 수정, 목록 버튼 */}
       <div className='flex justify-end gap-3'>
         <div className='mt-10'>
           <Button
             type='primary'
             size='large'
-            onClick={() => navigate('/petDiary')}
+            onClick={() => navigate('/petDiaries')}
           >
             수정
           </Button>
@@ -81,7 +77,7 @@ export const PetDiaryDetail = () => {
           <Button
             type='primary'
             size='large'
-            onClick={() => navigate('/petDiary')}
+            onClick={() => navigate('/petDiaries')}
           >
             목록
           </Button>

@@ -33,10 +33,9 @@ export async function login({
 export async function changePassword({
   password
 }: ChangePasswordRequest): Promise<void> {
-  const response = await apiClient.post(
-    `/${USER_PREFIX}/changePassword`,
+  const response = await apiClient.post(`/${USER_PREFIX}/changePassword`, {
     password
-  )
+  })
   return response.data
 }
 

@@ -1,47 +1,15 @@
-import { useCreateDiary } from '@/services/pet'
+import { Content } from '@/components/diary/Content'
+import { useCreateDiary } from '@/services/diary'
+import { useDiaryForm } from '@/services/diary/hooks'
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Upload, UploadFile, message } from 'antd'
-import { useState } from 'react'
+import { Button, Upload, UploadFile } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { DiaryData } from '../types/DiaryData'
-
-type DiaryFormData = Partial<DiaryData>
 
 export const CreatePetDiary = () => {
   const nav = useNavigate()
   const createDiaryMutate = useCreateDiary()
-
-  const [diaryData, setDiaryData] = useState<DiaryFormData>({
-    title: '',
-    content: '',
-    images: []
-  })
-
-  // 변경감지
-  const onChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-
-    setDiaryData({ ...diaryData, [name]: value })
-  }
-
-  // 이미지 업로드
-  const handleImageUpload = ({ fileList }: { fileList: UploadFile[] }) => {
-    if (fileList.length > 5) {
-      message.error('최대 5장까지만 업로드 가능합니다.')
-      return
-    }
-    setDiaryData({ ...diaryData, images: fileList })
-  }
-
-  // 이미지 삭제
-  const handleRemoveImage = (file: UploadFile) => {
-    const newImages = diaryData.images!.filter(
-      (item: UploadFile) => item.uid !== file.uid
-    )
-    setDiaryData({ ...diaryData, images: newImages })
-  }
+  const { diaryData, handleInputChange, handleImageUpload, handleRemoveImage } =
+    useDiaryForm()
 
   // 폼 제출하기
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -73,7 +41,7 @@ export const CreatePetDiary = () => {
       {
         onSuccess: (data) => {
           console.log('반려동물 등록 성공!', data)
-          nav('/petDiary')
+          nav('/petDiaries')
         },
         onError: (err) => {
           console.log(err)
@@ -89,6 +57,7 @@ export const CreatePetDiary = () => {
           일기 작성
         </h2>
         <form onSubmit={handleSubmit}>
+          {/* 이미지 업로드 */}
           <div className='mb-5 ml-36'>
             <Upload
               listType='picture-card'
@@ -106,29 +75,12 @@ export const CreatePetDiary = () => {
             </Upload>
           </div>
 
-          <div className='flex items-center justify-center'>
-            <div className='h-[500px] w-3/4 rounded-2xl border border-gray-300 px-6 py-6'>
-              <div className='border-b border-gray-300'>
-                <input
-                  type='text'
-                  placeholder='제목을 입력하세요.'
-                  className='mb-4 size-full h-8 text-2xl focus:outline-none'
-                  name='title'
-                  value={diaryData.title}
-                  onChange={onChangeInput}
-                />
-              </div>
-              <div className='h-[388px] w-full'>
-                <textarea
-                  placeholder='내용을 입력하세요.'
-                  className='mt-4 h-full w-full resize-none focus:outline-none'
-                  name='content'
-                  value={diaryData.content}
-                  onChange={onChangeInput}
-                />
-              </div>
-            </div>
-          </div>
+          {/* 본문 */}
+          <Content
+            titleValue={diaryData.title}
+            contentValue={diaryData.content}
+            handleInputChange={handleInputChange}
+          />
 
           <div className='absolute right-1/4 mt-4'>
             <Button type='primary' htmlType='submit'>

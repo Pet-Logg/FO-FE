@@ -7,7 +7,7 @@ export interface PetData {
   petBirth: string
   petBreed: string
   petGender: string
-  petWeight: number | null
+  petWeight: number
 
   isNeutered?: string | null
   disease?: string[] | null

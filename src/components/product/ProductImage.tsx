@@ -1,14 +1,17 @@
 interface ProductImgProps {
   mainImage: string
-  imageList: string[]
+  imgUrl: string | undefined
   onMouseEnterEvt: (img: string) => void
 }
 
 export const ProductImg = ({
   mainImage,
-  imageList,
+  imgUrl,
   onMouseEnterEvt
 }: ProductImgProps) => {
+  // 이미지 리스트로 변경
+  const imageList = Array.isArray(imgUrl) ? imgUrl : imgUrl ? [imgUrl] : []
+
   return (
     <div className='w-[450px]'>
       <div className='mb-3 overflow-hidden rounded-lg border'>

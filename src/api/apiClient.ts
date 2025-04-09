@@ -1,5 +1,6 @@
 import { HttpHeader } from '@/constants'
 import { ErrorResultResponse } from '@/types/ErrorResponse'
+import { getUserId, getUserRole } from '@/utils/getUserInfo'
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 
@@ -36,18 +37,26 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true
 
       try {
+        const userId = getUserId()
+        const role = getUserRole()
         // Refresh 토큰으로 Access 토큰 재발급 요청
-        await axios.post('http://localhost:8080/api/v1/user/refresh', null, {
-          withCredentials: true
-        })
+        await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/api/v1/user/refresh`,
+          { userId, role },
+          {
+            withCredentials: true
+          }
+        )
 
         // 재발급 성공 → 실패했던 요청 다시 실행
         return apiClient(originalRequest)
       } catch (refreshErr) {
         const refreshError = refreshErr as AxiosError<ErrorResultResponse>
         const message = refreshError.response?.data?.resultMessage
-
         if (message === '만료된 JWT 토큰입니다.') {
+          window.location.href = '/login'
+        }
+        if (message?.startsWith('Refresh')) {
           window.location.href = '/login'
         }
       }

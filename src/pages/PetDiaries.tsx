@@ -1,27 +1,28 @@
 import defaultImg from '@/assets/logo.png'
 import { DiaryHeader, NoResult } from '@/components/diary'
-import { useGetAllDiary } from '@/services/pet'
-import { useState } from 'react'
+import { useDiary, useGetAllDiary } from '@/services/diary'
+import { getUserId } from '@/utils/getUserInfo'
+import { searchData } from '@/utils/searchData'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const PetDiaries = () => {
   const nav = useNavigate()
-  const [searchQuery, setSearchQuery] = useState('')
 
   // 다이어리 목록 가져오기
   const { data } = useGetAllDiary()
+  const { searchQuery, handleChangeSearchQuery } = useDiary()
+
+  useEffect(() => {
+    if (getUserId() === null) {
+      nav('/login')
+    }
+  }, [nav])
 
   // 검색
-  const filteredDiaries = (data || []).filter(
-    (data) =>
-      data.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      data.content.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredDiaries = searchData(data || [], searchQuery)
 
-  const handleChangeSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }
-
+  // 다이어리 선택
   const handleDiaryClick = (id: number) => {
     nav(`/petDiaryDetail/${id}`)
   }

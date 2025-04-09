@@ -1,2 +1,5 @@
+export * from './Content'
+export * from './ImgUpload'
 export * from './ProductHeader'
 export * from './ProductImage'
+export * from './ProductInput'

@@ -1,40 +1,25 @@
 import { FormInput } from '@/components/common/FormInput'
 import { useSignUp } from '@/services/auth'
+import { useSignupForm } from '@/services/auth/hooks/useSignupForm'
 import { useState } from 'react'
 
 export const Signup = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const { form, handleInputChange } = useSignupForm()
   const [error, setError] = useState('')
   const signUpMutate = useSignUp()
-
-  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-  }
-
-  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
-  }
-
-  const handleChangeConfirmPassword = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setConfirmPassword(e.target.value)
-  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() // 폼 제출 시 새로고침 방지
     setError('') // 이전 에러 초기화
 
     // 비밀번호 일치 확인
-    if (password !== confirmPassword) {
+    if (form.password !== form.confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.')
       return
     }
 
     signUpMutate.mutate(
-      { email, password },
+      { email: form.email, password: form.password },
       {
         onSuccess: (data) => {
           console.log('회원가입 성공!', data)
@@ -55,21 +40,24 @@ export const Signup = () => {
           <form onSubmit={handleSubmit}>
             <FormInput
               title='이메일'
+              name='email'
               type='email'
               required={true}
-              onChange={handleChangeEmail}
+              onChange={handleInputChange}
             />
             <FormInput
               title='비밀번호'
+              name='password'
               type='password'
               required={true}
-              onChange={handleChangePassword}
+              onChange={handleInputChange}
             />
             <FormInput
               title='비밀번호 확인'
+              name='confirmPassword'
               type='password'
               required={true}
-              onChange={handleChangeConfirmPassword}
+              onChange={handleInputChange}
             />
             <button
               type='submit'

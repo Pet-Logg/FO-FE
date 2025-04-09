@@ -1,6 +1,6 @@
 import { UseMutationCustomOptions } from '@/types/api'
 import { useMutation } from '@tanstack/react-query'
-import { createDiary } from '../api'
+import { createDiary } from '../../pet/api'
 
 export const useCreateDiary = (mutationOptions?: UseMutationCustomOptions) => {
   return useMutation({

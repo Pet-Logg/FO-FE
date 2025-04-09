@@ -1,33 +1,26 @@
 import { ProductHeader } from '@/components/product'
 import { useGetAllProduct } from '@/services/product'
+import { useProducts } from '@/services/product/hooks'
 import { getFirstImage } from '@/utils/getFirstImage'
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getUserRole } from '../utils/getUserRole'
 
-// 첫 번째 이미지를 가져오는 함수
 export const Products = () => {
-  const { data, isLoading, isError } = useGetAllProduct()
-  const [isAdmin, setIsAdmin] = useState(false)
+  const { data, isLoading, isError, error } = useGetAllProduct()
+  const { isAdmin } = useProducts(data)
 
-  useEffect(() => {
-    const role = getUserRole()
-    if (role === 'ADMIN') {
-      setIsAdmin(true)
-    }
-  }, [data])
-
-  if (isLoading) {
-    return <div className='mx-auto min-h-[800px] w-[1050px] py-14'>로딩 중</div>
-  }
-
-  if (isError) {
+  if (isLoading)
     return (
-      <div className='mx-auto min-h-[800px] w-[1050px] py-14'>
-        페이지를 불러오는 도중 에러가 발생했습니다.
-      </div>
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl'>
+        ⏳ 로딩 중...
+      </p>
     )
-  }
+
+  if (isError)
+    return (
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl text-red-500'>
+        {error.message}
+      </p>
+    )
 
   return (
     <div className='mx-auto min-h-[800px] w-[1050px] py-20'>

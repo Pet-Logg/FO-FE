@@ -5,6 +5,15 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import basicPicture from '../assets/basicPicture.png'
 
+const PetInfo = ({ label, value }) => {
+  return (
+    <>
+      <p className='text-left font-medium'>{label}</p>
+      <p>{value}</p>
+    </>
+  )
+}
+
 export const PetDetail = () => {
   const nav = useNavigate()
   const { petId } = useParams()
@@ -46,94 +55,107 @@ export const PetDetail = () => {
     )
 
   return (
-    <div className='flex min-h-[1000px] items-center justify-center bg-gray-100'>
-      <div className='w-full max-w-md rounded-2xl bg-white p-8 shadow-lg'>
-        <img
-          src={data?.petImg || basicPicture}
-          className='mx-auto mb-6 h-60 w-60 rounded-full border border-gray-300 object-cover'
-        />
+    <>
+      {data && (
+        <div className='flex min-h-[1000px] items-center justify-center bg-gray-100'>
+          <div className='w-full max-w-md rounded-2xl bg-white p-8 shadow-lg'>
+            {/* 펫 이미지 */}
+            <img
+              src={data.petImg || basicPicture}
+              className='mx-auto mb-6 h-60 w-60 rounded-full border border-gray-300 object-cover'
+            />
 
-        <h1 className='mb-6 text-center text-3xl font-bold'>{data?.petName}</h1>
+            <h1 className='mb-6 text-center text-3xl font-bold'>
+              {data.petName}
+            </h1>
 
-        <div>
-          <h1 className='mb-3 ml-2 text-lg font-bold'>🐶 기본 정보</h1>
-          <div className='mx-10 grid grid-cols-2 gap-y-2 border-b pb-5'>
-            <p className='text-left font-medium'>
-              {data?.animal === 'DOG' ? '견종' : '묘종'}
-            </p>
-            <p>{data?.petBreed || '-'}</p>
+            {/* 기본 정보 */}
+            <div>
+              <h1 className='mb-3 ml-2 text-lg font-bold'>🐶 기본 정보</h1>
+              <div className='mx-10 grid grid-cols-2 gap-y-2 border-b pb-7'>
+                <PetInfo
+                  label={data.animal === 'DOG' ? '견종' : '묘종'}
+                  value={data.petBreed || '-'}
+                />
 
-            <p className='text-left font-medium'>성별</p>
-            <p>
-              {data?.petGender
-                ? data.petGender === 'MALE'
-                  ? '남자'
-                  : '여자'
-                : '-'}
-            </p>
+                <PetInfo
+                  label='성별'
+                  value={data.petGender === 'MALE' ? '남자' : '여자'}
+                />
 
-            <p className='text-left font-medium'>생일</p>
-            <p>
-              {data?.petBirth
-                ? new Date(data.petBirth).toISOString().split('T')[0]
-                : '-'}
-            </p>
+                <PetInfo
+                  label='생일'
+                  value={
+                    data.petBirth
+                      ? new Date(data.petBirth).toISOString().split('T')[0]
+                      : '-'
+                  }
+                />
+                <PetInfo label='몸무게' value={`${data.petWeight} kg`} />
+              </div>
+            </div>
 
-            <p className='text-left font-medium'>몸무게</p>
-            <p>{data?.petWeight ? `${data?.petWeight} kg` : '-'} </p>
+            {/* 건강 정보 */}
+            <div>
+              <h1 className='mb-3 ml-2 pt-7 text-lg font-bold'>💊 건강 정보</h1>
+              <div className='mx-10 grid grid-cols-2 gap-y-2'>
+                <PetInfo
+                  label='중성화 여부'
+                  value={
+                    data.isNeutered
+                      ? data.isNeutered === 'Y'
+                        ? '했어요'
+                        : '안했어요'
+                      : '-'
+                  }
+                />
+
+                <PetInfo
+                  label='염려질환'
+                  value={data.disease?.length ? data.disease.join(', ') : '-'}
+                />
+
+                <PetInfo
+                  label='알러지'
+                  value={data.allergy?.length ? data.allergy.join(', ') : '-'}
+                />
+              </div>
+            </div>
+
+            <div className='flex justify-center gap-7 pt-9'>
+              <Button
+                text={'수정'}
+                type={'normal'}
+                onClick={() => {
+                  nav(`/createPet?petId=${petId}`, {
+                    state: { mode: 'edit' }
+                  })
+                }}
+              />
+              <Button
+                text={'삭제'}
+                type={'delete'}
+                onClick={() => setOpenPopup(true)}
+              />
+            </div>
           </div>
 
-          <h1 className='mb-3 ml-2 pt-5 text-lg font-bold'>💊 건강 정보</h1>
-          <div className='mx-10 grid grid-cols-2 gap-y-2'>
-            <p className='text-left font-medium'>중성화 여부</p>
-            <p>
-              {data?.isNeutered
-                ? data?.isNeutered === 'Y'
-                  ? '했어요'
-                  : '안했어요'
-                : '-'}
-            </p>
-
-            <p className='text-left font-medium'>염려질환</p>
-            <p>{data?.disease?.length ? data?.disease.join(', ') : '-'}</p>
-
-            <p className='text-left font-medium'>알러지</p>
-            <p>{data?.allergy?.length ? data?.allergy.join(', ') : '-'}</p>
-          </div>
+          {openPopup && (
+            <TwoButtonModal
+              text='반려동물을 삭제하시겠습니까?'
+              subText='삭제한 반려동물은 복구할 수 없습니다.'
+              firstButton='삭제'
+              secondButton='취소'
+              firstType='delete'
+              secondType='cancel'
+              onCancle={() => {
+                setOpenPopup(false)
+              }}
+              onConfirm={clickDeletePet}
+            />
+          )}
         </div>
-
-        <div className='flex justify-center gap-7 pt-9'>
-          <Button
-            text={'수정'}
-            type={'normal'}
-            onClick={() => {
-              nav(`/createPetInfo?petId=${petId}`, {
-                state: { mode: 'edit' }
-              })
-            }}
-          />
-          <Button
-            text={'삭제'}
-            type={'delete'}
-            onClick={() => setOpenPopup(true)}
-          />
-        </div>
-      </div>
-
-      {openPopup && (
-        <TwoButtonModal
-          text='반려동물을 삭제하시겠습니까?'
-          subText='삭제한 반려동물은 복구할 수 없습니다.'
-          firstButton='삭제'
-          secondButton='취소'
-          firstType='delete'
-          secondType='cancel'
-          onCancle={() => {
-            setOpenPopup(false)
-          }}
-          onConfirm={clickDeletePet}
-        />
       )}
-    </div>
+    </>
   )
 }
