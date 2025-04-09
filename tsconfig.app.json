@@ -29,5 +29,10 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "start": "node -r tsconfig-paths/register build/index.js"
+  }
 }

@@ -3,7 +3,7 @@ name: Deploy to S3 and Invalidate CloudFront Cache
 on:
   push:
     branches:
-      - dev
+      - feature/1
 
 jobs:
   build-and-deploy:
