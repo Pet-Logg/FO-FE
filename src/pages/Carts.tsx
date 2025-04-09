@@ -1,9 +1,13 @@
 import { CartItemList } from '@/components/cart/CartItemList'
 import { CartSummary } from '@/components/cart/CartSummary'
 import { OrderProgress } from '@/components/cart/OrderProgress'
-import { useDeleteCart, useGetCart, useUpdateCart } from '@/services/cart'
-import { useCart } from '@/services/cart/hooks/useCart'
-import { calculateTotal } from '@/services/cart/utils/cartUtils'
+import {
+  calculateTotal,
+  useCart,
+  useDeleteCart,
+  useGetCart,
+  useUpdateCart
+} from '@/services/Cart'
 
 export const Carts = () => {
   const { data: cartItems = [] } = useGetCart()

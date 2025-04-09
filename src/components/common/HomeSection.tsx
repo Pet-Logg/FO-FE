@@ -1,11 +1,11 @@
 import { motion, useAnimation, useInView } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 
-interface SectionProps {
+interface HomeSectionProps {
   children: React.ReactNode
 }
 
-export const Section = ({ children }: SectionProps) => {
+export const HomeSection = ({ children }: HomeSectionProps) => {
   const ref = useRef(null)
   const inView = useInView(ref, {
     once: true,

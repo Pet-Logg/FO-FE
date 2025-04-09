@@ -1,5 +1,5 @@
-import { GetCartResponse } from '@/services/cart'
-import logo from '../../assets/logo.png'
+import { GetCartResponse } from '@/services/Cart'
+import logo from '@/assets/logo.png'
 
 interface DiaryHeaderPrpos {
   isAllSelected: boolean

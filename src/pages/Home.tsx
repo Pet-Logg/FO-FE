@@ -1,6 +1,7 @@
 import { ImageSlider } from '@/components/common/ImageSlider'
-import home_section_001 from '../assets/home_section_001.png'
-import { Section } from './Section'
+import home_section_001 from '@/assets/home_section_001.png'
+import home_section_003 from '@/assets/home_section_003.png'
+import { HomeSection } from '@/components/common/HomeSection'
 
 export function Home() {
   return (
@@ -10,7 +11,7 @@ export function Home() {
         <ImageSlider />
       </div>
 
-      <Section>
+      <HomeSection>
         <div className='flex items-center justify-around'>
           <div>
             <h2 className='text-3xl font-bold'>
@@ -23,9 +24,9 @@ export function Home() {
           </div>
           <img src={home_section_001} className='w-[400px]' />
         </div>
-      </Section>
+      </HomeSection>
 
-      <Section>
+      <HomeSection>
         <div className='flex items-center justify-around'>
           <div>
             <h2 className='text-3xl font-bold'>
@@ -37,9 +38,9 @@ export function Home() {
           </div>
           <img src={home_section_001} className='w-[400px]' />
         </div>
-      </Section>
+      </HomeSection>
 
-      <Section>
+      <HomeSection>
         <div className='flex items-center justify-around'>
           <div>
             <h2 className='text-3xl font-bold'>
@@ -50,9 +51,9 @@ export function Home() {
               있어요.
             </p>
           </div>
-          <img src={home_section_001} className='w-[400px]' />
+          <img src={home_section_003} className='w-[400px]' />
         </div>
-      </Section>
+      </HomeSection>
     </div>
   )
 }
