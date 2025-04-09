@@ -42,6 +42,7 @@ export const Login = () => {
               onChange={(e) => {
                 setEmail(e.target.value)
               }}
+              name='email'
             />
             <FormInput
               title={'비밀번호'}
@@ -49,6 +50,7 @@ export const Login = () => {
               onChange={(e) => {
                 setPassword(e.target.value)
               }}
+              name='password'
             />
             <div className='mb-6 flex items-center justify-between'>
               <div className='flex items-center'>
