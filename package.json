@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && tsc-alias && vite build",
+    "start": "node -r tsconfig-paths/register build/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
