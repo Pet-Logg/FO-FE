@@ -1,62 +1,14 @@
 import { Button } from '@/components/common/Button'
 import { ChangePasswordInput } from '@/components/user/ChangePasswordInput'
-import { ChangePasswordRequest } from '@/services/auth'
-import { useChangePassword } from '@/services/auth/queries/useChangePasswordUser'
-import { useState } from 'react'
+import { useChangePassword } from '@/services/auth'
+import { usePasswordFrom } from '@/services/auth/hooks'
 import { useNavigate } from 'react-router-dom'
-
-type ChangePasswordForm = ChangePasswordRequest & { confirmPassword: string }
 
 export const ChangePassword = () => {
   const nav = useNavigate()
   const changePasswordMutate = useChangePassword()
-  const [passwordError, setPasswordError] = useState('') // 비밀번호 길이 오류
-  const [isDisabled, setIsDisabled] = useState(true)
-  const [formValues, setFormValues] = useState<ChangePasswordForm>({
-    password: '',
-    confirmPassword: ''
-  })
-
-  const passwordPattern =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*?_])[A-Za-z\d!@#$%^&*?_]{8,16}$/
-
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    const updatedFormValues = { ...formValues, [name]: value }
-    setFormValues(updatedFormValues)
-    let passwordErr = ''
-
-    // 비밀번호 정규식 검사
-    if (name === 'password') {
-      if (!passwordPattern.test(value) && value.length > 0) {
-        passwordErr =
-          '비밀번호는 8~16자, 영문, 숫자, 특수문자를 포함해야 합니다.'
-        setPasswordError(passwordErr)
-        return
-      }
-    }
-
-    // 입력이 비어 있으면 오류 메시지 초기화
-    if (value.length === 0) {
-      setPasswordError('')
-    }
-
-    // 비밀번호 일치 검사
-    if (name === 'confirmPassword' && value !== updatedFormValues.password) {
-      passwordErr = '비밀번호가 일치하지 않습니다.'
-      setPasswordError(passwordErr)
-      return
-    }
-
-    // 버튼 활성화
-    setIsDisabled(
-      !!(
-        passwordErr ||
-        !updatedFormValues.password ||
-        !updatedFormValues.confirmPassword
-      )
-    )
-  }
+  const { passwordError, isDisabled, formValues, handleInputChange } =
+    usePasswordFrom()
 
   // 비밀번호 변경 API 호출
   const handleChangePassword = () => {
@@ -97,7 +49,7 @@ export const ChangePassword = () => {
               name={'password'}
               placeholder={'새로운 비밀번호를 입력해주세요.'}
               password={formValues.password}
-              onChangeInput={onChangeInput}
+              onChangeInput={handleInputChange}
             />
 
             {/* 새로운 비밀번호 입력 확인 */}
@@ -106,7 +58,7 @@ export const ChangePassword = () => {
               name={'confirmPassword'}
               placeholder={'새로운 비밀번호를 다시 한 번 입력해주세요.'}
               password={formValues.confirmPassword}
-              onChangeInput={onChangeInput}
+              onChangeInput={handleInputChange}
             />
           </div>
 

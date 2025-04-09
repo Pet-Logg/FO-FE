@@ -1,6 +1,7 @@
 interface FormInputProps {
   title: string
   type: 'email' | 'password'
+  name: string
   required?: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -8,6 +9,7 @@ interface FormInputProps {
 export const FormInput = ({
   title,
   type,
+  name,
   required = false,
   onChange
 }: FormInputProps) => {
@@ -18,6 +20,7 @@ export const FormInput = ({
       </label>
       <input
         type={type}
+        name={name}
         className='w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none'
         required={required}
         onChange={onChange}

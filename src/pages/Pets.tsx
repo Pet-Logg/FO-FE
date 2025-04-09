@@ -6,7 +6,7 @@ import { getUserId } from '@/utils/getUserInfo'
 import { useEffect } from 'react'
 
 export const Pets = () => {
-  const { data, isLoading, isError } = useGetAllPet()
+  const { data, isLoading, isError, error } = useGetAllPet()
   const nav = useNavigate()
 
   useEffect(() => {
@@ -14,6 +14,20 @@ export const Pets = () => {
       nav('/login')
     }
   }, [nav])
+
+  if (isLoading)
+    return (
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl'>
+        ⏳ 로딩 중...
+      </p>
+    )
+
+  if (isError)
+    return (
+      <p className='mx-auto flex min-h-[750px] w-[1050px] items-center justify-center text-3xl text-red-500'>
+        {error.message}
+      </p>
+    )
 
   return (
     <div className='mx-auto flex min-h-[800px] w-[1050px] flex-col py-16'>
@@ -25,14 +39,6 @@ export const Pets = () => {
           onClick={() => nav('/createPet')}
         />
       </div>
-
-      {isLoading && <p className='text-center'>로딩 중</p>}
-
-      {isError && (
-        <p className='mx-auto flex min-h-[500px] items-center justify-center text-red-500'>
-          오류가 발생했습니다.
-        </p>
-      )}
 
       {!isLoading && !isError && data?.length === 0 && (
         <p className='mx-auto flex min-h-[500px] items-center justify-center'>

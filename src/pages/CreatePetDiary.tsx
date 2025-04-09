@@ -1,5 +1,6 @@
+import { Content } from '@/components/diary/Content'
 import { useCreateDiary } from '@/services/diary'
-import { useDiaryForm } from '@/services/diary/hooks/useDiaryForm'
+import { useDiaryForm } from '@/services/diary/hooks'
 import { PlusOutlined } from '@ant-design/icons'
 import { Button, Upload, UploadFile } from 'antd'
 import { useNavigate } from 'react-router-dom'
@@ -56,6 +57,7 @@ export const CreatePetDiary = () => {
           일기 작성
         </h2>
         <form onSubmit={handleSubmit}>
+          {/* 이미지 업로드 */}
           <div className='mb-5 ml-36'>
             <Upload
               listType='picture-card'
@@ -73,29 +75,12 @@ export const CreatePetDiary = () => {
             </Upload>
           </div>
 
-          <div className='flex items-center justify-center'>
-            <div className='h-[500px] w-3/4 rounded-2xl border border-gray-300 px-6 py-6'>
-              <div className='border-b border-gray-300'>
-                <input
-                  type='text'
-                  placeholder='제목을 입력하세요.'
-                  className='mb-4 size-full h-8 text-2xl focus:outline-none'
-                  name='title'
-                  value={diaryData.title}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className='h-[388px] w-full'>
-                <textarea
-                  placeholder='내용을 입력하세요.'
-                  className='mt-4 h-full w-full resize-none focus:outline-none'
-                  name='content'
-                  value={diaryData.content}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-          </div>
+          {/* 본문 */}
+          <Content
+            titleValue={diaryData.title}
+            contentValue={diaryData.content}
+            handleInputChange={handleInputChange}
+          />
 
           <div className='absolute right-1/4 mt-4'>
             <Button type='primary' htmlType='submit'>

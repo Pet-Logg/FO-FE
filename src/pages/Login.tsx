@@ -1,14 +1,14 @@
 import { FormInput } from '@/components/common/FormInput'
+import { useLoginForm } from '@/services/auth/hooks/useLoginForm'
 import { useLogin } from '@/services/auth/queries/useLogin'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const nav = useNavigate()
   const loginMutate = useLogin()
+  const { email, setEmail, password, setPassword } = useLoginForm()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
