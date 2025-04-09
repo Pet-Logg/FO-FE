@@ -41,7 +41,7 @@ jobs:
           args: --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
-          SOURCE_DIR: build
+          SOURCE_DIR: dist
 
       - name: Invalidate CloudFront cache
         run: |
