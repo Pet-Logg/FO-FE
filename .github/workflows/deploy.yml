@@ -18,9 +18,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Clear npm cache
-        run: npm cache clean --force
-
       - name: Create .env file
         run: |
           echo 'VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}' > .env
