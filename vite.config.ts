@@ -9,5 +9,8 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src/')
     }
+  },
+  build: {
+    outDir: 'build' // S3 배포용으로 'build/'로 변경
   }
 })

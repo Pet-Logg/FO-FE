@@ -7,7 +7,7 @@ import {
   useDeleteCart,
   useGetCart,
   useUpdateCart
-} from '@/services/cart'
+} from '@/services/Cart'
 
 export const Carts = () => {
   const { data: cartItems = [] } = useGetCart()
