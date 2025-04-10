@@ -12,9 +12,6 @@
 
 <br />
 
-🔗 <a href="https://www.petlog.com" target="_blank">www.petlog.com</a>  
-<strong>관리자 계정 : </strong> -
-
 </div>
 <br/>
 
