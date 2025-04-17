@@ -40,22 +40,6 @@ export async function getAllPet(): Promise<GetAllPetResponse[]> {
   }
 }
 
-// 펫 다이어리 등록
-export async function createDiary({
-  formData
-}: PetRequestWithFormData): Promise<void> {
-  const response = await apiClient.post(
-    `/${PET_PREFIX}/createDiary`,
-    formData,
-    {
-      headers: {
-        [HttpHeader.CONTENT_TYPE]: HttpContentType.FORM_DATA
-      }
-    }
-  )
-  return response.data
-}
-
 //  펫 petId가져오기
 export async function getPet(petId: number): Promise<GetPetResponse> {
   try {

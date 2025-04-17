@@ -19,5 +19,10 @@ export const useCart = (cartItems) => {
     )
   }
 
-  return { selectedItems, setSelectedItems, toggleSelectAll, toggleSelectItem }
+  return {
+    selectedItems,
+    setSelectedItems,
+    toggleSelectAll,
+    toggleSelectItem
+  }
 }
