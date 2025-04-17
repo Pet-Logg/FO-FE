@@ -47,3 +47,18 @@ export async function deleteCart({
   })
   return response.data
 }
+
+// 주문 선택한 아이템 조회하기
+export async function getOrderSheet(
+  selectedItems: number[]
+): Promise<useGetOrderSheetResponse[]> {
+  try {
+    const response = await apiClient.post(`/${PRODUCT_PREFIX}/getOrderSheet`, {
+      selectedItems
+    })
+    return response.data.data
+  } catch (error) {
+    console.log('error', error)
+    throw new Error('주문서 아이템 조회 실패')
+  }
+}

@@ -7,7 +7,8 @@ import {
   useDeleteCart,
   useGetCart,
   useUpdateCart
-} from '@/services/Cart'
+} from '@/services/cart'
+import { useNavigate } from 'react-router-dom'
 
 export const Carts = () => {
   const { data: cartItems = [] } = useGetCart()
@@ -16,6 +17,7 @@ export const Carts = () => {
   const { selectedItems, setSelectedItems, toggleSelectAll, toggleSelectItem } =
     useCart(cartItems)
   const deliveryFee = 3000 // 배송비
+  const nav = useNavigate()
 
   // 수량 증감 버튼
   const updateQuantityBtn = (id: number, amount: number) => {
@@ -66,12 +68,30 @@ export const Carts = () => {
   const isAllSelected =
     cartItems.length > 0 && selectedItems.length === cartItems.length
 
+  // 주문하기 버튼 선택
+  const handleOrder = () => {
+    nav('/order', {
+      state: {
+        selectedItems
+      }
+    })
+  }
+
   return (
     <div className='mx-auto min-h-[800px] w-[1050px] py-12'>
       {/* 단계 표시 */}
       <OrderProgress currentStep={1} />
 
-      <h1 className='mb-8 text-3xl font-bold'>장바구니</h1>
+      <h1 className='mb-4 text-3xl font-bold'>장바구니</h1>
+
+      <div className='mb-5 flex justify-end'>
+        <button
+          onClick={deleteSelectedItemsBtn}
+          className='rounded border border-gray-400 px-4 py-2 hover:bg-gray-100'
+        >
+          선택 삭제
+        </button>
+      </div>
 
       {/* 장바구니 테이블 */}
       <CartItemList
@@ -84,19 +104,14 @@ export const Carts = () => {
       />
 
       {/* 선택 삭제 버튼 */}
-      <div className='mt-6 flex items-start justify-between'>
-        <button
-          onClick={deleteSelectedItemsBtn}
-          className='rounded border border-gray-400 px-4 py-2 hover:bg-gray-100'
-        >
-          선택 삭제
-        </button>
-
+      <div className='mt-10 flex items-start justify-center'>
         {/* 총 결제 금액 요약 */}
         <CartSummary
           total={total}
           deliveryFee={deliveryFee}
           grandTotal={grandTotal}
+          productCount={selectedItems.length}
+          onOrderClick={handleOrder}
         />
       </div>
     </div>

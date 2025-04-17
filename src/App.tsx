@@ -15,6 +15,7 @@ import { Products } from './pages/Products'
 import { Signup } from './pages/Signup'
 import { Header } from './components/common/Header'
 import { Footer } from './components/common/Footer'
+import { Order } from './pages/Order'
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path='/products' element={<Products />} />
           <Route path='/:productId' element={<ProductDetail />} />
           <Route path='/cartView' element={<Carts />} />
+          <Route path='/order' element={<Order />} />
         </Routes>
         <Footer />
       </BrowserRouter>

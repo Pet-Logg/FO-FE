@@ -3,7 +3,7 @@ export interface CartItemRequest {
   quantity: number
 }
 export interface GetCartResponse {
-  id: number // wishListId = cartId
+  id: number
   productId: number
   name: string
   price: number
