@@ -1,31 +1,56 @@
 import { OrderProgress } from '@/components/cart/OrderProgress'
 import { useGetOrderSheet } from '@/services/cart'
 import { useOrder } from '@/services/cart/hooks/useOrder'
+import { useCreateOrder } from '@/services/order/queries/useCreateOrder'
 import { useLocation } from 'react-router-dom'
 
 export const Order = () => {
   const location = useLocation()
   const { selectedItems = [] } = location.state || {}
   const { data } = useGetOrderSheet(selectedItems)
-  const {
-    receiver,
-    phone,
-    address,
-    agree,
-    setAgree,
-    handlePayment,
-    handleInputChange
-  } = useOrder()
+  const { recipient, phone, address, agree, setAgree, handleInputChange } =
+    useOrder()
+  const createOrderMutate = useCreateOrder()
+
+  const handlePayment = () => {
+    if (!recipient || !phone || !address || !agree) {
+      alert('모든 정보를 입력하고 동의해주세요.')
+      return
+    }
+
+    // 주문 요청 데이터 구성
+    const CreateOrderRequestDto = {
+      recipient,
+      phone,
+      address,
+      totalPrice,
+      items:
+        data?.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity
+        })) || []
+    }
+
+    createOrderMutate.mutate(CreateOrderRequestDto, {
+      onSuccess: () => {
+        console.log('주문에 성공했습니다.')
+      },
+      onError: () => {
+        console.log('주문에 실패했습니다.')
+      }
+    })
+    alert('결제가 완료되었습니다.')
+  }
 
   // 전체 금액 계산
-  const totalPrice =
+  const sumPrice =
     data?.reduce((acc, item) => acc + item.price * item.quantity, 0) ?? 0
 
   // 배송비
   const deliveryFee = 3000
 
   // 배송비 포함 전체금액 계산
-  const grandTotalPrice = totalPrice + deliveryFee
+  const totalPrice = sumPrice + deliveryFee
 
   return (
     <div className='mx-auto min-h-[800px] w-[1050px] py-12'>
@@ -41,8 +66,8 @@ export const Order = () => {
             <input
               type='text'
               placeholder='받는 분 성함'
-              name='receiver'
-              value={receiver}
+              name='recipient'
+              value={recipient}
               onChange={handleInputChange}
               className='w-full rounded border px-4 py-2'
             />
@@ -97,7 +122,7 @@ export const Order = () => {
           <div className='flex items-center justify-between bg-green-50 px-6 py-4'>
             <h2 className='mb-1 text-lg font-bold'>총 주문금액</h2>
             <div className='text-lg font-bold text-green-600'>
-              {grandTotalPrice.toLocaleString()} 원
+              {totalPrice.toLocaleString()} 원
             </div>
           </div>
         </div>

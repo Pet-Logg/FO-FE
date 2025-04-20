@@ -1,7 +1,7 @@
 import { apiClient } from '@/api/apiClient'
 import { CartItemRequest, DeleteCartRequest, GetCartResponse } from './types'
 
-const PRODUCT_PREFIX = 'product'
+const PRODUCT_PREFIX = 'order'
 
 // 장바구니 추가
 export async function addCart({
@@ -51,7 +51,7 @@ export async function deleteCart({
 // 주문 선택한 아이템 조회하기
 export async function getOrderSheet(
   selectedItems: number[]
-): Promise<useGetOrderSheetResponse[]> {
+): Promise<GetCartResponse[]> {
   try {
     const response = await apiClient.post(`/${PRODUCT_PREFIX}/getOrderSheet`, {
       selectedItems
